@@ -22,7 +22,9 @@ const OUT = path.join(ROOT, 'server/src/data/baku-osm.json');
 const BBOX = '40.345,49.770,40.460,49.990'; // S,W,N,E — central Baku operational area
 const ENDPOINTS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter', 'https://overpass.private.coffee/api/interpreter'];
 
-const QUERY = `[out:json][timeout:90];
+// Features with full polygon geometry (so the marker is guaranteed to lie INSIDE
+// the park/stadium — a bounding-box centre of a curved coastal park falls into the sea).
+const QUERY = `[out:json][timeout:120];
 (
   node["station"="subway"](${BBOX});
   node["railway"="station"]["subway"="yes"](${BBOX});
@@ -32,9 +34,10 @@ const QUERY = `[out:json][timeout:90];
   relation["leisure"="stadium"]["name"](${BBOX});
   nwr["amenity"="fire_station"](${BBOX});
   nwr["amenity"="hospital"]["name"](${BBOX});
-  relation["boundary"="administrative"]["admin_level"~"^(6|7|8)$"]["name"](40.25,49.60,40.65,50.40);
-);
-out center bb tags;`;
+)->.features;
+.features out geom tags;
+relation["boundary"="administrative"]["admin_level"~"^(6|7|8)$"]["name"](40.25,49.60,40.65,50.40)->.districts;
+.districts out center tags;`;
 
 async function overpass() {
   for (const url of ENDPOINTS) {
@@ -57,20 +60,57 @@ async function overpass() {
 
 const R = 6371000;
 const rad = (d) => (d * Math.PI) / 180;
-function bboxAreaM2(b) {
-  if (!b) return 0;
-  const h = rad(b.maxlat - b.minlat) * R;
-  const w = rad(b.maxlon - b.minlon) * R * Math.cos(rad((b.maxlat + b.minlat) / 2));
-  return h * w * 0.65; // bbox → polygon fill factor
+/** Outer ring of a way, or the largest outer ring of a multipolygon relation. */
+function ringOf(e) {
+  if (e.type === 'way' && e.geometry?.length > 2) return e.geometry.map((g) => ({ lat: g.lat, lng: g.lon }));
+  if (e.type === 'relation' && e.members) {
+    const rings = e.members.filter((m) => m.role !== 'inner' && m.geometry?.length > 2).map((m) => m.geometry.map((g) => ({ lat: g.lat, lng: g.lon })));
+    return rings.sort((a, b) => polyArea(b) - polyArea(a))[0] ?? null;
+  }
+  return null;
 }
-const pos = (e) =>
-  e.type === 'node'
-    ? { lat: e.lat, lng: e.lon }
-    : e.center
-      ? { lat: e.center.lat, lng: e.center.lon }
-      : e.bounds
-        ? { lat: (e.bounds.minlat + e.bounds.maxlat) / 2, lng: (e.bounds.minlon + e.bounds.maxlon) / 2 }
-        : null;
+/** Polygon area in m² (shoelace on a local equirectangular projection). */
+function polyArea(ring) {
+  if (!ring || ring.length < 3) return 0;
+  const k = Math.cos(rad(ring[0].lat));
+  let a = 0;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    a += rad(ring[j].lng) * k * R * rad(ring[i].lat) * R - rad(ring[i].lng) * k * R * rad(ring[j].lat) * R;
+  }
+  return Math.abs(a / 2);
+}
+function inside(p, ring) {
+  let c = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const a = ring[i], b = ring[j];
+    if (a.lat > p.lat !== b.lat > p.lat && p.lng < ((b.lng - a.lng) * (p.lat - a.lat)) / (b.lat - a.lat) + a.lng) c = !c;
+  }
+  return c;
+}
+/** Representative point guaranteed inside the polygon (closest interior sample to the centroid). */
+function interiorPoint(ring) {
+  const cen = { lat: ring.reduce((s, p) => s + p.lat, 0) / ring.length, lng: ring.reduce((s, p) => s + p.lng, 0) / ring.length };
+  if (inside(cen, ring)) return cen;
+  const lats = ring.map((p) => p.lat), lngs = ring.map((p) => p.lng);
+  const [a0, a1, b0, b1] = [Math.min(...lats), Math.max(...lats), Math.min(...lngs), Math.max(...lngs)];
+  let best = null, bd = Infinity;
+  for (let i = 1; i < 30; i++)
+    for (let j = 1; j < 30; j++) {
+      const q = { lat: a0 + ((a1 - a0) * i) / 30, lng: b0 + ((b1 - b0) * j) / 30 };
+      if (!inside(q, ring)) continue;
+      const d = (q.lat - cen.lat) ** 2 + (q.lng - cen.lng) ** 2;
+      if (d < bd) { bd = d; best = q; }
+    }
+  return best ?? ring[0];
+}
+const areaOf = (e) => polyArea(ringOf(e));
+const pos = (e) => {
+  if (e.type === 'node') return { lat: e.lat, lng: e.lon };
+  const ring = ringOf(e);
+  if (ring) return interiorPoint(ring);
+  if (e.center) return { lat: e.center.lat, lng: e.center.lon };
+  return null;
+};
 const round = (p) => ({ lat: +p.lat.toFixed(5), lng: +p.lng.toFixed(5) });
 const nameOf = (t) => t['name:az'] || t.name || t['name:en'];
 const slug = (s) =>
@@ -148,7 +188,7 @@ console.log(`✓ wikidata: ${Object.keys(WD).length} entities`);
 const parksAll = dedupe(
   els
     .filter((e) => e.tags?.leisure === 'park' && pos(e) && !EXCLUDE.test(nameOf(e.tags) ?? ''))
-    .map((e) => ({ name: nameOf(e.tags), location: pos(e), area: bboxAreaM2(e.bounds) }))
+    .map((e) => ({ name: nameOf(e.tags), location: pos(e), area: areaOf(e) }))
     .filter((p) => p.name && p.area >= 25_000)
     .sort((a, b) => b.area - a.area),
   300,

@@ -57,7 +57,7 @@ export function ConnBadge({ conn, dark }: { conn: ConnState; dark?: boolean }) {
   return (
     <span className={clsx('inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium', dark ? 'bg-white/5 text-slate-300' : 'bg-slate-100 text-slate-600')}>
       <span className={clsx('h-2 w-2 rounded-full', conn === 'live' ? 'bg-emerald-500' : conn === 'connecting' ? 'animate-pulse bg-amber-400' : 'bg-red-500')} />
-      {label}
+      <span className="hidden sm:inline">{label}</span>
     </span>
   );
 }

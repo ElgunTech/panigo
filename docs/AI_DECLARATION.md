@@ -1,0 +1,49 @@
+# Süni intellektdən istifadə haqqında bəyannamə
+
+> Bu sənəd layihədə süni intellekt alətlərindən **harada, necə və hansı nəzarətlə** istifadə olunduğunu göstərir. Komanda üzvlərinin adları və rolları bölmə 4-də komanda tərəfindən doldurulmalıdır.
+
+## 1. İstifadə olunan alətlər
+
+| Alət | Versiya / model | Təyinat |
+|---|---|---|
+| **Claude Code** (Anthropic, Claude desktop tətbiqi) | Claude Opus 5.5 | Arxitektura təklifi, kod yazılması, testlər, data idxalı skripti, brauzerdə yoxlama, sənədlər |
+| Claude Code daxili brauzeri | — | Hazır UI-nin real brauzerdə yoxlanması (ekran görüntüləri, klik ssenariləri) |
+
+Başqa generativ alət istifadə olunmayıb. Xəritə datası süni intellekt tərəfindən **uydurulmayıb**: OpenStreetMap və Wikidata-dan skriptlə çəkilib (bax [DATA.md](DATA.md)).
+
+## 2. Mərhələlər üzrə istifadə
+
+| Mərhələ | Süni intellektin rolu | İnsan nəzarəti / qərarı |
+|---|---|---|
+| Tələblərin təhlili | Tapşırıq mətni modullara və qəbul meyarlarına bölündü (90%, 95%, 500 m, 5 dəq, ≥4 fərqli vətəndaş) | Komanda tapşırığı verdi, prioritetləri və "peşəkar React" tələbini müəyyən etdi |
+| Arxitektura seçimi | Hexagonal quruluş, provider chain + circuit breaker, event bus + batch broadcast, RBAC matrisi təklif edildi. Drop-lar üçün genişlənmə nöqtələri əvvəlcədən qoyuldu | Stack (React, Node) və real data tələbi komandanındır |
+| Kod yazılması | Backend (domen, servislər, API, təhlükəsizlik) və frontend (vətəndaş, dispetçer, login, admin) kodu yaradıldı | Kod TypeScript strict rejimində tip yoxlamasından keçdi, testlərlə və brauzerdə yoxlandı |
+| Testlər | 53 avtomatik test yazıldı: alqoritm, marşrutlaşdırma və fallback, API inteqrasiya, təhlükəsizlik, istifadəçi idarəetməsi, reducer | Testlər işlədildi, hamısı keçir. Bir uğursuz test (səhv test datası) aşkarlanıb düzəldildi |
+| Real data | Overpass və Wikidata idxal skripti, tutum evristikaları, uyğunsuz obyektlərin süzgəci yazıldı | Real data istifadəsi komandanın qərarıdır. Nəticə əl ilə yoxlandı |
+| Challenge drop-lar | Hər drop üçün mövcud mexanizm və dəyişiklik nöqtəsi sənədləşdirildi ([ARCHITECTURE.md §4](ARCHITECTURE.md)) | Drop elan olunanda həll komanda tərəfindən təsdiqlənir |
+| Yük testi | `scripts/loadtest.mjs` yazıldı və işlədildi | Rəqəmlər real ölçmədir, uydurulmayıb |
+| Sənədlər | README, arxitektura, data və bu bəyannamə yazıldı, Word sənədi hazırlandı | Komanda oxuyub təsdiqləyir |
+
+## 3. Nəzarət mexanizmləri
+
+1. **Avtomatik yoxlama:** hər mərhələdən sonra `tsc --noEmit` (strict) və `vitest`. Commit-lər yalnız yaşıl testlərlə edilib.
+2. **Real brauzerdə yoxlama:** vətəndaş marşrutu, 92% doluluqda avtomatik reroute, zəlzələ ssenarisi, qırmızı həyəcan, 1 klik icra, qeydiyyat, admin rol paneli ekran görüntüləri ilə yoxlanıb.
+3. **Süni intellektin səhvləri və necə aşkarlandığı** (şəffaflıq üçün):
+
+   | Problem | Necə aşkarlandı | Həll |
+   |---|---|---|
+   | CARTO xəritə plitələri API açarı tələb edirdi | Brauzerdə "API KEY REQUIRED" görüntüsü | OpenStreetMap plitələri + `VITE_TILE_URL` konfiqurasiyası |
+   | Həyəcan icra edildikdən dərhal sonra eyni həyəcan təkrar yaranırdı | Brauzerdə ssenari testi | Yalnız cavabsız (`new`) SOS-lar sayılır + reqressiya testi |
+   | OSM yollarında `center` yox idi, parklar itirdi | İdxal statistikasında 0 park | Mərkəz `bounds`-dan hesablanır |
+   | Prezident iqamətgahı və xiyaban toplanış məntəqəsi kimi düşmüşdü | Datanın əl ilə yoxlanması | `EXCLUDE` süzgəci + test |
+   | Telefon regex-ində escape xətası | Server işə düşmədi (log) | Düzəldildi, tip yoxlaması və testlər təkrarlandı |
+
+4. **Təhlükəsizlik:** sirr və şifrələr kodda yalnız demo default kimi var, productionda env məcburidir. Süni intellektə heç bir real şəxsi data verilməyib.
+
+## 4. Komanda (komanda tərəfindən doldurulur)
+
+| Üzv | Rol | Süni intellekt nəticələrini yoxladığı sahə |
+|---|---|---|
+| _[ad, soyad]_ | _[məs. backend / data]_ | _[məs. böhran alqoritmi testləri]_ |
+| _[ad, soyad]_ | _[məs. frontend / demo]_ | _[məs. UI və ssenari]_ |
+| _[ad, soyad]_ | _[məs. arxitektura / müdafiə]_ | _[məs. drop həlləri]_ |

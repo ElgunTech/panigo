@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { LatLng, RoadClosure } from '@shared/types';
 import { haversine, polylineHitsCircle } from '../src/domain/geo';
-import { RoadNetwork } from '../src/domain/roadNetwork';
+import { isOnLand, RoadNetwork } from '../src/domain/roadNetwork';
 import { rankPoints } from '../src/domain/recommendation';
 import { CircuitBreaker } from '../src/routing/circuitBreaker';
 import { RoutingService } from '../src/routing/routingService';
@@ -120,6 +120,10 @@ describe('real-world dataset (OpenStreetMap + Wikidata)', () => {
     expect(pts.some((p) => p.name.includes('Olimpiya'))).toBe(true);
     expect(pts.some((p) => p.status === 'reserve')).toBe(true);
     expect(pts.every((p) => p.capacity > 0 && p.occupancy <= p.capacity)).toBe(true);
+  });
+  it('no assembly point lies in the Caspian Sea (polygon interior points)', () => {
+    const wet = seedPoints().filter((p) => !isOnLand(p.location));
+    expect(wet.map((p) => p.name)).toEqual([]);
   });
   it('excludes restricted sites from assembly points', () => {
     expect(seedPoints().some((p) => /residence|xiyaban|zoo/i.test(p.name))).toBe(false);

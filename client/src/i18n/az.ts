@@ -130,6 +130,7 @@ export const az = {
     allFull: 'Bütün yaxın məntəqələr doludur — ən az dolu olan göstərilir.',
     sosTitle: 'Təcili SOS',
     sosHint: 'Bir toxunuşla dərhal göndərilir — yeriniz avtomatik əlavə olunur.',
+    sosHintShort: 'Bir toxunuş — yeriniz avtomatik',
     sosSent: 'SOS göndərildi',
     sosLimit: 'Çox sayda SOS — bir az gözləyin.',
     mySos: 'Mənim siqnallarım',

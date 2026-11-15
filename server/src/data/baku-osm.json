@@ -1,13 +1,13 @@
 {
   "source": "OpenStreetMap contributors (ODbL) via Overpass API",
-  "fetchedAt": "2026-11-15T07:42:04.853Z",
+  "fetchedAt": "2026-11-15T07:53:08.494Z",
   "bbox": "40.345,49.770,40.460,49.990",
   "counts": {
     "metro": 31,
-    "parks": 35,
+    "parks": 29,
     "stadiums": 7,
     "fireStations": 21,
-    "hospitals": 105,
+    "hospitals": 104,
     "districts": 12
   },
   "points": [
@@ -388,37 +388,11 @@
       "name": "Dənizkənarı Milli Park",
       "type": "park",
       "location": {
-        "lat": 40.36627,
-        "lng": 49.84538
+        "lat": 40.36819,
+        "lng": 49.84463
       },
       "capacity": 20000,
-      "areaM2": 1981076,
-      "source": "osm:leisure=park",
-      "status": "open"
-    },
-    {
-      "id": "k-zeytun-bagi",
-      "name": "Zeytun bağı",
-      "type": "park",
-      "location": {
-        "lat": 40.42642,
-        "lng": 49.82428
-      },
-      "capacity": 20000,
-      "areaM2": 894173,
-      "source": "osm:leisure=park",
-      "status": "open"
-    },
-    {
-      "id": "k-ag-seher-bulvari-baki",
-      "name": "Ağ Şəhər Bulvarı Bakı",
-      "type": "park",
-      "location": {
-        "lat": 40.37314,
-        "lng": 49.87569
-      },
-      "capacity": 20000,
-      "areaM2": 829922,
+      "areaM2": 420944,
       "source": "osm:leisure=park",
       "status": "open"
     },
@@ -427,11 +401,11 @@
       "name": "Nəbabət Bağı / Botanika Bağı",
       "type": "park",
       "location": {
-        "lat": 40.35767,
-        "lng": 49.81742
+        "lat": 40.35751,
+        "lng": 49.81528
       },
       "capacity": 20000,
-      "areaM2": 648537,
+      "areaM2": 418545,
       "source": "osm:leisure=park",
       "status": "open"
     },
@@ -440,24 +414,24 @@
       "name": "Gənclik Parkı / Zığ şossesi",
       "type": "park",
       "location": {
-        "lat": 40.35897,
-        "lng": 49.95126
+        "lat": 40.3594,
+        "lng": 49.95231
       },
       "capacity": 20000,
-      "areaM2": 319545,
+      "areaM2": 293640,
       "source": "osm:leisure=park",
       "status": "open"
     },
     {
-      "id": "k-heyder-eliyev-parki-8-ci-km",
-      "name": "Heydər Əliyev Parkı \\ 8-ci km",
+      "id": "k-ag-seher-bulvari-baki",
+      "name": "Ağ Şəhər Bulvarı Bakı",
       "type": "park",
       "location": {
-        "lat": 40.40246,
-        "lng": 49.94275
+        "lat": 40.37481,
+        "lng": 49.87325
       },
       "capacity": 20000,
-      "areaM2": 198711,
+      "areaM2": 275658,
       "source": "osm:leisure=park",
       "status": "open"
     },
@@ -466,37 +440,11 @@
       "name": "Mərkəzi Park",
       "type": "park",
       "location": {
-        "lat": 40.37198,
-        "lng": 49.82762
+        "lat": 40.37269,
+        "lng": 49.82747
       },
       "capacity": 20000,
-      "areaM2": 158423,
-      "source": "osm:leisure=park",
-      "status": "open"
-    },
-    {
-      "id": "k-qis-parki",
-      "name": "Qış Parkı",
-      "type": "park",
-      "location": {
-        "lat": 40.37645,
-        "lng": 49.83603
-      },
-      "capacity": 20000,
-      "areaM2": 154702,
-      "source": "osm:leisure=park",
-      "status": "open"
-    },
-    {
-      "id": "k-ataturk-parki",
-      "name": "Atatürk Parkı",
-      "type": "park",
-      "location": {
-        "lat": 40.4044,
-        "lng": 49.84969
-      },
-      "capacity": 20000,
-      "areaM2": 115613,
+      "areaM2": 107668,
       "source": "osm:leisure=park",
       "status": "open"
     },
@@ -505,37 +453,11 @@
       "name": "Nizami Gəncəvi Parkı",
       "type": "park",
       "location": {
-        "lat": 40.38004,
-        "lng": 49.89472
+        "lat": 40.3797,
+        "lng": 49.89528
       },
       "capacity": 20000,
-      "areaM2": 101824,
-      "source": "osm:leisure=park",
-      "status": "open"
-    },
-    {
-      "id": "k-demiryolcular-parki",
-      "name": "Dəmiryolçular Parkı",
-      "type": "park",
-      "location": {
-        "lat": 40.43011,
-        "lng": 49.80771
-      },
-      "capacity": 20000,
-      "areaM2": 95023,
-      "source": "osm:leisure=park",
-      "status": "open"
-    },
-    {
-      "id": "k-heyder-eliyev-parki",
-      "name": "Heydər Əliyev Parkı",
-      "type": "park",
-      "location": {
-        "lat": 40.3789,
-        "lng": 49.95654
-      },
-      "capacity": 19000,
-      "areaM2": 76159,
+      "areaM2": 104524,
       "source": "osm:leisure=park",
       "status": "open"
     },
@@ -544,37 +466,50 @@
       "name": "Zəfər Parkı",
       "type": "park",
       "location": {
-        "lat": 40.37631,
-        "lng": 49.86875
+        "lat": 40.37633,
+        "lng": 49.86839
       },
-      "capacity": 18600,
-      "areaM2": 74549,
+      "capacity": 20000,
+      "areaM2": 79903,
       "source": "osm:leisure=park",
       "status": "open"
     },
     {
-      "id": "k-zerife-eliyeva-parki",
-      "name": "Zərifə Əliyeva parkı",
+      "id": "k-demiryolcular-parki",
+      "name": "Dəmiryolçular Parkı",
       "type": "park",
       "location": {
-        "lat": 40.42253,
-        "lng": 49.82068
+        "lat": 40.43046,
+        "lng": 49.80751
       },
-      "capacity": 17400,
-      "areaM2": 69434,
+      "capacity": 18200,
+      "areaM2": 72673,
       "source": "osm:leisure=park",
       "status": "open"
     },
     {
-      "id": "k-qelebe-parki",
-      "name": "Qələbə Parkı",
+      "id": "k-heyder-eliyev-parki",
+      "name": "Heydər Əliyev Parkı",
       "type": "park",
       "location": {
-        "lat": 40.40843,
-        "lng": 49.85794
+        "lat": 40.37853,
+        "lng": 49.95617
       },
-      "capacity": 17100,
-      "areaM2": 68524,
+      "capacity": 16700,
+      "areaM2": 66805,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-sevgi-parki",
+      "name": "Sevgi parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.38728,
+        "lng": 49.86456
+      },
+      "capacity": 15500,
+      "areaM2": 62140,
       "source": "osm:leisure=park",
       "status": "open"
     },
@@ -583,11 +518,24 @@
       "name": "Dədə Qorqud parkı",
       "type": "park",
       "location": {
-        "lat": 40.39286,
-        "lng": 49.84713
+        "lat": 40.39253,
+        "lng": 49.84671
       },
-      "capacity": 17000,
-      "areaM2": 67912,
+      "capacity": 15300,
+      "areaM2": 61345,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-qis-parki",
+      "name": "Qış Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.37698,
+        "lng": 49.83801
+      },
+      "capacity": 14800,
+      "areaM2": 59169,
       "source": "osm:leisure=park",
       "status": "open"
     },
@@ -596,63 +544,11 @@
       "name": "Ramiz Aboyev adına mədəniyyət və istirahət parkı",
       "type": "park",
       "location": {
-        "lat": 40.43642,
-        "lng": 49.84029
+        "lat": 40.43635,
+        "lng": 49.84038
       },
-      "capacity": 16300,
-      "areaM2": 65136,
-      "source": "osm:leisure=park",
-      "status": "open"
-    },
-    {
-      "id": "k-sehriyar-bagi",
-      "name": "Şəhriyar Bağı",
-      "type": "park",
-      "location": {
-        "lat": 40.39226,
-        "lng": 49.85531
-      },
-      "capacity": 15700,
-      "areaM2": 62739,
-      "source": "osm:leisure=park",
-      "status": "open"
-    },
-    {
-      "id": "k-samir-xasiyev-parki",
-      "name": "Samir Xasıyev Parkı",
-      "type": "park",
-      "location": {
-        "lat": 40.39133,
-        "lng": 49.87444
-      },
-      "capacity": 15300,
-      "areaM2": 61026,
-      "source": "osm:leisure=park",
-      "status": "open"
-    },
-    {
-      "id": "k-bayil-parki",
-      "name": "Bayil Parkı",
-      "type": "park",
-      "location": {
-        "lat": 40.35262,
-        "lng": 49.83271
-      },
-      "capacity": 14400,
-      "areaM2": 57461,
-      "source": "osm:leisure=park",
-      "status": "open"
-    },
-    {
-      "id": "k-merkezi-park-yuxari-sovetski",
-      "name": "Mərkəzi Park Yuxarı \\ Sovetski",
-      "type": "park",
-      "location": {
-        "lat": 40.37461,
-        "lng": 49.82474
-      },
-      "capacity": 13900,
-      "areaM2": 55483,
+      "capacity": 14800,
+      "areaM2": 59067,
       "source": "osm:leisure=park",
       "status": "open"
     },
@@ -661,63 +557,141 @@
       "name": "Yasamal parkı",
       "type": "park",
       "location": {
-        "lat": 40.38731,
-        "lng": 49.81266
+        "lat": 40.38764,
+        "lng": 49.81327
       },
-      "capacity": 13800,
-      "areaM2": 55220,
+      "capacity": 14200,
+      "areaM2": 56789,
       "source": "osm:leisure=park",
       "status": "open"
     },
     {
-      "id": "k-dagustu-park",
-      "name": "Dağüstü Park",
+      "id": "k-heyder-eliyev-parki-8-ci-km",
+      "name": "Heydər Əliyev Parkı \\ 8-ci km",
       "type": "park",
       "location": {
-        "lat": 40.3575,
-        "lng": 49.82913
-      },
-      "capacity": 13500,
-      "areaM2": 53877,
-      "source": "osm:leisure=park",
-      "status": "reserve"
-    },
-    {
-      "id": "k-sevgi-parki",
-      "name": "Sevgi parkı",
-      "type": "park",
-      "location": {
-        "lat": 40.38691,
-        "lng": 49.86494
+        "lat": 40.40199,
+        "lng": 49.94157
       },
       "capacity": 12900,
-      "areaM2": 51471,
+      "areaM2": 51588,
       "source": "osm:leisure=park",
-      "status": "reserve"
+      "status": "open"
     },
     {
-      "id": "k-nerimanov-parki",
-      "name": "Nərimanov parkı",
+      "id": "k-sehriyar-bagi",
+      "name": "Şəhriyar Bağı",
       "type": "park",
       "location": {
-        "lat": 40.40183,
-        "lng": 49.87163
+        "lat": 40.39245,
+        "lng": 49.85473
       },
-      "capacity": 10900,
-      "areaM2": 43472,
+      "capacity": 12600,
+      "areaM2": 50514,
       "source": "osm:leisure=park",
-      "status": "reserve"
+      "status": "open"
+    },
+    {
+      "id": "k-samir-xasiyev-parki",
+      "name": "Samir Xasıyev Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.39127,
+        "lng": 49.87461
+      },
+      "capacity": 12100,
+      "areaM2": 48347,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-qelebe-parki",
+      "name": "Qələbə Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.40846,
+        "lng": 49.85785
+      },
+      "capacity": 12000,
+      "areaM2": 47995,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-merkezi-park-yuxari-sovetski",
+      "name": "Mərkəzi Park Yuxarı \\ Sovetski",
+      "type": "park",
+      "location": {
+        "lat": 40.37453,
+        "lng": 49.82467
+      },
+      "capacity": 11700,
+      "areaM2": 46648,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-ataturk-parki",
+      "name": "Atatürk Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.40387,
+        "lng": 49.84988
+      },
+      "capacity": 11500,
+      "areaM2": 45960,
+      "source": "osm:leisure=park",
+      "status": "open"
     },
     {
       "id": "k-mese-parki-samaxinka",
       "name": "Meşə Parkı \\ Şamaxinka",
       "type": "park",
       "location": {
-        "lat": 40.40929,
-        "lng": 49.80256
+        "lat": 40.40972,
+        "lng": 49.80221
       },
-      "capacity": 10700,
-      "areaM2": 42997,
+      "capacity": 9800,
+      "areaM2": 39133,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-neftciler-parki",
+      "name": "Neftçilər Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.39413,
+        "lng": 49.97427
+      },
+      "capacity": 9800,
+      "areaM2": 39085,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-nerimanov-parki",
+      "name": "Nərimanov parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.40229,
+        "lng": 49.8713
+      },
+      "capacity": 9200,
+      "areaM2": 36836,
+      "source": "osm:leisure=park",
+      "status": "reserve"
+    },
+    {
+      "id": "k-dagustu-park",
+      "name": "Dağüstü Park",
+      "type": "park",
+      "location": {
+        "lat": 40.35742,
+        "lng": 49.82955
+      },
+      "capacity": 8700,
+      "areaM2": 34627,
       "source": "osm:leisure=park",
       "status": "reserve"
     },
@@ -726,11 +700,11 @@
       "name": "Port Baku Parkı",
       "type": "park",
       "location": {
-        "lat": 40.37502,
-        "lng": 49.86368
+        "lat": 40.37504,
+        "lng": 49.86377
       },
-      "capacity": 9400,
-      "areaM2": 37639,
+      "capacity": 8300,
+      "areaM2": 33105,
       "source": "osm:leisure=park",
       "status": "reserve"
     },
@@ -739,37 +713,50 @@
       "name": "Alov Parkı",
       "type": "park",
       "location": {
-        "lat": 40.4225,
-        "lng": 49.9167
+        "lat": 40.42247,
+        "lng": 49.91681
       },
-      "capacity": 9000,
-      "areaM2": 35871,
+      "capacity": 7200,
+      "areaM2": 28763,
       "source": "osm:leisure=park",
       "status": "reserve"
     },
     {
-      "id": "k-ataturk-parki",
-      "name": "Atatürk parkı",
+      "id": "k-huseyn-cavid-parki",
+      "name": "Hüseyn Cavid parkı",
       "type": "park",
       "location": {
-        "lat": 40.41116,
-        "lng": 49.84708
+        "lat": 40.37349,
+        "lng": 49.8174
       },
-      "capacity": 9000,
-      "areaM2": 35802,
+      "capacity": 7100,
+      "areaM2": 28373,
       "source": "osm:leisure=park",
       "status": "reserve"
     },
     {
-      "id": "k-neftciler-parki",
-      "name": "Neftçilər Parkı",
+      "id": "k-zabitler-parki",
+      "name": "Zabitlər parkı",
       "type": "park",
       "location": {
-        "lat": 40.39409,
-        "lng": 49.97422
+        "lat": 40.38519,
+        "lng": 49.83629
       },
-      "capacity": 8200,
-      "areaM2": 32948,
+      "capacity": 7000,
+      "areaM2": 28065,
+      "source": "osm:leisure=park",
+      "status": "reserve"
+    },
+    {
+      "id": "k-zerife-eliyeva-parki",
+      "name": "Zərifə Əliyeva parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.42289,
+        "lng": 49.82061
+      },
+      "capacity": 6300,
+      "areaM2": 25126,
       "source": "osm:leisure=park",
       "status": "reserve"
     },
@@ -778,8 +765,8 @@
       "name": "Tofiq Bəhramov adına Respublika Stadionu",
       "type": "stadium",
       "location": {
-        "lat": 40.39756,
-        "lng": 49.8524
+        "lat": 40.39757,
+        "lng": 49.85238
       },
       "seats": 31200,
       "capacity": 30000,
@@ -791,8 +778,8 @@
       "name": "Neftçi İdman Bazası",
       "type": "stadium",
       "location": {
-        "lat": 40.40291,
-        "lng": 49.83847
+        "lat": 40.403,
+        "lng": 49.83836
       },
       "capacity": 3000,
       "source": "osm:leisure=stadium; capacity=default",
@@ -803,8 +790,8 @@
       "name": "Spartak Stadionu",
       "type": "stadium",
       "location": {
-        "lat": 40.38916,
-        "lng": 49.82805
+        "lat": 40.38922,
+        "lng": 49.82802
       },
       "capacity": 3000,
       "source": "osm:leisure=stadium; capacity=default",
@@ -815,8 +802,8 @@
       "name": "İsmət Qayıbov Stadionu",
       "type": "stadium",
       "location": {
-        "lat": 40.4371,
-        "lng": 49.9551
+        "lat": 40.43715,
+        "lng": 49.95491
       },
       "capacity": 3000,
       "source": "osm:leisure=stadium; capacity=default",
@@ -827,8 +814,8 @@
       "name": "Bakı Olimpiya Stadionu",
       "type": "stadium",
       "location": {
-        "lat": 40.42998,
-        "lng": 49.91953
+        "lat": 40.43003,
+        "lng": 49.91951
       },
       "seats": 69870,
       "capacity": 30000,
@@ -840,8 +827,8 @@
       "name": "Palms Sports Arena",
       "type": "stadium",
       "location": {
-        "lat": 40.40017,
-        "lng": 49.94393
+        "lat": 40.40035,
+        "lng": 49.94403
       },
       "seats": 15000,
       "capacity": 15000,
@@ -853,8 +840,8 @@
       "name": "30 nömrəli məktəb stadionu",
       "type": "stadium",
       "location": {
-        "lat": 40.42206,
-        "lng": 49.82708
+        "lat": 40.42211,
+        "lng": 49.82703
       },
       "capacity": 3000,
       "source": "osm:leisure=stadium; capacity=default",
@@ -1857,148 +1844,141 @@
     {
       "name": "Təcili Yardim Xəstəxanasi Musa Nağiyev adina",
       "location": {
-        "lat": 40.39162,
-        "lng": 49.8324
+        "lat": 40.39165,
+        "lng": 49.83239
       }
     },
     {
       "name": "Mərkəzi Dəmiryol Xəstəxanası",
       "location": {
-        "lat": 40.42256,
-        "lng": 49.80458
+        "lat": 40.4226,
+        "lng": 49.80433
       }
     },
     {
       "name": "1 saylı Vərəm deispanseri \\ Bakı",
       "location": {
-        "lat": 40.40657,
-        "lng": 49.80093
+        "lat": 40.40642,
+        "lng": 49.80119
       }
     },
     {
       "name": "Dental Studio \\ Ukrayna dairəsi",
       "location": {
-        "lat": 40.37835,
-        "lng": 49.94932
+        "lat": 40.37838,
+        "lng": 49.94928
       }
     },
     {
       "name": "Mərkəzi klinik xəstəxana",
       "location": {
-        "lat": 40.36153,
-        "lng": 49.82453
+        "lat": 40.36146,
+        "lng": 49.82462
       }
     },
     {
       "name": "Dəmiryol Xəstəxanası",
       "location": {
-        "lat": 40.3801,
-        "lng": 49.85229
+        "lat": 40.38009,
+        "lng": 49.85242
       }
     },
     {
       "name": "9 Saylı Təcili Yardım Stansiyası",
       "location": {
-        "lat": 40.42948,
-        "lng": 49.8231
+        "lat": 40.42952,
+        "lng": 49.82311
       }
     },
     {
       "name": "Xüsusi Müalicə Saglamliq Kompleksi (XMSK)",
       "location": {
-        "lat": 40.35307,
-        "lng": 49.80926
+        "lat": 40.35317,
+        "lng": 49.8092
       }
     },
     {
       "name": "2 Saylı Kliniki Psixiatriya Xəstəxanası",
       "location": {
-        "lat": 40.38524,
-        "lng": 49.84355
+        "lat": 40.38533,
+        "lng": 49.84349
       }
     },
     {
       "name": "Sağlam Ailə",
       "location": {
         "lat": 40.40943,
-        "lng": 49.86186
+        "lng": 49.86188
       }
     },
     {
       "name": "Universal Hospital",
       "location": {
-        "lat": 40.41874,
-        "lng": 49.84572
+        "lat": 40.41878,
+        "lng": 49.8457
       }
     },
     {
       "name": "Milli Sağlamlıq Mərkəzi",
       "location": {
-        "lat": 40.41124,
-        "lng": 49.9
+        "lat": 40.4111,
+        "lng": 49.90042
       }
     },
     {
       "name": "Bərpa Tibb Mərkəzi \\ Nobel \\ 8 Noyabr pr.",
       "location": {
-        "lat": 40.36856,
-        "lng": 49.9347
+        "lat": 40.36861,
+        "lng": 49.93478
       }
     },
     {
       "name": "32 saylı Xəstəxana / Keşlə",
       "location": {
-        "lat": 40.39647,
-        "lng": 49.8946
-      }
-    },
-    {
-      "name": "18 Saylı Birləşmiş Şəhər Xəstəxanası",
-      "location": {
-        "lat": 40.41281,
-        "lng": 49.93722
+        "lat": 40.39648,
+        "lng": 49.89458
       }
     },
     {
       "name": "Tibb Məntəqəsi",
       "location": {
-        "lat": 40.45183,
-        "lng": 49.94268
+        "lat": 40.45184,
+        "lng": 49.94272
       }
     },
     {
       "name": "6 saylı Vərəm Dispanseri",
       "location": {
-        "lat": 40.37096,
-        "lng": 49.99063
+        "lat": 40.37075,
+        "lng": 49.99057
       }
     },
     {
       "name": "6 saylı Uşaq Uroloji Sanatoriyası",
       "location": {
-        "lat": 40.37688,
-        "lng": 49.96407
+        "lat": 40.37683,
+        "lng": 49.96408
       }
     },
     {
       "name": "4 saylı Uşaq Vərəm Sanatoriyası",
       "location": {
-        "lat": 40.37403,
-        "lng": 49.9554
+        "lat": 40.3742,
+        "lng": 49.95535
       }
     },
     {
       "name": "Tuberkuloz Dispanseri \\ UPD Keşlə",
       "location": {
-        "lat": 40.38534,
+        "lat": 40.38541,
         "lng": 49.90404
       }
     },
     {
       "name": "Sulutəpə Tibb Məntəqəsi",
       "location": {
-        "lat": 40.43292,
-        "lng": 49.77322
+        "lat": 40.43295,
+        "lng": 49.77324
       }
     }
   ]

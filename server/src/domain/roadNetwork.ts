@@ -28,7 +28,8 @@ const DLNG = 0.0056;
 /** Rough Caspian coastline (lat below which there is sea) by longitude. */
 const COAST: [number, number][] = [
   [49.79, 40.348], [49.82, 40.352], [49.84, 40.360], [49.86, 40.367],
-  [49.88, 40.371], [49.90, 40.373], [49.93, 40.372], [49.98, 40.368],
+  // east of Ağ Şəhər the shore turns south towards Zığ (verified against OSM tiles)
+  [49.88, 40.371], [49.90, 40.373], [49.92, 40.365], [49.94, 40.355], [49.98, 40.350],
 ];
 
 function coastLat(lng: number): number {

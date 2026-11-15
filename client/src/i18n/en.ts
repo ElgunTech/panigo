@@ -100,6 +100,7 @@ export const en: Dict = {
     allFull: 'All nearby points are full — showing the least crowded.',
     sosTitle: 'Emergency SOS',
     sosHint: 'Sent instantly with one tap — your location is attached automatically.',
+    sosHintShort: 'One tap — location attached',
     sosSent: 'SOS sent',
     sosLimit: 'Too many SOS — please wait a moment.',
     mySos: 'My signals',

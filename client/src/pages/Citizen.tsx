@@ -154,7 +154,7 @@ export default function Citizen() {
           </div>
         </header>
 
-        <div className="scroll-thin min-h-0 flex-1 space-y-4 overflow-y-auto p-4">
+        <div className="scroll-thin min-h-0 flex-1 space-y-4 overflow-y-auto p-4 pb-52 lg:pb-4">
           {/* Location */}
           <section className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
             <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -263,7 +263,8 @@ export default function Citizen() {
           )}
 
           {/* SOS */}
-          <section className="rounded-2xl border border-red-200 bg-white p-4 shadow-sm">
+          {/* Desktop: SOS in the panel. Mobile: buttons live in the sticky bottom bar; only my signals stay here. */}
+          <section className={clsx('rounded-2xl border border-red-200 bg-white p-4 shadow-sm', mySos.length === 0 && 'hidden lg:block')}>
             <div className="flex items-center gap-2">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
@@ -271,8 +272,8 @@ export default function Citizen() {
               </span>
               <h3 className="text-sm font-bold uppercase tracking-wide text-red-600">{t.citizen.sosTitle}</h3>
             </div>
-            <p className="mt-1 text-xs text-slate-500">{t.citizen.sosHint}</p>
-            <div className="mt-3 grid grid-cols-2 gap-2">
+            <p className="mt-1 hidden text-xs text-slate-500 lg:block">{t.citizen.sosHint}</p>
+            <div className="mt-3 hidden grid-cols-2 gap-2 lg:grid">
               {HAZARDS.map((h) => (
                 <button
                   key={h}
@@ -289,7 +290,7 @@ export default function Citizen() {
             <button
               onClick={toggleSafe}
               className={clsx(
-                'mt-3 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-extrabold tracking-wide transition active:scale-[0.99]',
+                'mt-3 hidden w-full items-center justify-center gap-2 rounded-xl py-3.5 lg:flex text-sm font-extrabold tracking-wide transition active:scale-[0.99]',
                 safe ? 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50' : 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/25 hover:bg-emerald-700',
               )}
             >
@@ -379,7 +380,7 @@ export default function Citizen() {
       </aside>
 
       {/* Map */}
-      <div className="relative order-1 h-[42vh] shrink-0 lg:order-2 lg:h-auto lg:flex-1">
+      <div className="relative order-1 h-[34vh] shrink-0 sm:h-[40vh] lg:order-2 lg:h-auto lg:flex-1">
         <CityMap theme="light" className="h-full w-full">
           <MapClick onClick={(p) => setLocation(p)} />
           <ClosuresLayer closures={closures} />
@@ -406,6 +407,43 @@ export default function Citizen() {
             {toast.text}
           </div>
         )}
+      </div>
+
+      {/* Mobile sticky emergency bar — SOS is always one thumb-tap away */}
+      <div className="fixed inset-x-0 bottom-0 z-[1100] border-t border-red-100 bg-white/95 px-3 pb-[calc(env(safe-area-inset-bottom)+10px)] pt-2.5 shadow-[0_-10px_30px_rgba(15,23,42,0.12)] backdrop-blur lg:hidden">
+        <div className="mb-2 flex items-center gap-2 px-0.5">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
+          </span>
+          <span className="text-[11px] font-bold uppercase tracking-wider text-red-600">{t.citizen.sosTitle}</span>
+          <span className="ml-auto truncate text-[10px] text-slate-400">{t.citizen.sosHintShort}</span>
+        </div>
+        <div className="grid grid-cols-4 gap-1.5">
+          {HAZARDS.map((h) => (
+            <button
+              key={h}
+              onClick={() => sendSos(h)}
+              disabled={!!sending || !token}
+              aria-label={`SOS: ${t.hazard[h]}`}
+              className="flex min-h-[64px] flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[11px] font-bold leading-tight text-white shadow-sm transition active:scale-95 disabled:opacity-60"
+              style={{ background: HAZARD_COLOR[h] }}
+            >
+              {sending === h ? <Loader2 className="h-5 w-5 animate-spin" /> : <HazardIcon hazard={h} className="h-5 w-5" />}
+              <span className="text-center">{t.hazard[h]}</span>
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={toggleSafe}
+          className={clsx(
+            'mt-2 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-extrabold tracking-wide transition active:scale-[0.99]',
+            safe ? 'border border-slate-300 bg-white text-slate-700' : 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/25',
+          )}
+        >
+          {safe ? <AlertTriangle className="h-5 w-5" /> : <ShieldCheck className="h-5 w-5" />}
+          {safe ? t.citizen.safeUndo : t.citizen.safe}
+        </button>
       </div>
     </div>
   );

@@ -114,15 +114,15 @@ function Console({ token, user, onLogout }: { token: string; user: User; onLogou
 
       <Kpis state={state} activeSos={activeSos.length} openAlerts={openAlerts} />
 
-      <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
         {/* Left: alerts + feed */}
-        <aside className="scroll-thin order-2 flex max-h-[60vh] min-h-0 flex-col gap-3 overflow-y-auto border-white/5 p-3 lg:order-1 lg:max-h-none lg:w-[360px] lg:border-r">
+        <aside className="scroll-thin order-1 flex max-h-[55vh] shrink-0 flex-col gap-3 overflow-y-auto border-white/5 p-3 lg:max-h-none lg:shrink lg:w-[360px] lg:border-r">
           <AlertsPanel alerts={alerts} state={state} ops={ops} onFocus={setFocus} />
           <SosFeed sos={sos} brigades={brigades} zones={state.zones} ops={ops} onFocus={setFocus} />
         </aside>
 
         {/* Map */}
-        <div className="relative order-1 h-[45vh] shrink-0 lg:order-2 lg:h-auto lg:flex-1">
+        <div className="relative order-2 h-[50vh] shrink-0 lg:h-auto lg:flex-1">
           <CityMap theme="dark" className={clsx('h-full w-full', closureMode && 'cursor-crosshair')}>
             <ZonesLayer zones={state.zones} sos={activeSos} alerts={alerts} focus={focus} />
             <HospitalsLayer hospitals={state.hospitals} />
@@ -151,7 +151,7 @@ function Console({ token, user, onLogout }: { token: string; user: User; onLogou
         </div>
 
         {/* Right: tabs */}
-        <aside className="order-3 flex min-h-0 flex-col border-white/5 lg:w-[360px] lg:border-l">
+        <aside className="order-3 flex min-h-[70vh] flex-col border-white/5 lg:min-h-0 lg:w-[360px] lg:border-l">
           <SidePanel state={state} ops={ops} role={user.role} me={user.sub} onClosureMode={() => setClosureMode(true)} onFocus={setFocus} />
         </aside>
       </div>

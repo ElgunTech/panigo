@@ -1,0 +1,16 @@
+services:
+  uce:
+    build: .
+    ports:
+      - "4000:4000"
+    environment:
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production-please}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+      DISPATCHER_PASSWORD: ${DISPATCHER_PASSWORD:-dispatcher123}
+      CORS_ORIGINS: http://localhost:4000
+      ROUTING_PROVIDERS: osrm,simulated
+    volumes:
+      - uce-data:/data
+    restart: unless-stopped
+volumes:
+  uce-data:
