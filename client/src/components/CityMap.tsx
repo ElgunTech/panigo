@@ -193,12 +193,14 @@ export function EntrancesLayer({ entrances, active, label }: { entrances: { lat:
   );
 }
 
-const sosIcon = (color: string) =>
+const sosIcon = (color: string, done = false) =>
   L.divIcon({
     className: '',
     iconSize: [30, 30],
     iconAnchor: [15, 15],
-    html: `<div class="sos-pin"><span class="ring" style="background:${color}"></span><span class="core" style="background:${color}">SOS</span></div>`,
+    html: done
+      ? `<div class="sos-pin done"><span class="core" style="background:#16a34a">✓</span></div>`
+      : `<div class="sos-pin"><span class="ring" style="background:${color}"></span><span class="core" style="background:${color}">SOS</span></div>`,
   });
 
 /** The citizen's own active SOS signals — pulsing pin at the exact reported location. */
@@ -206,12 +208,26 @@ export function MySosLayer({ sos, label }: { sos: SosSignal[]; label: (s: SosSig
   return (
     <>
       {sos.map((s) => (
-        <Marker key={s.id} position={[s.location.lat, s.location.lng]} icon={sosIcon(HAZARD_COLOR[s.hazard])} zIndexOffset={800}>
+        <Marker key={s.id} position={[s.location.lat, s.location.lng]} icon={sosIcon(HAZARD_COLOR[s.hazard], s.status === 'resolved' || !!s.confirmedAt)} zIndexOffset={800}>
           <Tooltip direction="top" offset={[0, -12]}>
             {label(s)}
           </Tooltip>
         </Marker>
       ))}
     </>
+  );
+}
+
+const destIcon = (kind: 'hospital' | 'base') =>
+  L.divIcon({ className: '', iconSize: [26, 26], iconAnchor: [13, 13], html: `<div class="dest-pin ${kind}">${kind === 'hospital' ? '+' : 'B'}</div>` });
+
+/** Where a brigade is heading after the job (nearest hospital or its base). */
+export function DestinationMarker({ at, kind, label }: { at: LatLng; kind: 'hospital' | 'base'; label: string }) {
+  return (
+    <Marker position={[at.lat, at.lng]} icon={destIcon(kind)} zIndexOffset={600}>
+      <Tooltip direction="bottom" offset={[0, 14]} permanent className="!px-2 !py-1 !text-[10px]">
+        {label}
+      </Tooltip>
+    </Marker>
   );
 }

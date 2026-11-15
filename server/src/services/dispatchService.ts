@@ -2,6 +2,7 @@ import type { Brigade, LatLng, SosSignal } from '@shared/types';
 import { advanceAlong, haversine, polylineLength } from '../domain/geo';
 import type { RoutingService } from '../routing/routingService';
 import type { Store } from './store';
+import { HOSPITALS } from '../data/seed';
 
 const BRIGADE_SPEED_MS = 12; // ~43 km/h with sirens
 /** Time a brigade works on scene before the signals are resolved (simulated ms). */
@@ -30,7 +31,8 @@ export class DispatchService {
   async assign(brigadeId: string, sosIds: string[], actor: string, target?: LatLng): Promise<Brigade> {
     const b = this.store.brigades.get(brigadeId);
     if (!b) throw new DispatchError('BRIGADE_NOT_FOUND');
-    if (b.status !== 'available') throw new DispatchError('BRIGADE_BUSY');
+    // A unit on its way back can be re-tasked
+    if (b.status !== 'available' && b.status !== 'returning') throw new DispatchError('BRIGADE_BUSY');
     const open = sosIds.map((id) => this.store.sos.get(id)).filter((s): s is SosSignal => !!s && s.status !== 'resolved' && s.status !== 'cancelled');
 
     // Stops: the SOS points themselves (nearest-neighbour tour), or an explicit target
@@ -55,6 +57,9 @@ export class DispatchService {
     b.route = geometry;
     b.etaS = Math.round(polylineLength(geometry) / BRIGADE_SPEED_MS);
     b.targetSosIds = stops.map((s) => s.id);
+    b.followSosIds = [];
+    b.destinationName = undefined;
+    b.destinationKind = undefined;
     this.onSceneMs.delete(b.id);
     this.store.upsertBrigade(b);
     for (const s of stops) {
@@ -70,18 +75,22 @@ export class DispatchService {
   tick(dtMs: number) {
     const simMs = dtMs * this.timeScale;
     for (const b of this.store.brigades.values()) {
-      if (b.status === 'en_route' && b.route) {
+      if ((b.status === 'en_route' || b.status === 'returning') && b.route) {
         const { position, rest, arrived } = advanceAlong(b.route, (BRIGADE_SPEED_MS * simMs) / 1000);
         b.location = position;
         b.route = rest;
         b.etaS = Math.max(0, Math.round(polylineLength(rest) / BRIGADE_SPEED_MS));
+        if (arrived && b.status === 'returning') {
+          this.finishReturn(b);
+          continue;
+        }
         if (arrived) {
           b.status = 'on_scene';
           b.route = undefined;
           b.etaS = 0;
           this.onSceneMs.set(b.id, 0);
         }
-        this.markArrivals(b);
+        if (b.status === 'en_route' || b.status === 'on_scene') this.markArrivals(b);
         this.store.upsertBrigade(b);
       } else if (b.status === 'on_scene') {
         const t = (this.onSceneMs.get(b.id) ?? 0) + simMs;
@@ -111,18 +120,48 @@ export class DispatchService {
       }
     }
     this.store.log('system', 'brigade.completed', { brigadeId: b.id, sosIds: b.targetSosIds });
-    // Final state goes to the citizens too (they are still in targetSosIds when we publish)
-    b.status = 'available';
-    b.target = undefined;
     this.onSceneMs.delete(b.id);
-    this.store.upsertBrigade(b);
+
+    // Return trip: medical units transport to the nearest real hospital, others go back to base.
+    // The served citizens keep following the unit on their map (followSosIds).
+    const hospital = b.type === 'medical' && HOSPITALS.length ? HOSPITALS.reduce((x, y) => (haversine(b.location, x.location) <= haversine(b.location, y.location) ? x : y)) : undefined;
+    const dest = hospital?.location ?? b.base;
+    b.status = 'returning';
+    b.followSosIds = b.targetSosIds;
     b.targetSosIds = [];
+    b.destinationKind = hospital ? 'hospital' : 'base';
+    b.destinationName = hospital?.name;
+    b.target = dest;
+    b.route = [b.location, dest];
+    b.etaS = Math.round(haversine(b.location, dest) / BRIGADE_SPEED_MS);
+    this.store.upsertBrigade(b);
+    void this.routing
+      .route(b.location, dest, this.store.openClosures(), 'vehicle')
+      .then((r) => {
+        if (b.status === 'returning' && b.target === dest) {
+          b.route = r.geometry;
+          b.etaS = Math.round(polylineLength(r.geometry) / BRIGADE_SPEED_MS);
+          this.store.upsertBrigade(b);
+        }
+      })
+      .catch(() => undefined);
+  }
+
+  private finishReturn(b: Brigade) {
+    b.status = 'available';
+    b.route = undefined;
+    b.etaS = 0;
+    this.store.upsertBrigade(b); // last update still reaches the following citizens
+    b.followSosIds = [];
+    b.target = undefined;
+    b.destinationName = undefined;
+    b.destinationKind = undefined;
     this.store.upsertBrigade(b);
   }
 
   nearestFree(p: LatLng) {
     return [...this.store.brigades.values()]
-      .filter((b) => b.status === 'available')
+      .filter((b) => b.status === 'available' || b.status === 'returning')
       .sort((a, b) => haversine(a.location, p) - haversine(b.location, p))[0];
   }
 }

@@ -128,7 +128,7 @@ export class CrisisService {
     // Re-validate at decision time — state may have changed since the alert was raised
     const hazard = alert.kind === 'priority_sos' ? 'medical' : this.dominantHazard(alert);
     const brigade =
-      (alert.recommendation.brigadeId && this.store.brigades.get(alert.recommendation.brigadeId)?.status === 'available'
+      (alert.recommendation.brigadeId && ['available', 'returning'].includes(this.store.brigades.get(alert.recommendation.brigadeId)?.status ?? '')
         ? this.store.brigades.get(alert.recommendation.brigadeId)
         : undefined) ?? pickBrigade(alert.center, hazard, [...this.store.brigades.values()]);
     const recommendedReserve =

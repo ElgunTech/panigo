@@ -1,4 +1,4 @@
-import { getSession, isCitizenRole } from './session';
+import { getSession, isCitizenRole, tokenRole } from './session';
 /** Thin typed fetch wrapper. Token is per-app ("citizen" | "operator") and kept in localStorage. */
 export type TokenKind = 'citizen' | 'operator';
 
@@ -54,7 +54,10 @@ export async function ensureCitizenToken(care?: boolean): Promise<string> {
   const s = getSession();
   if (s && isCitizenRole(s.user.role)) return s.token;
   const existing = getToken('citizen');
-  if (existing && care === undefined) {
+  // Reuse the guest identity (and its SOS history) unless a *different* care mode is requested —
+  // reloading /citizen?care=1 must not create a new anonymous citizen.
+  const sameMode = care === undefined || (tokenRole(existing) === 'mobility_impaired') === care;
+  if (existing && sameMode) {
     try {
       await api('/citizen/me', { token: existing });
       return existing;

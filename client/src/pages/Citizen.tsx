@@ -8,8 +8,8 @@ import { api, ApiError, ensureCitizenToken } from '../lib/api';
 import { useLive } from '../lib/useLive';
 import { isCitizenRole, setSession, tokenRole, useSession } from '../lib/session';
 import { fmtDistance, fmtMinutes, HAZARD_COLOR, occColor, pct, timeAgo } from '../lib/format';
-import { BarriersLayer, BrigadesLayer, CityMap, ClosuresLayer, EntrancesLayer, MySosLayer, FitTo, MapClick, PointsLayer, RouteLayer, YouMarker } from '../components/CityMap';
-import { BrigadeTracker } from '../components/BrigadeTracker';
+import { BarriersLayer, BrigadesLayer, CityMap, ClosuresLayer, DestinationMarker, EntrancesLayer, MySosLayer, FitTo, MapClick, PointsLayer, RouteLayer, YouMarker } from '../components/CityMap';
+import { BrigadeTracker, brigadeFor } from '../components/BrigadeTracker';
 import { ConnBadge, HazardIcon, LangSwitch, Logo, OccupancyBar, PointIcon } from '../components/ui';
 
 const DEFAULT_LOC: LatLng = { lat: 40.3889, lng: 49.8413 };
@@ -149,12 +149,21 @@ export default function Citizen() {
   const closures = useMemo(() => Object.values(state.closures), [state.closures]);
   const mySos = useMemo(() => Object.values(state.sos).sort((a, b) => b.createdAt - a.createdAt).slice(0, 5), [state.sos]);
   /** Open signals (pin on the map) and the brigades currently serving them (live marker + route). */
-  const activeSos = useMemo(() => mySos.filter((s) => s.status === 'new' || s.status === 'assigned'), [mySos]);
-  const servingBrigades = useMemo(
-    () => activeSos.filter((s) => s.status === 'assigned' && s.brigadeId && state.brigades[s.brigadeId]).map((s) => state.brigades[s.brigadeId!]),
-    [activeSos, state.brigades],
+  // SOS pins stay on the map while open, and also after the job while the brigade that
+  // served it is still visible (on its way to the hospital / base) or the citizen confirmed it.
+  const activeSos = useMemo(
+    () => mySos.filter((s) => s.status === 'new' || s.status === 'assigned' || !!s.confirmedAt || !!brigadeFor(s, state.brigades)),
+    [mySos, state.brigades],
   );
-  const trackedSos = activeSos.find((s) => s.status === 'assigned' && s.brigadeId && state.brigades[s.brigadeId]);
+  const servingBrigades = useMemo(() => {
+    const m = new Map<string, Brigade>();
+    for (const s of activeSos) {
+      const b = brigadeFor(s, state.brigades);
+      if (b) m.set(b.id, b);
+    }
+    return [...m.values()];
+  }, [activeSos, state.brigades]);
+  const trackedSos = activeSos.find((s) => !!brigadeFor(s, state.brigades));
   const dest = plan?.destination ? (state.points[plan.destination.id] ?? plan.destination) : null;
   const destPct = dest ? pct(dest) : 0;
   const showBanner = plan && plan.reason !== 'initial' && plan.reason !== 'manual' && bannerDismissed !== plan.createdAt;
@@ -381,33 +390,42 @@ export default function Citizen() {
                 <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">{t.citizen.mySos}</h4>
                 <ul className="space-y-1.5">
                   {mySos.map((s) => (
-                    <li key={s.id} className="rounded-lg bg-slate-50 px-2.5 py-2 text-sm">
+                    <li key={s.id} className="rounded-xl bg-slate-50 px-2.5 py-2 text-sm">
+                      {/* Row 1: hazard + badges (never wrap inside a badge); Row 2: time */}
                       <div className="flex items-center gap-2">
-                      <HazardIcon hazard={s.hazard} className="h-4 w-4 shrink-0" />
-                      <span className="font-medium">{t.hazard[s.hazard]}</span>
-                      {s.priority === 1 && <span className="rounded bg-violet-600 px-1 py-px text-[9px] font-extrabold text-white">{t.citizen.priority1}</span>}
-                      <span
-                        className={clsx(
-                          'ml-auto rounded-full px-2 py-0.5 text-[11px] font-semibold',
-                          s.status === 'new' && 'bg-red-100 text-red-700',
-                          s.status === 'assigned' && 'bg-amber-100 text-amber-800',
-                          s.status === 'resolved' && 'bg-emerald-100 text-emerald-700',
-                          s.status === 'cancelled' && 'bg-slate-200 text-slate-600',
-                        )}
-                      >
-                        {t.sosStatus[s.status]}
-                      </span>
-                      {s.status === 'new' && (
-                        <button onClick={() => cancelSos(s.id)} className="rounded p-0.5 text-slate-400 hover:bg-slate-200 hover:text-slate-700" aria-label={t.common.cancel}>
-                          <X className="h-3.5 w-3.5" />
-                        </button>
-                      )}
-                      <span className="hidden text-[11px] text-slate-400 sm:inline">
-                        <Clock className="mr-0.5 inline h-3 w-3" />
-                        {timeAgo(s.createdAt, t.common)}
-                      </span>
+                        <HazardIcon hazard={s.hazard} className="h-4 w-4 shrink-0 text-slate-600" />
+                        <span className="min-w-0 truncate font-semibold">{t.hazard[s.hazard]}</span>
+                        <div className="ml-auto flex shrink-0 items-center gap-1">
+                          {s.priority === 1 && (
+                            <span className="inline-flex items-center gap-0.5 whitespace-nowrap rounded-md bg-violet-600 px-1.5 py-0.5 text-[10px] font-extrabold leading-none text-white" title={t.citizen.priority1}>
+                              <Accessibility className="h-3 w-3" />
+                              P1
+                            </span>
+                          )}
+                          <span
+                            className={clsx(
+                              'whitespace-nowrap rounded-full px-2 py-0.5 text-[10.5px] font-semibold leading-tight',
+                              s.status === 'new' && 'bg-red-100 text-red-700',
+                              s.status === 'assigned' && 'bg-amber-100 text-amber-800',
+                              s.status === 'resolved' && 'bg-emerald-100 text-emerald-700',
+                              s.status === 'cancelled' && 'bg-slate-200 text-slate-600',
+                            )}
+                          >
+                            {t.sosStatus[s.status]}
+                          </span>
+                          {s.status === 'new' && (
+                            <button onClick={() => cancelSos(s.id)} className="rounded p-0.5 text-slate-400 hover:bg-slate-200 hover:text-slate-700" aria-label={t.common.cancel}>
+                              <X className="h-3.5 w-3.5" />
+                            </button>
+                          )}
+                        </div>
                       </div>
-                      <BrigadeTracker sos={s} brigade={s.brigadeId ? state.brigades[s.brigadeId] : undefined} token={token} onError={(text) => setToast({ kind: 'err', text })} />
+                      <div className="mt-0.5 flex items-center gap-1 pl-6 text-[11px] text-slate-400">
+                        <Clock className="h-3 w-3" />
+                        {timeAgo(s.createdAt, t.common)}
+                        {s.priority === 1 && <span className="text-violet-600">· {t.citizen.priority1}</span>}
+                      </div>
+                      <BrigadeTracker sos={s} brigade={brigadeFor(s, state.brigades)} token={token} onError={(text) => setToast({ kind: 'err', text })} />
                     </li>
                   ))}
                 </ul>
@@ -475,7 +493,10 @@ export default function Citizen() {
             onSelect={(p) => pct(p) < 90 && requestPlan(location, p.id)}
             labels={(p) => `${p.name} — ${pct(p).toFixed(0)}%${p.ridershipDaily ? ` · ${p.ridershipDaily.toLocaleString()} ${t.citizen.dailyRiders}` : ''}`}
           />
-          <BrigadesLayer brigades={[...new Map(servingBrigades.map((b) => [b.id, b])).values()]} label={(b) => `${b.name} — ${t.brigadeStatus[b.status]}`} />
+          <BrigadesLayer brigades={servingBrigades} label={(b) => `${b.name} — ${t.brigadeStatus[b.status]}${b.destinationName ? ` → ${b.destinationName}` : ''}`} />
+          {servingBrigades.filter((b) => b.status === 'returning' && b.target).map((b) => (
+            <DestinationMarker key={b.id} at={b.target!} kind={b.destinationKind ?? 'base'} label={`${t.citizen.destination}: ${b.destinationName ?? t.citizen.brigadeToBase}`} />
+          ))}
           <MySosLayer sos={activeSos} label={(s) => `${t.citizen.sosPoint}: ${t.hazard[s.hazard]} · ${t.sosStatus[s.status]}`} />
           {care && <BarriersLayer barriers={state.barriers} label={t.citizen.barrierTip} />}
           <YouMarker at={location} />
@@ -508,7 +529,7 @@ export default function Citizen() {
         </div>
         {trackedSos && (
           <div className="mb-2">
-            <BrigadeTracker compact sos={trackedSos} brigade={state.brigades[trackedSos.brigadeId!]} token={token} onError={(text) => setToast({ kind: 'err', text })} />
+            <BrigadeTracker compact sos={trackedSos} brigade={brigadeFor(trackedSos, state.brigades)} token={token} onError={(text) => setToast({ kind: 'err', text })} />
           </div>
         )}
         <div className="grid grid-cols-4 gap-1.5">

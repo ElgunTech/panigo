@@ -91,6 +91,7 @@ Qayda B: open məntəqədə occupancy / capacity > 95%
 - Briqada təyin olunan SOS nöqtələrinə **ardıcıl uğrayır** (nearest-neighbour turu, maksimum 8 dayanacaq). Buna görə klaster həyəcanında da hər vətəndaşa fiziki olaraq çatır.
 - `Store.upsertBrigade` briqadanın mövqeyini həm dispetçerə, həm də xidmət etdiyi vətəndaşların otağına (`citizen:<id>`) göndərir.
 - Server briqadanın SOS-a ≤100 m yaxınlaşmasını özü aşkarlayır (`arrivedAt`). Vətəndaşın təsdiqi (`POST /citizen/sos/:id/arrived`) yalnız briqada həqiqətən ≤100 m (üstəgəl 20 m tolerans) məsafədə olanda qəbul olunur, əks halda `409 BRIGADE_TOO_FAR` qaytarılır. Təsdiq audit jurnalına yazılır.
+- İş bitəndən sonra briqada `returning` statusuna keçir: tibbi briqada ən yaxın real xəstəxanaya (OSM), digərləri bazaya gedir. Xidmət etdiyi vətəndaşlar (`followSosIds`) onu təyinata çatana qədər xəritədə görür. Qayıdan briqadaya yeni tapşırıq vermək olar.
 
 ### 3.4 Davamlı marşrutlaşdırma (`routingService.ts`)
 `ROUTING_PROVIDERS=osrm-foot,osrm,simulated`: provider-lər prioritet sırası ilə çağırılır. Hər provider hansı profilə xidmət etdiyini bildirir:

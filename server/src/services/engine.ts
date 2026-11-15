@@ -87,7 +87,7 @@ export class Engine {
 
   /** Brigades currently serving this citizen's signals (for the citizen map). */
   brigadesFor(citizenId: string) {
-    return [...this.store.brigades.values()].filter((b) => b.targetSosIds.some((id) => this.store.sos.get(id)?.citizenId === citizenId));
+    return [...this.store.brigades.values()].filter((b) => [...b.targetSosIds, ...(b.followSosIds ?? [])].some((id) => this.store.sos.get(id)?.citizenId === citizenId));
   }
 
   cancelSos(citizenId: string, sosId: string) {

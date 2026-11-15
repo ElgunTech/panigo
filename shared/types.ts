@@ -110,7 +110,8 @@ export interface SosSignal {
 }
 
 export type BrigadeType = 'fire' | 'medical' | 'rescue';
-export type BrigadeStatus = 'available' | 'en_route' | 'on_scene' | 'offline';
+/** returning = after the job: medical units drive to the nearest hospital, others back to base */
+export type BrigadeStatus = 'available' | 'en_route' | 'on_scene' | 'returning' | 'offline';
 
 export interface Brigade {
   id: string;
@@ -120,6 +121,11 @@ export interface Brigade {
   base: LatLng;
   status: BrigadeStatus;
   targetSosIds: string[];
+  /** SOS signals served on the last job — their citizens keep following the unit on its return trip */
+  followSosIds?: string[];
+  /** where the unit is heading after the job (hospital name / base) */
+  destinationName?: string;
+  destinationKind?: 'hospital' | 'base';
   target?: LatLng;
   route?: LatLng[];
   etaS?: number;

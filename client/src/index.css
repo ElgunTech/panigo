@@ -124,3 +124,19 @@ input[type='range'].occ-range {
 @media (prefers-reduced-motion: reduce) {
   .sos-pin .ring { animation: none; opacity: 0.35; }
 }
+.sos-pin.done .core {
+  font-size: 12px;
+  line-height: 14px;
+}
+.dest-pin {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font: 900 15px/1 Inter, sans-serif;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+.dest-pin.hospital { background: #fff; color: #dc2626; border-color: #dc2626; }
+.dest-pin.base { background: #0369a1; color: #fff; font-size: 12px; }

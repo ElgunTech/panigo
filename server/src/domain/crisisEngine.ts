@@ -80,7 +80,8 @@ const HAZARD_TO_BRIGADE: Record<Hazard, BrigadeType> = {
 
 /** Nearest available brigade, preferring one specialised for the hazard. */
 export function pickBrigade(target: LatLng, hazard: Hazard, brigades: Brigade[]): Brigade | undefined {
-  const free = brigades.filter((b) => b.status === 'available');
+  // units on their way back are free to be re-tasked
+  const free = brigades.filter((b) => b.status === 'available' || b.status === 'returning');
   if (!free.length) return undefined;
   const wanted = HAZARD_TO_BRIGADE[hazard];
   // 1.6x distance penalty for non-specialised units

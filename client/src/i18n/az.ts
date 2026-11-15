@@ -114,6 +114,7 @@ export const az = {
     available: 'Hazır',
     en_route: 'Yolda',
     on_scene: 'Hadisə yerində',
+    returning: 'Qayıdır',
     offline: 'Xidmətdən kənar',
   },
   provider: {
@@ -123,6 +124,10 @@ export const az = {
     straight: 'Təxmini istiqamət',
   },
   citizen: {
+    brigadeToHospital: 'Xəstəxanaya aparır',
+    brigadeToBase: 'Bazaya qayıdır',
+    sosDone: 'Yardım göstərildi',
+    destination: 'Təyinat',
     sosPoint: 'SOS siqnalınızın yeri',
     brigadeOnWay: 'Briqada yoldadır',
     brigadeOnScene: 'Briqada hadisə yerindədir',

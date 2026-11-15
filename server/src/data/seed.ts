@@ -32,6 +32,9 @@ export const DATASET = loadDataset();
 /** Wheelchair barriers (real OSM steps + stair underpasses). */
 export const BARRIERS: Barrier[] = DATASET?.barriers ?? [];
 
+/** Real hospitals (OSM) — medical units transport patients to the nearest one. */
+export const HOSPITALS: { name: string; location: LatLng }[] = DATASET?.hospitals ?? [];
+
 /** Bakı şəhəri — rayon zonaları (təxmini mərkəzlər). */
 export const ZONES: Zone[] = [
   { id: 'sabail', name: 'Səbail', center: { lat: 40.3655, lng: 49.8352 }, radiusM: 2200 },

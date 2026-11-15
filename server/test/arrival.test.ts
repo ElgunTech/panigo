@@ -74,6 +74,25 @@ describe('"Briqada çatdı" confirmation', () => {
     expect(audit.some((a: { action: string }) => a.action === 'sos.arrival_confirmed')).toBe(true);
   });
 
+  it('after the job the citizen keeps seeing where the brigade goes (medical → nearest hospital)', async () => {
+    const { citizen, sos, brigade } = await setup();
+    driveUntil(brigade.id, sos.location, 90);
+    await request(app).post(`/api/citizen/sos/${sos.id}/arrived`).set(auth(citizen)).expect(200);
+    // finish driving + on-scene work
+    for (let i = 0; i < 2000 && engine.store.brigades.get(brigade.id)!.status !== 'returning'; i++) engine.dispatch.tick(1000);
+    const b = engine.store.brigades.get(brigade.id)!;
+    expect(b.status).toBe('returning');
+    expect(b.destinationKind).toBe('hospital');
+    expect(b.destinationName).toBeTruthy();
+    expect(engine.store.sos.get(sos.id)!.status).toBe('resolved');
+    const me = (await request(app).get('/api/citizen/me').set(auth(citizen))).body;
+    expect(me.brigades[0]).toMatchObject({ id: brigade.id, status: 'returning' });
+    // once at the hospital the unit is free again and no longer tracked by the citizen
+    for (let i = 0; i < 5000 && engine.store.brigades.get(brigade.id)!.status === 'returning'; i++) engine.dispatch.tick(1000);
+    expect(engine.store.brigades.get(brigade.id)!.status).toBe('available');
+    expect((await request(app).get('/api/citizen/me').set(auth(citizen))).body.brigades).toHaveLength(0);
+  });
+
   it("another citizen cannot confirm someone else's SOS", async () => {
     const { sos, brigade } = await setup();
     driveUntil(brigade.id, sos.location, 90);

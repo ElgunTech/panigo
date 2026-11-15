@@ -119,7 +119,7 @@ function PointRow({ p, ops, onFocus }: { p: AssemblyPoint; ops: Ops; onFocus: (p
 
 function BrigadesTab({ state, onFocus }: { state: LiveState; onFocus: (p: LatLng) => void }) {
   const { t } = useI18n();
-  const tone = { available: 'bg-emerald-500/15 text-emerald-300', en_route: 'bg-amber-500/15 text-amber-300', on_scene: 'bg-violet-500/15 text-violet-300', offline: 'bg-slate-500/15 text-slate-400' };
+  const tone = { available: 'bg-emerald-500/15 text-emerald-300', en_route: 'bg-amber-500/15 text-amber-300', on_scene: 'bg-violet-500/15 text-violet-300', returning: 'bg-sky-500/15 text-sky-300', offline: 'bg-slate-500/15 text-slate-400' };
   return (
     <ul className="space-y-2">
       {Object.values(state.brigades).map((b) => (
