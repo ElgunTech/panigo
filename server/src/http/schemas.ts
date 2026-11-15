@@ -91,6 +91,11 @@ export const outageSchema = z.object({
   down: z.boolean(),
 });
 
+export const faultSchema = z.object({
+  provider: z.enum(['external', 'osrm', 'osrm-foot']),
+  fault: z.enum(['none', 'http503', 'timeout']),
+});
+
 export const scenarioSchema = z.object({
   epicenter: latLng.optional(),
 });

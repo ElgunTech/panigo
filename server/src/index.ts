@@ -10,6 +10,11 @@ import { Broadcaster } from './realtime/broadcaster';
 import { Engine } from './services/engine';
 import { UserRepository } from './security/userRepository';
 
+// Last line of defence (Challenge Drop 2): a failing dependency must never take the server down.
+// Errors are logged and the process keeps serving; routing falls back to the local backup.
+process.on('unhandledRejection', (reason) => console.error('[guard] unhandled rejection (kept alive):', reason));
+process.on('uncaughtException', (err) => console.error('[guard] uncaught exception (kept alive):', err));
+
 async function main() {
   const config = loadConfig();
   const engine = new Engine(config);

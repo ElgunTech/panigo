@@ -31,3 +31,54 @@
 - Reroute əlçatan profili saxlayır
 - Əlçatan marşrut standart marşrutdan çox pilləkən yaxınlığından keçmir (real OSM datası ilə)
 - AZ və EN lüğətləri tam və eynidir
+
+---
+
+## Drop 2 — Xarici xəritə/marşrut API-si sıradan çıxıb (HTTP 503 və ya > 5 s)
+
+### Tələb
+Xarici API **HTTP 503** qaytaranda və ya **5 saniyədən gec** cavab verəndə:
+1. Sistem çökməməlidir (unhandled exception olmamalıdır).
+2. Circuit breaker və fallback avtomatik işə düşməlidir.
+3. Marşrut və məsafə **lokal ehtiyat bazadan** hesablanmalıdır (statik koordinat matrisi və ya son keşlənmiş marşrutlar).
+4. İstifadəçiyə **"Oflayn/Ehtiyat marşrut rejimində işləyir"** bildirişi göstərilməlidir.
+
+### Həll
+
+**Fallback zənciri** (`ROUTING_PROVIDERS=osrm-foot,osrm,cache,simulated,matrix`):
+
+| # | Provayder | Növ | Nə verir |
+|---|---|---|---|
+| 1 | `osrm-foot` | xarici | Canlı piyada marşrutu |
+| 2 | `osrm` | xarici | Canlı yol marşrutu (briqadalar, əlçatan rejim) |
+| 3 | `cache` | **lokal**: son keşlənmiş marşrutlar | Xarici API-nin qaytardığı hər marşrut SQLite-a (`route_cache`) yazılır. Kəsintidə vətəndaşa 450 m yaxınlıqda başlayan real küçə həndəsəsi verilir və onun mövqeyinə calanır. Başlanğıcda `offline-routing.json`-dakı 48 real marşrut yüklənir |
+| 4 | `simulated` | **lokal**: yol şəbəkəsi modeli | A* qrafı, bağlı yollardan qaçır |
+| 5 | `matrix` | **lokal**: statik koordinat matrisi | 77 anker × 154 məntəqə və metro çıxışı üzrə real piyada məsafə və vaxt (OSRM Table API ilə əvvəlcədən hesablanıb) |
+| 6 | `straight` | son çarə | Düz xətt × 1,3 təxmini |
+
+| Mexanizm | Detal | Fayl |
+|---|---|---|
+| Xəta növlərinin tanınması | 503, 502, 504 və 429 → `UpstreamUnavailableError` (`Retry-After` oxunur); 5 s → `UpstreamTimeoutError` (`OSRM_TIMEOUT_MS=5000`) | `osrmProvider.ts` |
+| Circuit breaker | 3 ardıcıl xəta → `open`; müddət = max(30 s, `Retry-After`); sonra `half-open` yoxlaması; uğurlu olarsa `closed` | `circuitBreaker.ts` |
+| Çökməməyə zəmanət | Hər provayder `try/catch` + 6 s sərt timeout içindədir, `route()` heç vaxt istisna atmır; Express xəta handler-i; prosesdə `unhandledRejection` və `uncaughtException` qoruyucuları | `routingService.ts`, `index.ts` |
+| Bərpa | Oflayn cavablar keşlənmir. API qayıdanda vətəndaşın planı avtomatik canlı marşrutla yenilənir | `routingService.ts`, `Citizen.tsx` |
+| Bildiriş | `SystemStatus.routingMode = online / offline` vətəndaşlara və dispetçerə canlı göndərilir. Vətəndaş banner, xəritə üzərində "Ehtiyat rejim" nişanı və "Mənbə: Son keşlənmiş real marşrut / Lokal yol şəbəkəsi / Statik matris" görür | `engine.ts`, `Citizen.tsx` |
+| Demo (xəta inyeksiyası) | Dispetçer → İdarəetmə → Davamlılıq: **Normal / HTTP 503 / Timeout >5 s / Tam kəsinti**. Xəta həqiqi kod yolundan keçir və breaker öz-özünə açılır. Kartda provayderlərin vəziyyəti, son xəta, yenidən yoxlamaya qalan vaxt və keşdəki marşrut sayı göstərilir | `POST /api/sim/fault`, `SidePanel.tsx` |
+| Ehtiyat datanın qurulması | `node scripts/build-offline-routing.mjs`: statik matris və ilkin keş (repoya commit olunur) | `scripts/` |
+
+### Ölçülmüş nəticə (canlı sistem)
+
+| Ssenari | 1-ci sorğu | Sonrakı sorğular | Mənbə |
+|---|---|---|---|
+| HTTP 503 | HTTP 200, 6 ms | 3 ms | `cache` (real küçə həndəsəsi), `simulated` |
+| Timeout >5 s | HTTP 200, 5013 ms (bir dəfə) | **2 ms** (breaker açıqdır) | `simulated` |
+| Xəta sıfırlananda | Rejim → `online`, plan canlı marşrutla yenilənir | | `osrm-foot` |
+
+### Sübut (avtomatik testlər): `server/test/offline.test.ts` (8 test)
+Testlər əsl HTTP stub serverlə aparılır:
+- **503:** lokal fallback işə düşür, `offline: true` qaytarılır, istisna yoxdur.
+- **Gecikmə:** timeout-dan gec cavab xəta sayılır.
+- **Breaker:** 3 xətadan sonra açılır, `Retry-After: 60`-a hörmət edir və API-yə müraciəti dayandırır.
+- **Bərpa:** half-open yoxlamasından sonra breaker bağlanır.
+- **Lokal baza:** son keşlənmiş real marşrut vətəndaşın mövqeyinə calanır; SQLite arxivi restartdan sağ çıxır; statik matris canlı marşrut olmadan məsafə verir.
+- **End-to-end:** 503 zamanı `/citizen/plan` 200 qaytarır, `/health` → `routingMode: offline`, bərpadan sonra `online`.

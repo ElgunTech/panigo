@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import clsx from 'clsx';
-import { Accessibility, DoorOpen, LogIn, LogOut, AlertTriangle, ArrowLeft, Check, CheckCircle2, Clock, Crosshair, Footprints, Car, Info, Loader2, MapPin, Navigation, RotateCcw, ShieldCheck, X } from 'lucide-react';
+import { WifiOff, Accessibility, DoorOpen, LogIn, LogOut, AlertTriangle, ArrowLeft, Check, CheckCircle2, Clock, Crosshair, Footprints, Car, Info, Loader2, MapPin, Navigation, RotateCcw, ShieldCheck, X } from 'lucide-react';
 import { HAZARDS, type EvacuationPlan, type Hazard, type LatLng, type PublicSnapshot, type RouteResult, type SosSignal, type Brigade } from '@shared/types';
 import { useI18n } from '../i18n';
 import { api, ApiError, ensureCitizenToken } from '../lib/api';
@@ -163,6 +163,14 @@ export default function Citizen() {
     }
     return [...m.values()];
   }, [activeSos, state.brigades]);
+  /** Offline / backup routing mode: server reports it, or our current route came from the local backup. */
+  const offlineMode = state.system?.routingMode === 'offline' || !!plan?.route?.offline;
+  // API recovered → replace the backup route with a live one automatically
+  const routingMode = state.system?.routingMode;
+  useEffect(() => {
+    if (routingMode === 'online' && plan?.route?.offline && !safe) requestPlan(location);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [routingMode]);
   const trackedSos = activeSos.find((s) => !!brigadeFor(s, state.brigades));
   const dest = plan?.destination ? (state.points[plan.destination.id] ?? plan.destination) : null;
   const destPct = dest ? pct(dest) : 0;
@@ -222,6 +230,22 @@ export default function Citizen() {
               {t.citizen.pickOnMap} · {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
             </p>
           </section>
+
+          {/* Challenge Drop 2 — external routing API down → local backup */}
+          {offlineMode && (
+            <section role="status" aria-live="polite" className="animate-slideIn flex gap-3 rounded-2xl border border-violet-300 bg-violet-50 p-3 text-violet-900">
+              <WifiOff className="mt-0.5 h-5 w-5 shrink-0" />
+              <div className="min-w-0 text-sm">
+                <p className="font-bold">{t.citizen.offlineTitle}</p>
+                <p className="mt-0.5 text-[12px] leading-snug text-violet-800/80">{t.citizen.offlineDesc}</p>
+                {plan?.route?.offline && (
+                  <p className="mt-1 text-[11px] font-semibold text-violet-700">
+                    {t.citizen.offlineSource}: {t.provider[plan.route.provider]}
+                  </p>
+                )}
+              </div>
+            </section>
+          )}
 
           {/* Challenge Drop 1 — special-care (reduced mobility) mode */}
           <section className={clsx('rounded-2xl border p-3', care ? 'border-violet-300 bg-violet-50' : 'border-slate-200 bg-white shadow-sm')}>
@@ -335,7 +359,7 @@ export default function Citizen() {
                   </div>
                   <div className={clsx('mt-3 flex items-center gap-1.5 text-[11px]', plan.route.degraded ? 'text-violet-700' : 'text-slate-400')}>
                     <Info className="h-3.5 w-3.5" />
-                    {plan.route.degraded ? t.citizen.degraded : plan.route.mode === 'foot' && plan.profile === 'standard' ? t.citizen.walkRoute : t.provider[plan.route.provider]}
+                    {plan.route.offline ? `${t.citizen.offlinePill}: ${t.provider[plan.route.provider]}` : plan.route.mode === 'foot' && plan.profile === 'standard' ? t.citizen.walkRoute : t.provider[plan.route.provider]}
                     {closures.length > 0 && ` · ${closures.length} ${t.citizen.closures}`}
                   </div>
                   {plan.options.every((o) => o.full) && <p className="mt-2 rounded-lg bg-red-50 p-2 text-xs text-red-700">{t.citizen.allFull}</p>}
@@ -502,6 +526,11 @@ export default function Citizen() {
           <YouMarker at={location} />
           <FitTo points={fitPoints} deps={plan?.createdAt} />
         </CityMap>
+        {offlineMode && (
+          <div className="pointer-events-none absolute left-3 top-3 z-[1000] inline-flex items-center gap-1.5 rounded-full bg-violet-600 px-3 py-1.5 text-xs font-bold text-white shadow-lg">
+            <WifiOff className="h-3.5 w-3.5" /> {t.citizen.offlinePill}
+          </div>
+        )}
         {toast && (
           <div
             role="status"

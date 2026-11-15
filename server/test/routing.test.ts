@@ -104,14 +104,20 @@ describe('RoutingService (provider chain + circuit breaker)', () => {
     expect((await svc.route(A, B, [])).provider).toBe('simulated');
   });
 
-  it('caches identical requests', async () => {
+  it('caches identical ONLINE requests (offline answers are not cached, so recovery is immediate)', async () => {
+    const ext: RoutingProvider = { id: 'osrm-foot', closureAware: false, mode: 'foot', route: vi.fn(async () => [{ geometry: [A, B], distanceM: 1500, durationS: 1100 }]) };
+    const svc = new RoutingService([ext]);
+    await svc.route(A, B, []);
+    await svc.route(A, B, []);
+    expect(ext.route).toHaveBeenCalledTimes(1);
+    expect(svc.stats.cacheHits).toBe(1);
+
     const sim = new SimulatedProvider();
     const spy = vi.spyOn(sim, 'route');
-    const svc = new RoutingService([sim]);
-    await svc.route(A, B, []);
-    await svc.route(A, B, []);
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(svc.stats.cacheHits).toBe(1);
+    const local = new RoutingService([sim]);
+    await local.route(A, B, []);
+    await local.route(A, B, []);
+    expect(spy).toHaveBeenCalledTimes(2);
   });
 });
 

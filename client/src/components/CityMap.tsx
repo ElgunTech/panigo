@@ -94,7 +94,7 @@ export function RouteLayer({ route, previous }: { route: RouteResult | null; pre
       {route && (
         <>
           <Polyline positions={route.geometry.map((p) => [p.lat, p.lng])} pathOptions={{ color: '#1e3a8a', weight: 9, opacity: 0.25 }} />
-          <Polyline positions={route.geometry.map((p) => [p.lat, p.lng])} pathOptions={{ color: route.degraded ? '#7c3aed' : '#2563eb', weight: 5, opacity: 0.95, dashArray: route.provider === 'straight' ? '8 8' : undefined }} />
+          <Polyline positions={route.geometry.map((p) => [p.lat, p.lng])} pathOptions={{ color: route.degraded ? '#7c3aed' : '#2563eb', weight: 5, opacity: 0.95, dashArray: route.provider === 'straight' || route.provider === 'matrix' ? '8 8' : undefined }} />
         </>
       )}
     </>

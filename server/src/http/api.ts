@@ -7,7 +7,7 @@ import rateLimit from 'express-rate-limit';
 import { can, issueGuestToken, issueToken, PERMISSIONS } from '../security/auth';
 import { UserRepository } from '../security/userRepository';
 import { ah, HttpError, keyedLimiter, requirePermission, validate } from './middleware';
-import { registerSchema, userPatchSchema, closureSchema, dispatchSchema, loginSchema, outageSchema, planSchema, pointPatchSchema, safeSchema, scenarioSchema, sosSchema } from './schemas';
+import { faultSchema, registerSchema, userPatchSchema, closureSchema, dispatchSchema, loginSchema, outageSchema, planSchema, pointPatchSchema, safeSchema, scenarioSchema, sosSchema } from './schemas';
 
 export function apiRouter(engine: Engine, users: UserRepository): Router {
   const r = Router();
@@ -67,7 +67,7 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
 
   // ---------- Public read model ----------
   r.get('/public/snapshot', (_req, res) => {
-    const snap: PublicSnapshot = { zones: store.zones, points: [...store.points.values()], closures: store.openClosures(), barriers: BARRIERS, dataSource: DATASET?.source };
+    const snap: PublicSnapshot = { zones: store.zones, points: [...store.points.values()], closures: store.openClosures(), barriers: BARRIERS, dataSource: DATASET?.source, system: engine.systemStatus() };
     res.json(snap);
   });
 
@@ -190,9 +190,21 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
   r.post('/sim/outage', requirePermission('closure:manage'), validate(outageSchema), (req, res) => {
     if (!engine.routing.setForcedDown(req.body.provider, req.body.down)) throw new HttpError(404, 'PROVIDER_NOT_FOUND');
     store.log(req.user!.sub, 'chaos.outage', req.body);
-    const status = engine.systemStatus();
-    store.publish({ type: 'system.status', data: status }, { kind: 'dispatch' });
-    res.json(status);
+    engine.publishStatus();
+    res.json(engine.systemStatus());
+  });
+  /**
+   * Challenge Drop 2 — inject a REAL failure into the external routing API:
+   * http503 = upstream answers 503 Service Unavailable, timeout = no answer within 5 s.
+   * provider 'external' applies to both OSRM instances.
+   */
+  r.post('/sim/fault', requirePermission('closure:manage'), validate(faultSchema), (req, res) => {
+    const ids = req.body.provider === 'external' ? ['osrm-foot', 'osrm'] : [req.body.provider];
+    const ok = ids.map((id: string) => engine.routing.setFault(id, req.body.fault)).some(Boolean);
+    if (!ok) throw new HttpError(404, 'PROVIDER_NOT_FOUND');
+    store.log(req.user!.sub, 'chaos.fault', req.body);
+    engine.publishStatus();
+    res.json(engine.systemStatus());
   });
   r.post('/sim/reset', requirePermission('system:manage'), (req, res) => {
     engine.reset(req.user!.sub);

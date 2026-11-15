@@ -178,7 +178,8 @@ export interface CitizenStatus {
   updatedAt: number;
 }
 
-export type RouteProviderId = 'osrm-foot' | 'osrm' | 'simulated' | 'straight';
+/** osrm-foot / osrm = external API; cache = last cached real routes (SQLite); simulated = local road graph; matrix = static coordinate matrix; straight = last resort */
+export type RouteProviderId = 'osrm-foot' | 'osrm' | 'cache' | 'simulated' | 'matrix' | 'straight';
 
 export interface RouteResult {
   provider: RouteProviderId;
@@ -190,6 +191,8 @@ export interface RouteResult {
   walkS: number;
   /** true when served by a fallback provider */
   degraded: boolean;
+  /** true when computed from the LOCAL backup (external routing API unavailable) */
+  offline: boolean;
   profile: RouteProfile;
   /** how the geometry was computed: on the pedestrian network or on the road network */
   mode: 'foot' | 'vehicle';
@@ -220,15 +223,27 @@ export interface EvacuationPlan {
   createdAt: number;
 }
 
+export type FaultMode = 'none' | 'http503' | 'timeout';
+
 export interface ProviderHealth {
   id: RouteProviderId;
+  /** external API (true) or local backup (false) */
+  external: boolean;
   state: 'closed' | 'open' | 'half_open';
   failures: number;
   forcedDown: boolean;
+  /** injected fault for Challenge Drop 2 demos */
+  fault: FaultMode;
   lastError?: string;
+  /** when the open circuit will be probed again (ms epoch) */
+  retryAt?: number;
 }
 
 export interface SystemStatus {
+  /** offline = every external routing API is unavailable → local backup in use */
+  routingMode: 'online' | 'offline';
+  /** routes in the local backup (SQLite archive + seed) */
+  routeCacheSize: number;
   providers: ProviderHealth[];
   scenarioRunning: boolean;
   uptimeS: number;
@@ -240,6 +255,7 @@ export interface PublicSnapshot {
   hospitals?: Facility[];
   barriers?: Barrier[];
   dataSource?: string;
+  system?: SystemStatus;
   points: AssemblyPoint[];
   closures: RoadClosure[];
 }

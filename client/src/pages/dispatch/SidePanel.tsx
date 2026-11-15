@@ -155,10 +155,6 @@ function ControlTab({ state, ops, role, onClosureMode }: { state: LiveState; ops
       .catch(() => undefined);
   }, []);
   const closures = Object.values(state.closures);
-  // "External map API outage" = every external provider (pedestrian + road OSRM)
-  const external = state.system?.providers.filter((p) => p.id.startsWith('osrm')) ?? [];
-  const osrm = { forcedDown: external.length > 0 && external.every((p) => p.forcedDown) };
-  const toggleOutage = (down: boolean) => Promise.all(external.map((p) => ops.outage(p.id, down))).catch(() => undefined);
   const running = state.system?.scenarioRunning;
 
   return (
@@ -203,32 +199,7 @@ function ControlTab({ state, ops, role, onClosureMode }: { state: LiveState; ops
         )}
       </Card>
 
-      <Card title={t.dispatch.resilience} icon={<Zap className="h-3.5 w-3.5 text-violet-400" />}>
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <div className="text-xs font-semibold text-white">{t.dispatch.outage}</div>
-            <p className="text-[11px] text-slate-400">{t.dispatch.outageDesc}</p>
-          </div>
-          <button
-            role="switch"
-            aria-checked={!!osrm?.forcedDown}
-            onClick={() => toggleOutage(!osrm.forcedDown)}
-            className={clsx('relative h-6 w-11 shrink-0 rounded-full transition', osrm?.forcedDown ? 'bg-violet-500' : 'bg-white/15')}
-          >
-            <span className={clsx('absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all', osrm?.forcedDown ? 'left-[22px]' : 'left-0.5')} />
-          </button>
-        </div>
-        <ul className="mt-2.5 space-y-1">
-          {state.system?.providers.map((p) => (
-            <li key={p.id} className="flex items-center gap-2 text-[11px]">
-              <Power className={clsx('h-3 w-3', p.forcedDown || p.state === 'open' ? 'text-red-400' : p.state === 'half_open' ? 'text-amber-400' : 'text-emerald-400')} />
-              <span className="font-mono text-slate-300">{p.id}</span>
-              <span className="text-slate-500">{p.forcedDown ? t.dispatch.providerState.open : t.dispatch.providerState[p.state]}</span>
-              {p.lastError && <span className="truncate text-slate-600">· {p.lastError}</span>}
-            </li>
-          ))}
-        </ul>
-      </Card>
+      <ResilienceCard state={state} ops={ops} />
 
       {opendata && <OpendataCard data={opendata} />}
 
@@ -397,6 +368,100 @@ function OpendataCard({ data }: { data: OpendataMeta }) {
             <span className="text-slate-600"> · {s.organization}</span>
           </li>
         ))}
+      </ul>
+    </Card>
+  );
+}
+
+type FaultChoice = 'none' | 'http503' | 'timeout' | 'down';
+
+/**
+ * Challenge Drop 2 control: inject a REAL failure into the external routing API and
+ * watch the circuit breakers, the routing mode and the local backup take over.
+ */
+function ResilienceCard({ state, ops }: { state: LiveState; ops: Ops }) {
+  const { t } = useI18n();
+  const [busy, setBusy] = useState(false);
+  const sys = state.system;
+  const external = sys?.providers.filter((p) => p.external) ?? [];
+  const current: FaultChoice = external.length && external.every((p) => p.forcedDown) ? 'down' : (external.find((p) => p.fault !== 'none')?.fault ?? 'none');
+  const offline = sys?.routingMode === 'offline';
+
+  const choose = async (c: FaultChoice) => {
+    setBusy(true);
+    try {
+      // reset everything first, then apply the chosen failure
+      await Promise.all(external.filter((p) => p.forcedDown).map((p) => ops.outage(p.id, false)));
+      await ops.fault('external', 'none');
+      if (c === 'down') await Promise.all(external.map((p) => ops.outage(p.id, true)));
+      else if (c !== 'none') await ops.fault('external', c);
+    } catch {
+      /* status refresh shows the result */
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const choices: { id: FaultChoice; label: string }[] = [
+    { id: 'none', label: t.dispatch.faultNone },
+    { id: 'http503', label: t.dispatch.fault503 },
+    { id: 'timeout', label: t.dispatch.faultTimeout },
+    { id: 'down', label: t.dispatch.faultDown },
+  ];
+
+  return (
+    <Card title={t.dispatch.resilience} icon={<Zap className="h-3.5 w-3.5 text-violet-400" />}>
+      <div className={clsx('flex items-center justify-between rounded-lg px-2.5 py-2 text-xs font-bold', offline ? 'bg-violet-500/20 text-violet-200' : 'bg-emerald-500/10 text-emerald-300')}>
+        <span>{t.dispatch.routingMode}</span>
+        <span className="flex items-center gap-1.5">
+          <span className={clsx('h-2 w-2 rounded-full', offline ? 'animate-pulse bg-violet-400' : 'bg-emerald-400')} />
+          {offline ? t.dispatch.modeOffline : t.dispatch.modeOnline}
+        </span>
+      </div>
+      <p className="mt-1 text-[10px] text-slate-500">
+        {sys?.routeCacheSize ?? 0} {t.dispatch.cachedRoutes}
+      </p>
+
+      <div className="mt-2.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">{t.dispatch.faultTitle}</div>
+      <div className="mt-1.5 grid grid-cols-2 gap-1" role="radiogroup" aria-label={t.dispatch.faultTitle}>
+        {choices.map((c) => (
+          <button
+            key={c.id}
+            role="radio"
+            aria-checked={current === c.id}
+            disabled={busy}
+            onClick={() => choose(c.id)}
+            className={clsx(
+              'rounded-md px-2 py-1.5 text-[11px] font-semibold transition disabled:opacity-50',
+              current === c.id ? (c.id === 'none' ? 'bg-emerald-500/25 text-emerald-200 ring-1 ring-emerald-400/50' : 'bg-violet-500/30 text-violet-100 ring-1 ring-violet-400/60') : 'bg-white/5 text-slate-300 hover:bg-white/10',
+            )}
+          >
+            {c.label}
+          </button>
+        ))}
+      </div>
+
+      <ul className="mt-2.5 space-y-1 border-t border-white/5 pt-2">
+        {sys?.providers.map((p) => {
+          const down = p.forcedDown || p.state === 'open';
+          const secs = p.retryAt ? Math.max(0, Math.round((p.retryAt - Date.now()) / 1000)) : 0;
+          return (
+            <li key={p.id} className="text-[11px]">
+              <div className="flex items-center gap-2">
+                <Power className={clsx('h-3 w-3 shrink-0', down ? 'text-red-400' : p.state === 'half_open' ? 'text-amber-400' : 'text-emerald-400')} />
+                <span className="font-mono text-slate-300">{p.id}</span>
+                <span className="rounded bg-white/5 px-1 text-[9px] uppercase text-slate-500">{p.external ? t.dispatch.external : t.dispatch.local}</span>
+                <span className={clsx('ml-auto', down ? 'text-red-300' : 'text-slate-500')}>{p.forcedDown ? t.dispatch.providerState.open : t.dispatch.providerState[p.state]}</span>
+              </div>
+              {(p.lastError || secs > 0) && (
+                <div className="truncate pl-5 text-[10px] text-slate-600">
+                  {p.lastError}
+                  {secs > 0 && ` · ${t.dispatch.retryIn} ${secs}s`}
+                </div>
+              )}
+            </li>
+          );
+        })}
       </ul>
     </Card>
   );

@@ -54,6 +54,7 @@ function makeOps(token: string, onAuthError: () => void) {
     setPoint: (id: string, patch: { occupancyPct?: number; status?: string }) => call(`/dispatch/points/${id}`, patch, 'PATCH'),
     scenario: () => call('/sim/scenario', {}),
     outage: (provider: string, down: boolean) => call('/sim/outage', { provider, down }),
+    fault: (provider: 'external' | 'osrm' | 'osrm-foot', fault: 'none' | 'http503' | 'timeout') => call('/sim/fault', { provider, fault }),
     reset: () => call('/sim/reset', {}),
     users: () => call<AdminUser[]>('/admin/users'),
     updateUser: (username: string, patch: { role?: string; disabled?: boolean }) => call<AdminUser>(`/admin/users/${username}`, patch, 'PATCH'),
@@ -83,7 +84,7 @@ function Console({ token, user, onLogout }: { token: string; user: User; onLogou
   const closures = useMemo(() => Object.values(state.closures), [state.closures]);
   const alerts = useMemo(() => Object.values(state.alerts).sort((a, b) => (a.status === 'open' ? 0 : 1) - (b.status === 'open' ? 0 : 1) || b.createdAt - a.createdAt), [state.alerts]);
   const openAlerts = alerts.filter((a) => a.status === 'open').length;
-  const degraded = state.system?.providers.some((p) => p.id === 'osrm' && (p.state === 'open' || p.forcedDown));
+  const degraded = state.system?.routingMode === 'offline';
 
   return (
     <div className="dark-map flex h-full flex-col bg-ink-950 text-slate-200">
@@ -99,7 +100,7 @@ function Console({ token, user, onLogout }: { token: string; user: User; onLogou
           {state.system && (
             <span className={clsx('hidden items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium sm:inline-flex', degraded ? 'bg-violet-500/15 text-violet-300' : 'bg-white/5 text-slate-300')}>
               <Server className="h-3.5 w-3.5" />
-              {state.system.providers.map((p) => `${p.id}:${p.forcedDown ? t.dispatch.providerState.open : t.dispatch.providerState[p.state]}`).join(' · ')}
+              {t.dispatch.routingMode}: {degraded ? t.dispatch.modeOffline : t.dispatch.modeOnline} · {state.system.providers.filter((p) => p.external).map((p) => `${p.id}:${p.forcedDown ? t.dispatch.providerState.open : t.dispatch.providerState[p.state]}`).join(' · ')}
             </span>
           )}
           <ConnBadge conn={conn} dark />

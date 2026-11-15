@@ -29,10 +29,11 @@ export function loadConfig(overrides: Partial<AppConfig> = {}): AppConfig {
     jwtSecret: e.JWT_SECRET ?? 'dev-only-secret-change-me',
     jwtTtl: e.JWT_TTL ?? '12h',
     corsOrigins: (e.CORS_ORIGINS ?? 'http://localhost:5173,http://127.0.0.1:5173').split(',').map((s) => s.trim()),
-    routingProviders: (e.ROUTING_PROVIDERS ?? 'osrm-foot,osrm,simulated').split(',').map((s) => s.trim()),
+    routingProviders: (e.ROUTING_PROVIDERS ?? 'osrm-foot,osrm,cache,simulated,matrix').split(',').map((s) => s.trim()),
     osrmUrl: e.OSRM_URL ?? 'https://router.project-osrm.org',
     osrmFootUrl: e.OSRM_FOOT_URL ?? 'https://routing.openstreetmap.de/routed-foot',
-    osrmTimeoutMs: num(e.OSRM_TIMEOUT_MS, 2500),
+    // Challenge Drop 2: an answer slower than 5 s counts as an outage
+    osrmTimeoutMs: num(e.OSRM_TIMEOUT_MS, 5000),
     dbFile: e.DB_FILE === 'off' ? null : (e.DB_FILE ?? 'panigo-events.db'),
     rateLimitPerMin: num(e.RATE_LIMIT_PER_MIN, 600),
     authRateLimitPerMin: num(e.AUTH_RATE_LIMIT_PER_MIN, 20),

@@ -82,7 +82,7 @@ Nəticə `server/src/data/baku-osm.json` faylına yazılır və repoya commit ol
 2. **QIRMIZI HƏYƏCAN** kartı çıxır. Tövsiyəyə baxın (hansı briqada, hansı ehtiyat məntəqə) və **Təsdiqlə (1 klik)** basın. Briqada xəritədə hərəkət edir, ehtiyat məntəqə açılır, audit jurnalına yazılır.
 3. Başqa pəncərədə `/citizen` açın. Tövsiyə olunan məntəqəni dispetçer panelində sürüşdürücü ilə **92%**-ə qaldırın. Vətəndaş dərhal **"Məntəqə 92% doldu — alternativ məntəqəyə yönləndirildiniz"** banneri ilə yeni marşrut alır.
 4. **Yol bağla → Neftçilər prospekti**: marşrutu bu yoldan keçən vətəndaşlar avtomatik başqa marşruta keçirilir.
-5. **Davamlılıq → Xarici xəritə API kəsintisi** açarını yandırın. Sistem OSRM-dən daxili yol qrafına keçir və vətəndaş "daxili marşrut mühərriki" xəbərdarlığını görür.
+5. **Davamlılıq → HTTP 503** (və ya **Timeout >5 s**) seçin. Circuit breaker açılır, vətəndaş "Oflayn/Ehtiyat marşrut rejimində işləyir" banneri ilə son keşlənmiş real marşrutu alır. **Normal** seçəndə sistem canlı rejimə qayıdır.
 6. Vətəndaş SOS göndərsin, dispetçer SOS axınında **Təyin et** ilə briqada seçsin. Vətəndaşın xəritəsində SOS nişanı və yaxınlaşan briqada görünür, 100 m-də **"Briqada çatdı"** aktivləşir və dispetçerdə "Vətəndaş təsdiqlədi" nişanı çıxır.
 7. **İstifadəçilər** tabında yeni qeydiyyatdan keçən vətəndaşı **Dispetçer** roluna keçirin. Hüquq dərhal qüvvəyə minir, yenidən giriş lazım deyil.
 
@@ -92,7 +92,7 @@ Nəticə `server/src/data/baku-osm.json` faylına yazılır və repoya commit ol
 
 | Sənəd | Məzmun |
 |---|---|
-| [docs/CHALLENGE_DROPS.md](docs/CHALLENGE_DROPS.md) | **Challenge Drop 1:** hərəkət məhdudiyyətli şəxs rolu, Prioritet #1 SOS, əlçatan marşrut, tam i18n |
+| [docs/CHALLENGE_DROPS.md](docs/CHALLENGE_DROPS.md) | **Drop 1:** hərəkət məhdudiyyətli şəxs, Prioritet #1 SOS, əlçatan marşrut, tam i18n · **Drop 2:** xarici API kəsintisi (503 / >5 s) → circuit breaker, lokal ehtiyat baza (keşlənmiş marşrutlar + statik matris), "Oflayn/Ehtiyat rejim" |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Arxitektura sxemi (frontend → backend → DB/API axını), modullar, alqoritmlər, challenge drop-lara uyğunlaşma |
 | [docs/DATA.md](docs/DATA.md) | Real data mənbələri, lisenziya, tutum evristikaları |
 | [docs/AI_DECLARATION.md](docs/AI_DECLARATION.md) | Süni intellekt alətlərindən istifadə haqqında bəyannamə |
@@ -100,4 +100,4 @@ Nəticə `server/src/data/baku-osm.json` faylına yazılır və repoya commit ol
 
 ## 4. Texnologiyalar
 
-React 18 + TypeScript + Vite + Tailwind + Leaflet · Node.js + Express + Socket.IO + Zod · SQLite (`node:sqlite`) · OSRM (xarici marşrut API) + daxili A* yol qrafı · JWT + scrypt + Helmet + rate limiting · Vitest + Supertest (91 test).
+React 18 + TypeScript + Vite + Tailwind + Leaflet · Node.js + Express + Socket.IO + Zod · SQLite (`node:sqlite`) · OSRM (xarici marşrut API) + daxili A* yol qrafı · JWT + scrypt + Helmet + rate limiting · Vitest + Supertest (99 test).

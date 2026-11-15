@@ -6,6 +6,8 @@ import { ARRIVAL_RADIUS_M } from './dispatchService';
 import { RoadNetwork } from '../domain/roadNetwork';
 import { OsrmProvider } from '../routing/osrmProvider';
 import { RoutingService } from '../routing/routingService';
+import { loadOfflineRouting, RouteArchive, type OfflineRoutingData } from '../routing/routeArchive';
+import { CachedRouteProvider, MatrixProvider } from '../routing/offlineProviders';
 import { SimulatedProvider } from '../routing/simulatedProvider';
 import type { RoutingProvider } from '../routing/types';
 import { CrisisService } from './crisisService';
@@ -21,6 +23,7 @@ import { Store } from './store';
 export class Engine {
   readonly store = new Store();
   readonly routing: RoutingService;
+  readonly routeArchive: RouteArchive;
   readonly evacuation: EvacuationService;
   readonly dispatch: DispatchService;
   readonly crisis: CrisisService;
@@ -32,7 +35,15 @@ export class Engine {
     readonly config: AppConfig,
     providers?: RoutingProvider[],
   ) {
-    this.routing = new RoutingService(providers ?? buildProviders(config), undefined, BARRIERS);
+    // Local backup for Challenge Drop 2: archived real routes (SQLite + seed) and a static matrix
+    const offline = loadOfflineRouting();
+    this.routeArchive = new RouteArchive(config.dbFile, (offline?.routes ?? []).map((r) => ({ ...r, at: 0 })));
+    this.routing = new RoutingService(providers ?? buildProviders(config, this.routeArchive, offline), undefined, BARRIERS);
+    this.routing.archive = this.routeArchive;
+    this.routing.onModeChange = (mode) => {
+      this.store.log('system', 'routing.mode', { mode });
+      this.publishStatus();
+    };
     this.evacuation = new EvacuationService(this.store, this.routing);
     this.dispatch = new DispatchService(this.store, this.routing, config.timeScale);
     this.crisis = new CrisisService(this.store, this.dispatch, this.evacuation);
@@ -155,8 +166,17 @@ export class Engine {
     await this.evacuation.onPointChanged(p);
   }
 
+  /** Status goes to dispatch AND citizens (they need the offline-mode notice). */
+  publishStatus() {
+    const s = this.systemStatus();
+    this.store.publish({ type: 'system.status', data: s }, { kind: 'dispatch' });
+    this.store.publish({ type: 'system.status', data: s }, { kind: 'public' });
+  }
+
   systemStatus(): SystemStatus {
     return {
+      routingMode: this.routing.mode(),
+      routeCacheSize: this.routeArchive.size,
       providers: this.routing.health(),
       scenarioRunning: this.scenarioRunning,
       uptimeS: Math.round((Date.now() - this.startedAt) / 1000),
@@ -180,7 +200,12 @@ export class Engine {
   start() {
     const tick = 1000;
     this.timers.push(setInterval(() => this.dispatch.tick(tick), tick));
-    this.timers.push(setInterval(() => this.store.publish({ type: 'system.status', data: this.systemStatus() }, { kind: 'dispatch' }), 5000));
+    this.timers.push(
+      setInterval(() => {
+        this.routing.checkMode(); // breaker cooldown elapsed → may flip back online
+        this.publishStatus();
+      }, 5000),
+    );
   }
 
   /** Earthquake drill: SOS bursts, road closures and crowds converging on points. */
@@ -208,11 +233,11 @@ export class Engine {
         clearInterval(t);
         this.scenarioRunning = false;
         this.store.log('scenario', 'scenario.end');
-        this.store.publish({ type: 'system.status', data: this.systemStatus() }, { kind: 'dispatch' });
+        this.publishStatus();
       }
     }, 2500);
     this.timers.push(t);
-    this.store.publish({ type: 'system.status', data: this.systemStatus() }, { kind: 'dispatch' });
+    this.publishStatus();
     return true;
   }
 
@@ -225,16 +250,19 @@ export class Engine {
 
   stop() {
     this.timers.forEach(clearInterval);
+    this.routeArchive.close();
   }
 }
 
 const dist = (a: LatLng, b: LatLng) => (a.lat - b.lat) ** 2 + (a.lng - b.lng) ** 2;
 
-function buildProviders(cfg: AppConfig): RoutingProvider[] {
-  const registry: Record<string, () => RoutingProvider> = {
+function buildProviders(cfg: AppConfig, archive: RouteArchive, offline: OfflineRoutingData | null): RoutingProvider[] {
+  const registry: Record<string, () => RoutingProvider | null> = {
     'osrm-foot': () => new OsrmProvider('osrm-foot', cfg.osrmFootUrl, 'foot', 'foot', ['standard', 'accessible'], cfg.osrmTimeoutMs),
     osrm: () => new OsrmProvider('osrm', cfg.osrmUrl, 'driving', 'vehicle', ['vehicle', 'accessible'], cfg.osrmTimeoutMs),
+    cache: () => new CachedRouteProvider(archive),
     simulated: () => new SimulatedProvider(new RoadNetwork(), BARRIERS),
+    matrix: () => (offline ? new MatrixProvider(offline) : null),
   };
-  return cfg.routingProviders.filter((id) => registry[id]).map((id) => registry[id]());
+  return cfg.routingProviders.filter((id) => registry[id]).map((id) => registry[id]()).filter((p): p is RoutingProvider => !!p);
 }
