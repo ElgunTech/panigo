@@ -22,7 +22,8 @@ export const ROLES: Role[] = ['citizen', 'mobility_impaired', 'dispatcher', 'adm
 /** 1 = critical (special-needs citizen), 2 = normal */
 export type SosPriority = 1 | 2;
 
-export type RouteProfile = 'standard' | 'accessible';
+/** standard = pedestrian, accessible = step-free pedestrian/wheelchair, vehicle = rescue brigades */
+export type RouteProfile = 'standard' | 'accessible' | 'vehicle';
 
 export interface Barrier {
   lat: number;
@@ -38,6 +39,10 @@ export interface Zone {
   /** residents (Wikidata P1082) — used to size the response per zone */
   population?: number;
   populationYear?: string;
+  /** people per km² (DSK 2024, opendata.az) */
+  densityPerKm2?: number;
+  /** persons with disabilities in the district (DSK, opendata.az) */
+  disabledPersons?: number;
 }
 
 /** Static reference facility (hospital) from the real-world dataset */
@@ -60,6 +65,12 @@ export interface AssemblyPoint {
   occupancy: number;
   /** step-free / wheelchair accessible (ramps, no stairs) */
   accessible: boolean;
+  /** real entrances (e.g. official metro exits, opendata.az) — pedestrians are routed to the nearest one */
+  entrances?: { lat: number; lng: number; label: string }[];
+  /** average daily metro ridership 2025 (opendata.az) */
+  ridershipDaily?: number;
+  /** data provenance */
+  source?: string;
   /** citizens currently routed towards this point */
   incoming: number;
   status: AssemblyPointStatus;
@@ -144,7 +155,7 @@ export interface CitizenStatus {
   updatedAt: number;
 }
 
-export type RouteProviderId = 'osrm' | 'simulated' | 'straight';
+export type RouteProviderId = 'osrm-foot' | 'osrm' | 'simulated' | 'straight';
 
 export interface RouteResult {
   provider: RouteProviderId;
@@ -157,6 +168,8 @@ export interface RouteResult {
   /** true when served by a fallback provider */
   degraded: boolean;
   profile: RouteProfile;
+  /** how the geometry was computed: on the pedestrian network or on the road network */
+  mode: 'foot' | 'vehicle';
   /** stairs / stair-underpasses near the chosen route (0 = step-free) */
   barriersNear: number;
 }
@@ -175,6 +188,8 @@ export interface EvacuationPlan {
   origin: LatLng;
   options: PointOption[];
   destination: AssemblyPoint | null;
+  /** the entrance the route leads to (nearest metro exit), if the point has several */
+  entrance?: { lat: number; lng: number; label: string };
   route: RouteResult | null;
   reason: RerouteReason;
   profile: RouteProfile;

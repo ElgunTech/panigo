@@ -3,6 +3,9 @@ import { haversine, pointToSegment, polylineHitsCircle, WALK_SPEED_MS, WHEELCHAI
 import { CircuitBreaker } from './circuitBreaker';
 import type { RawRoute, RoutingProvider } from './types';
 
+/** Vehicle estimate used when the geometry follows the pedestrian network (crisis traffic). */
+const VEHICLE_SPEED_MS = 7;
+
 interface Entry {
   provider: RoutingProvider;
   breaker: CircuitBreaker;
@@ -38,9 +41,11 @@ export class RoutingService {
       return hit;
     }
 
+    // Only providers that serve this profile (pedestrian vs road network), in priority order
+    const eligible = this.chain.filter(({ provider }) => !provider.supports || provider.supports.includes(profile));
     let result: RouteResult | null = null;
-    for (let i = 0; i < this.chain.length && !result; i++) {
-      const { provider, breaker } = this.chain[i];
+    for (let i = 0; i < eligible.length; i++) {
+      const { provider, breaker } = eligible[i];
       if (!breaker.canRequest()) continue;
       try {
         const routes = await provider.route(from, to, closures, profile);
@@ -50,7 +55,11 @@ export class RoutingService {
         if (profile === 'accessible' && candidates.length > 1) {
           candidates = [...candidates].sort((a, b) => this.barriersNear(a.geometry) - this.barriersNear(b.geometry));
         }
-        if (candidates[0]) result = this.toResult(provider.id, candidates[0], i > 0, profile);
+        if (!candidates[0]) continue;
+        const r = this.toResult(provider, candidates[0], i > 0, profile);
+        // Accessible keeps looking (e.g. road network) until a step-free route is found
+        if (!result || (profile === 'accessible' && r.barriersNear < result.barriersNear)) result = r;
+        if (profile !== 'accessible' || result.barriersNear === 0) break;
       } catch (err) {
         breaker.failure(err);
       }
@@ -102,15 +111,24 @@ export class RoutingService {
     return n;
   }
 
-  private toResult(provider: RouteResult['provider'], r: RawRoute, degraded: boolean, profile: RouteProfile): RouteResult {
+  private toResult(p: RoutingProvider, r: RawRoute, degraded: boolean, profile: RouteProfile): RouteResult {
+    const foot = p.mode === 'foot';
+    // Pedestrian time: the foot router's own estimate (+15 % crowd slowdown) or distance / walking pace
+    const walkS =
+      profile === 'accessible'
+        ? r.distanceM / WHEELCHAIR_SPEED_MS
+        : foot && p.id !== 'simulated'
+          ? r.durationS * 1.15
+          : r.distanceM / WALK_SPEED_MS;
     return {
-      provider,
+      provider: p.id,
       geometry: r.geometry,
       distanceM: Math.round(r.distanceM),
-      durationS: Math.round(r.durationS),
-      walkS: Math.round(r.distanceM / (profile === 'accessible' ? WHEELCHAIR_SPEED_MS : WALK_SPEED_MS)),
+      durationS: Math.round(foot ? r.distanceM / VEHICLE_SPEED_MS : r.durationS),
+      walkS: Math.round(walkS),
       degraded,
       profile,
+      mode: p.mode,
       barriersNear: profile === 'accessible' ? this.barriersNear(r.geometry) : 0,
     };
   }
@@ -130,6 +148,7 @@ function straightLine(from: LatLng, to: LatLng, profile: RouteProfile): RouteRes
     walkS: Math.round(d / (profile === 'accessible' ? WHEELCHAIR_SPEED_MS : WALK_SPEED_MS)),
     degraded: true,
     profile,
+    mode: profile === 'vehicle' ? 'vehicle' : 'foot',
     barriersNear: 0,
   };
 }

@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import clsx from 'clsx';
-import { Accessibility, LogIn, LogOut, AlertTriangle, ArrowLeft, Check, CheckCircle2, Clock, Crosshair, Footprints, Car, Info, Loader2, MapPin, Navigation, RotateCcw, ShieldCheck, X } from 'lucide-react';
+import { Accessibility, DoorOpen, LogIn, LogOut, AlertTriangle, ArrowLeft, Check, CheckCircle2, Clock, Crosshair, Footprints, Car, Info, Loader2, MapPin, Navigation, RotateCcw, ShieldCheck, X } from 'lucide-react';
 import { HAZARDS, type EvacuationPlan, type Hazard, type LatLng, type PublicSnapshot, type RouteResult, type SosSignal } from '@shared/types';
 import { useI18n } from '../i18n';
 import { api, ApiError, ensureCitizenToken } from '../lib/api';
 import { useLive } from '../lib/useLive';
 import { isCitizenRole, setSession, tokenRole, useSession } from '../lib/session';
 import { fmtDistance, fmtMinutes, HAZARD_COLOR, occColor, pct, timeAgo } from '../lib/format';
-import { BarriersLayer, CityMap, ClosuresLayer, FitTo, MapClick, PointsLayer, RouteLayer, YouMarker } from '../components/CityMap';
+import { BarriersLayer, CityMap, ClosuresLayer, EntrancesLayer, FitTo, MapClick, PointsLayer, RouteLayer, YouMarker } from '../components/CityMap';
 import { ConnBadge, HazardIcon, LangSwitch, Logo, OccupancyBar, PointIcon } from '../components/ui';
 
 const DEFAULT_LOC: LatLng = { lat: 40.3889, lng: 49.8413 };
@@ -300,8 +300,12 @@ export default function Citizen() {
                       value={`${fmtMinutes(plan.route.walkS)} ${t.common.minutes}`}
                       label={plan.profile === 'accessible' ? t.citizen.wheelchair : t.citizen.walk}
                     />
-                    <Stat icon={<Car className="h-4 w-4" />} value={`${fmtMinutes(plan.route.durationS)} ${t.common.minutes}`} label={plan.profile === 'accessible' ? t.citizen.medicalTransport : t.citizen.drive} />
                     <Stat icon={<Navigation className="h-4 w-4" />} value={fmtDistance(plan.route.distanceM, t.common)} label="" />
+                    {plan.entrance ? (
+                      <Stat icon={<DoorOpen className="h-4 w-4" />} value={plan.entrance.label.replace(/^s*Çıxışs*/i, '#')} label={t.citizen.entrance} />
+                    ) : (
+                      <Stat icon={<Car className="h-4 w-4" />} value={`${fmtMinutes(plan.route.durationS)} ${t.common.minutes}`} label={plan.profile === 'accessible' ? t.citizen.medicalTransport : t.citizen.drive} />
+                    )}
                   </div>
                   <div className="mt-4">
                     <div className="mb-1 flex justify-between text-xs">
@@ -314,7 +318,7 @@ export default function Citizen() {
                   </div>
                   <div className={clsx('mt-3 flex items-center gap-1.5 text-[11px]', plan.route.degraded ? 'text-violet-700' : 'text-slate-400')}>
                     <Info className="h-3.5 w-3.5" />
-                    {plan.route.degraded ? t.citizen.degraded : t.provider[plan.route.provider]}
+                    {plan.route.degraded ? t.citizen.degraded : plan.route.mode === 'foot' && plan.profile === 'standard' ? t.citizen.walkRoute : t.provider[plan.route.provider]}
                     {closures.length > 0 && ` · ${closures.length} ${t.citizen.closures}`}
                   </div>
                   {plan.options.every((o) => o.full) && <p className="mt-2 rounded-lg bg-red-50 p-2 text-xs text-red-700">{t.citizen.allFull}</p>}
@@ -453,11 +457,12 @@ export default function Citizen() {
           <MapClick onClick={(p) => setLocation(p)} />
           <ClosuresLayer closures={closures} />
           <RouteLayer route={safe ? null : (plan?.route ?? null)} previous={previous} />
+          {!safe && dest?.entrances && <EntrancesLayer entrances={dest.entrances} active={plan?.entrance} label={t.citizen.entrance} />}
           <PointsLayer
             points={points.filter((p) => p.status === 'open' && (!care || p.accessible))}
             highlight={dest?.id}
             onSelect={(p) => pct(p) < 90 && requestPlan(location, p.id)}
-            labels={(p) => `${p.name} — ${pct(p).toFixed(0)}%`}
+            labels={(p) => `${p.name} — ${pct(p).toFixed(0)}%${p.ridershipDaily ? ` · ${p.ridershipDaily.toLocaleString()} ${t.citizen.dailyRiders}` : ''}`}
           />
           {care && <BarriersLayer barriers={state.barriers} label={t.citizen.barrierTip} />}
           <YouMarker at={location} />

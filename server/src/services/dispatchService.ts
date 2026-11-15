@@ -28,7 +28,7 @@ export class DispatchService {
     const dest = target ?? sos[0]?.location;
     if (!dest) throw new DispatchError('NO_TARGET');
 
-    const route = await this.routing.route(b.location, dest, this.store.openClosures());
+    const route = await this.routing.route(b.location, dest, this.store.openClosures(), 'vehicle');
     b.status = 'en_route';
     b.target = dest;
     b.route = route.geometry;

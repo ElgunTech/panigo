@@ -174,3 +174,21 @@ export function BarriersLayer({ barriers, label }: { barriers: Barrier[]; label:
     </>
   );
 }
+
+const entranceIcon = (active: boolean) =>
+  L.divIcon({ className: '', iconSize: [20, 20], iconAnchor: [10, 10], html: `<div class="entrance-pin${active ? ' active' : ''}">M</div>` });
+
+/** Real metro exits (opendata.az) of the destination; the one the route leads to is highlighted. */
+export function EntrancesLayer({ entrances, active, label }: { entrances: { lat: number; lng: number; label: string }[]; active?: { lat: number; lng: number }; label: string }) {
+  return (
+    <>
+      {entrances.map((e, i) => (
+        <Marker key={i} position={[e.lat, e.lng]} icon={entranceIcon(!!active && active.lat === e.lat && active.lng === e.lng)} zIndexOffset={500}>
+          <Tooltip>
+            {label}: {e.label}
+          </Tooltip>
+        </Marker>
+      ))}
+    </>
+  );
+}

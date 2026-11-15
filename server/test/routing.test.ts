@@ -48,6 +48,7 @@ describe('RoutingService (provider chain + circuit breaker)', () => {
     const p = {
       id: 'osrm' as const,
       closureAware: false,
+      mode: 'foot' as const,
       calls: 0,
       route: vi.fn(async () => {
         p.calls++;
@@ -77,6 +78,7 @@ describe('RoutingService (provider chain + circuit breaker)', () => {
     const ext: RoutingProvider = {
       id: 'osrm',
       closureAware: false,
+      mode: 'foot',
       route: async () => [
         { geometry: [A, { lat: 40.3945, lng: 49.8463 }, B], distanceM: 1500, durationS: 200 },
         { geometry: [A, { lat: 40.3889, lng: 49.8513 }, B], distanceM: 1900, durationS: 260 },

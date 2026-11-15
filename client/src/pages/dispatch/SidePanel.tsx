@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { Activity, Ambulance, Ban, Building, MapPinOff, Play, Power, RefreshCcw, ScrollText, SlidersHorizontal, Trash2, Users, Zap } from 'lucide-react';
+import { Activity, Ambulance, Ban, Building, Database, MapPinOff, Play, Power, RefreshCcw, ScrollText, SlidersHorizontal, Trash2, Users, Zap } from 'lucide-react';
 import type { AssemblyPoint, LatLng } from '@shared/types';
 import { useI18n } from '../../i18n';
 import type { LiveState } from '../../lib/liveState';
@@ -10,6 +10,13 @@ import { OccupancyBar, PointIcon } from '../../components/ui';
 import type { AdminUser, Ops } from '../Dispatch';
 
 type Tab = 'points' | 'brigades' | 'control' | 'audit' | 'users';
+
+interface OpendataMeta {
+  source: string;
+  fetchedAt: string;
+  sources: { dataset: string; organization: string; url: string; modified: string }[];
+  collapseStats: { year: number; incidents: number; deaths: number; injured: number; rescued: number }[];
+}
 
 export function SidePanel({ state, ops, role, me, onClosureMode, onFocus }: { state: LiveState; ops: Ops; role: string; me: string; onClosureMode: () => void; onFocus: (p: LatLng) => void }) {
   const { t } = useI18n();
@@ -138,13 +145,20 @@ function BrigadesTab({ state, onFocus }: { state: LiveState; onFocus: (p: LatLng
 function ControlTab({ state, ops, role, onClosureMode }: { state: LiveState; ops: Ops; role: string; onClosureMode: () => void }) {
   const { t } = useI18n();
   const [presets, setPresets] = useState<{ name: string; location: LatLng; radiusM: number }[]>([]);
+  const [opendata, setOpendata] = useState<OpendataMeta | null>(null);
   useEffect(() => {
-    api<{ closurePresets: typeof presets }>('/meta')
-      .then((m) => setPresets(m.closurePresets))
+    api<{ closurePresets: typeof presets; opendata: OpendataMeta | null }>('/meta')
+      .then((m) => {
+        setPresets(m.closurePresets);
+        setOpendata(m.opendata);
+      })
       .catch(() => undefined);
   }, []);
   const closures = Object.values(state.closures);
-  const osrm = state.system?.providers.find((p) => p.id === 'osrm');
+  // "External map API outage" = every external provider (pedestrian + road OSRM)
+  const external = state.system?.providers.filter((p) => p.id.startsWith('osrm')) ?? [];
+  const osrm = { forcedDown: external.length > 0 && external.every((p) => p.forcedDown) };
+  const toggleOutage = (down: boolean) => Promise.all(external.map((p) => ops.outage(p.id, down))).catch(() => undefined);
   const running = state.system?.scenarioRunning;
 
   return (
@@ -198,7 +212,7 @@ function ControlTab({ state, ops, role, onClosureMode }: { state: LiveState; ops
           <button
             role="switch"
             aria-checked={!!osrm?.forcedDown}
-            onClick={() => ops.outage('osrm', !osrm?.forcedDown).catch(() => undefined)}
+            onClick={() => toggleOutage(!osrm.forcedDown)}
             className={clsx('relative h-6 w-11 shrink-0 rounded-full transition', osrm?.forcedDown ? 'bg-violet-500' : 'bg-white/15')}
           >
             <span className={clsx('absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all', osrm?.forcedDown ? 'left-[22px]' : 'left-0.5')} />
@@ -215,6 +229,8 @@ function ControlTab({ state, ops, role, onClosureMode }: { state: LiveState; ops
           ))}
         </ul>
       </Card>
+
+      {opendata && <OpendataCard data={opendata} />}
 
       {role === 'admin' && (
         <button onClick={() => confirm(t.dispatch.reset + '?') && ops.reset()} className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 py-2 text-xs font-semibold text-slate-400 hover:bg-white/5">
@@ -348,5 +364,40 @@ function UsersTab({ ops, me }: { ops: Ops; me: string }) {
         })}
       </ul>
     </div>
+  );
+}
+
+/** Official open data provenance + FHN historical collapse statistics (mini bar chart). */
+function OpendataCard({ data }: { data: OpendataMeta }) {
+  const { t } = useI18n();
+  const stats = data.collapseStats.slice(-10);
+  const max = Math.max(1, ...stats.map((s) => s.incidents));
+  const total = data.collapseStats.reduce((a, s) => ({ i: a.i + s.incidents, d: a.d + s.deaths, r: a.r + s.rescued }), { i: 0, d: 0, r: 0 });
+  return (
+    <Card title={t.dispatch.opendata} icon={<Database className="h-3.5 w-3.5 text-sky-400" />}>
+      <p className="text-[11px] text-slate-400">{t.dispatch.opendataDesc}</p>
+      <div className="mt-3 text-[10px] font-semibold uppercase tracking-wider text-slate-500">{t.dispatch.collapseStats}</div>
+      <div className="mt-2 flex h-16 items-end gap-1" role="img" aria-label={t.dispatch.collapseStats}>
+        {stats.map((s) => (
+          <div key={s.year} className="group relative flex flex-1 flex-col items-center gap-1">
+            <div className="w-full rounded-t bg-sky-500/70 transition group-hover:bg-sky-400" style={{ height: `${Math.max(4, (s.incidents / max) * 52)}px` }} title={`${s.year}: ${s.incidents} ${t.dispatch.incidents}, ${s.deaths} ${t.dispatch.deaths}, ${s.rescued} ${t.dispatch.rescued}`} />
+            <span className="text-[8px] text-slate-500">{String(s.year).slice(2)}</span>
+          </div>
+        ))}
+      </div>
+      <p className="mt-1.5 text-[10px] text-slate-400">
+        {data.collapseStats[0]?.year}–{data.collapseStats[data.collapseStats.length - 1]?.year}: {total.i} {t.dispatch.incidents} · {total.d} {t.dispatch.deaths} · {total.r} {t.dispatch.rescued}
+      </p>
+      <ul className="mt-2.5 space-y-1 border-t border-white/5 pt-2">
+        {data.sources.map((s) => (
+          <li key={s.url} className="truncate text-[10px]">
+            <a href={s.url} target="_blank" rel="noreferrer" className="text-sky-300 hover:underline">
+              {s.dataset}
+            </a>
+            <span className="text-slate-600"> · {s.organization}</span>
+          </li>
+        ))}
+      </ul>
+    </Card>
   );
 }

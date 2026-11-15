@@ -4,11 +4,11 @@
 
 Zəlzələ, sel, sənaye qəzası və kütləvi tədbirlər zamanı **vətəndaşları ən yaxın təhlükəsiz toplanış məntəqəsinə yönləndirən**, **SOS siqnallarını toplayan** və **FHN dispetçerlərinə böhran ocaqlarını avtomatik göstərən** real-time mikro-sistem.
 
-> Digital Challenge Cup — Final layihəsi. Data: Bakı şəhəri, OpenStreetMap + Wikidata.
+> Digital Challenge Cup — Final layihəsi. Data: Bakı şəhəri — **opendata.az** (Bakı Metropoliteni, DSK, FHN, Gənclər və İdman Nazirliyi) + OpenStreetMap + Wikidata.
 
 | Modul | Nə edir |
 |---|---|
-| **1. Vətəndaş tətbiqi** (`/citizen`) | Rayon / GPS / xəritə üzrə yer seçimi · ən yaxın məntəqələr və onların canlı doluluğu · tövsiyə olunan təxliyə marşrutu (piyada və avtomobil ETA) · **bir kliklə SOS** (yanğın, dağıntı, su basması, tibbi yardım) · **"TƏHLÜKƏSİZƏM"** statusu · yol bağlananda və ya məntəqə **≥90%** dolanda **avtomatik alternativ marşrut** |
+| **1. Vətəndaş tətbiqi** (`/citizen`) | Rayon / GPS / xəritə üzrə yer seçimi · ən yaxın məntəqələr və onların canlı doluluğu · **piyada** təxliyə marşrutu (səki və piyada keçidləri, OSRM-foot), metro sığınacağının **ən yaxın real çıxışına** qədər · **bir kliklə SOS** (yanğın, dağıntı, su basması, tibbi yardım) · **"TƏHLÜKƏSİZƏM"** statusu · yol bağlananda və ya məntəqə **≥90%** dolanda **avtomatik alternativ marşrut** |
 | **2. Dispetçer mərkəzi** (`/dispatch`) | Zonalar üzrə canlı SOS axını · məntəqələrin doluluğu · briqadaların statusu və hərəkəti · **Kritik böhran alqoritmi** (500 m və ya eyni zona, 5 dəq, ≥4 fərqli vətəndaş, **və ya** doluluq >95%) → **QIRMIZI HƏYƏCAN** → **1 kliklə təsdiq** (əlavə briqada göndərilir və yeni toplanış nöqtəsi açılır) |
 | **Xüsusi qayğı (Drop 1)** | Hərəkət məhdudiyyətli şəxs rolu: SOS avtomatik **Prioritet #1**, yalnız əlçatan (panduslu, pilləkənsiz) məntəqə və marşrut, real OSM pilləkənlərindən qaçınma |
 | **Giriş və rollar** (`/login`) | Vahid giriş və qeydiyyat · rollar: vətəndaş / hərəkət məhdudiyyətli / dispetçer / admin · admin istifadəçilərin rolunu dəyişir və onları bloklayır · təcili SOS üçün qeydiyyatsız **qonaq rejimi** |
@@ -99,4 +99,4 @@ Nəticə `server/src/data/baku-osm.json` faylına yazılır və repoya commit ol
 
 ## 4. Texnologiyalar
 
-React 18 + TypeScript + Vite + Tailwind + Leaflet · Node.js + Express + Socket.IO + Zod · SQLite (`node:sqlite`) · OSRM (xarici marşrut API) + daxili A* yol qrafı · JWT + scrypt + Helmet + rate limiting · Vitest + Supertest (66 test).
+React 18 + TypeScript + Vite + Tailwind + Leaflet · Node.js + Express + Socket.IO + Zod · SQLite (`node:sqlite`) · OSRM (xarici marşrut API) + daxili A* yol qrafı · JWT + scrypt + Helmet + rate limiting · Vitest + Supertest (73 test).

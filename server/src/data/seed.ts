@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { AssemblyPoint, AssemblyPointType, Barrier, Brigade, BrigadeType, LatLng, Zone } from '@shared/types';
+import { ODAZ, stationKey, venueCapacity } from './opendata';
 
 /**
  * Real-world dataset imported from OpenStreetMap + Wikidata by
@@ -41,7 +42,12 @@ export const ZONES: Zone[] = [
   { id: 'nizami', name: 'Nizami', center: { lat: 40.4035, lng: 49.9365 }, radiusM: 2200 },
   { id: 'binagadi', name: 'Binəqədi', center: { lat: 40.4300, lng: 49.8300 }, radiusM: 2500 },
   { id: 'sabunchu', name: 'Sabunçu', center: { lat: 40.4280, lng: 49.9300 }, radiusM: 2500 },
-].map((z) => {
+].map((z): Zone => {
+  // Prefer official DSK 2024 figures (opendata.az); fall back to Wikidata (OSM import)
+  const off = ODAZ?.districts[z.name];
+  if (off) {
+    return { ...z, population: off.population, populationYear: String(off.year), densityPerKm2: off.densityPerKm2, disabledPersons: off.disabledPersons };
+  }
   const d = DATASET?.districts.find((x) => x.name.startsWith(z.name));
   return d?.population ? { ...z, population: d.population, populationYear: d.populationYear } : z;
 });
@@ -103,12 +109,69 @@ function initialLoadPct(id: string): number {
 }
 
 /** Demo hot-spots: realistic pressure on well-known central points at t=0. */
-const INITIAL_HOTSPOTS: Record<string, number> = { 'Dənizkənarı Milli Park': 86, 'Sahil m/st sığınacağı': 82, '28 May m/st sığınacağı': 71 };
+const INITIAL_HOTSPOTS: Record<string, number> = { 'Dənizkənarı Milli Park': 86 };
+
+type SeedPoint = OsmDataset['points'][number] & { entrances?: AssemblyPoint['entrances']; ridershipDaily?: number; initialPct?: number };
+
+/**
+ * Official metro shelters (opendata.az, Bakı Metropoliteni): only the 27 operating
+ * stations, each with its real exits as entrances. Initial load ∝ average daily
+ * ridership 2025 (busiest station ≈ 80 %). OSM only contributes the wheelchair tag.
+ */
+function officialMetroShelters(): SeedPoint[] {
+  if (!ODAZ) return [];
+  const maxRide = Math.max(...Object.values(ODAZ.metroRidership).map((r) => r.avgDaily));
+  const osmByKey = new Map((DATASET?.points ?? []).filter((p) => p.type === 'shelter').map((p) => [stationKey(p.name), p]));
+  return Object.entries(ODAZ.metroExits).map(([key, st]) => {
+    const exits = st.exits;
+    const centre = { lat: exits.reduce((s, e) => s + e.lat, 0) / exits.length, lng: exits.reduce((s, e) => s + e.lng, 0) / exits.length };
+    const osm = osmByKey.get(key);
+    const ride = ODAZ!.metroRidership[key]?.avgDaily;
+    return {
+      id: `m-${key}`,
+      name: `${st.name} m/st sığınacağı`,
+      type: 'shelter' as const,
+      location: osm?.location ?? { lat: +centre.lat.toFixed(6), lng: +centre.lng.toFixed(6) },
+      capacity: 1500,
+      status: 'open' as const,
+      source: 'opendata.az:metro-cixislari-uzre-koordinatlar',
+      accessible: osm?.accessible ?? false,
+      entrances: exits.map((e) => ({ lat: e.lat, lng: e.lng, label: e.label })),
+      ridershipDaily: ride,
+      initialPct: ride ? Math.round(20 + (60 * ride) / maxRide) : undefined,
+    };
+  });
+}
+
+/** Official sport venues (Gənclər və İdman Nazirliyi) not already present → reserve pool. */
+function officialVenues(existing: SeedPoint[]): SeedPoint[] {
+  if (!ODAZ) return [];
+  const near = (a: LatLng, b: LatLng) => Math.hypot(a.lat - b.lat, (a.lng - b.lng) * 0.76) * 111_000 < 300;
+  return ODAZ.venues
+    .filter((v) => !existing.some((p) => near(p.location, v.location)))
+    .map((v) => ({
+      id: `v-${stationKey(v.name).slice(0, 32)}`,
+      name: v.name.replace(/[“”"]/g, '').replace(/\s+MMC?$/, ''),
+      type: 'stadium' as const,
+      location: v.location,
+      capacity: venueCapacity(v.name),
+      status: 'reserve' as const,
+      source: `opendata.az:${v.source}`,
+      accessible: true,
+    }));
+}
+
+function seedSource(): SeedPoint[] {
+  if (!DATASET) return [];
+  const metro = officialMetroShelters();
+  const base: SeedPoint[] = metro.length ? [...DATASET.points.filter((p) => p.type !== 'shelter'), ...metro] : DATASET.points;
+  return [...base, ...officialVenues(base)];
+}
 
 export function seedPoints(now = Date.now()): AssemblyPoint[] {
   if (DATASET) {
-    return DATASET.points.map((p) => {
-      const occPct = p.status === 'reserve' ? 0 : (INITIAL_HOTSPOTS[p.name] ?? initialLoadPct(p.id));
+    return seedSource().map((p) => {
+      const occPct = p.status === 'reserve' ? 0 : (INITIAL_HOTSPOTS[p.name] ?? p.initialPct ?? initialLoadPct(p.id));
       return {
         id: p.id,
         name: p.name,
@@ -117,6 +180,9 @@ export function seedPoints(now = Date.now()): AssemblyPoint[] {
         zoneId: zoneOf(p.location).id,
         capacity: p.capacity,
         accessible: p.accessible ?? p.type !== 'shelter',
+        entrances: p.entrances,
+        ridershipDaily: p.ridershipDaily,
+        source: p.source,
         occupancy: Math.round((p.capacity * occPct) / 100),
         incoming: 0,
         status: p.status,

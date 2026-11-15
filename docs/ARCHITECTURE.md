@@ -88,7 +88,15 @@ Qayda B: open məntəqədə occupancy / capacity > 95%
 - **1 klik icra** (`CrisisService.execute`): qərar anında state yenidən yoxlanılır. Tövsiyə olunan briqada artıq məşğuldursa, növbəti ən uyğun briqada seçilir. Sonra briqada göndərilir, ehtiyat məntəqə açılır və həddindən artıq dolu məntəqəyə gedən vətəndaşlar yenidən planlanır. İkinci klik `409` qaytarır (idempotentlik). Qərar audit jurnalına yazılır.
 
 ### 3.4 Davamlı marşrutlaşdırma (`routingService.ts`)
-`ROUTING_PROVIDERS=osrm,simulated`: provider-lər prioritet sırası ilə çağırılır.
+`ROUTING_PROVIDERS=osrm-foot,osrm,simulated`: provider-lər prioritet sırası ilə çağırılır. Hər provider hansı profilə xidmət etdiyini bildirir:
+
+| Profil | Kim üçün | Zəncir |
+|---|---|---|
+| `standard` | Vətəndaş (piyada) | osrm-foot (səki, piyada keçidi) → daxili qraf |
+| `accessible` | Hərəkət məhdudiyyətli | osrm-foot alternativlərindən ən az pilləkənlisi; pilləkən varsa osrm (yol, pilləkənsiz) → daxili qraf |
+| `vehicle` | Xilasetmə briqadaları | osrm (yol şəbəkəsi) → daxili qraf |
+
+Metro sığınacaqlarında hədəf stansiyanın mərkəzi deyil, opendata.az-dakı **ən yaxın real çıxışdır**.
 - OSRM bağlı yolları bilmir. Ona görə 3-ə qədər alternativ marşrut istənilir və bağlı dairədən keçməyən ilk marşrut seçilir.
 - Hər provider-in öz **circuit breaker**-i var: 3 ardıcıl xətadan sonra 30 saniyəlik açıq dövr, sonra yarıaçıq yoxlama. Timeout 2,5 saniyədir.
 - Bütün provider-lər işləmirsə, düz xətt üzrə istiqamət və təxmini ETA qaytarılır. Vətəndaş heç vaxt cavabsız qalmır.

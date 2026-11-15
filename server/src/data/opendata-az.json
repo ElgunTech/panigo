@@ -1,0 +1,1381 @@
+{
+ "source": "opendata.az — Azərbaycan Respublikası Açıq Məlumatlar Portalı",
+ "fetchedAt": "2026-11-15T08:29:16.481Z",
+ "sources": [
+  {
+   "dataset": "Metro çıxışları üzrə koordinatlar",
+   "slug": "metro-cixislari-uzre-koordinatlar",
+   "organization": "“Bakı Metropoliteni” QSC",
+   "license": "cc-by",
+   "modified": "2026-02-13",
+   "url": "https://opendata.az/@baki-metropoliteni/metro-cixislari-uzre-koordinatlar",
+   "resource": "https://admin.opendata.az/dataset/3108fb32-8483-4126-8283-17f2f1452548/resource/6540e9a6-97d5-41c6-a05a-3365ed69805a/download/pathways.csv"
+  },
+  {
+   "dataset": "Metro stansiyaları üzrə gündəlik sərnişin gedişlərinin sayı - 2025, 2026 (Yanvar, Fevral) ",
+   "slug": "stansiyalar-uzre-gundelik-sernisin-gedislerinin-sayi",
+   "organization": "“Bakı Metropoliteni” QSC",
+   "license": "cc-by",
+   "modified": "2026-11-13",
+   "url": "https://opendata.az/@baki-metropoliteni/stansiyalar-uzre-gundelik-sernisin-gedislerinin-sayi",
+   "resource": "https://admin.opendata.az/dataset/66051a52-1172-4c59-8ea2-1062562c991f/resource/7f84c392-bee9-4fce-8fde-d60e53520913/download/passenger_2025.csv"
+  },
+  {
+   "dataset": "İdman qurğuları və stadionlar",
+   "slug": "idman-qurgulari-ve-stadionlar",
+   "organization": "Azərbaycan Respublikasının Gənclər və İdman Nazirliyi",
+   "license": "notspecified",
+   "modified": "2026-09-15",
+   "url": "https://opendata.az/@gencler-ve-idman-nazirliyi/idman-qurgulari-ve-stadionlar",
+   "resource": "https://admin.opendata.az/dataset/2b2f7818-cb7e-4695-90dc-f04652aba63e/resource/89817483-1064-403d-a026-86f0419f5ce9/download/idman_qurgulari_ve_stadionlar.geojson"
+  },
+  {
+   "dataset": "Olimpiya İdman Kompleksləri",
+   "slug": "olimpiya-idman-kompleksleri",
+   "organization": "Azərbaycan Respublikasının Gənclər və İdman Nazirliyi",
+   "license": "notspecified",
+   "modified": "2026-09-15",
+   "url": "https://opendata.az/@gencler-ve-idman-nazirliyi/olimpiya-idman-kompleksleri",
+   "resource": "https://admin.opendata.az/dataset/ee76abf8-13d8-4513-8b11-7e9c6901f03e/resource/a055f314-40b9-4ada-81e3-33a64332a34d/download/olimpiya_kompleksleri.geojson"
+  },
+  {
+   "dataset": "2024-ci ilin əvvəlinə ölkənin iqtisadi və inzibati rayonlarının ərazisi, əhalisinin sayı və sıxlığı ",
+   "slug": "2024-ci-ilin-evveline-olkenin-iqtisadi-ve-inzibati-rayonlarinin-erazisi-ehalisinin-sayi-ve-sixligi",
+   "organization": "Azərbaycan Respublikasının Dövlət Statistika Komitəsi",
+   "license": "cc-zero",
+   "modified": "2025-05-26",
+   "url": "https://opendata.az/@dsk/2024-ci-ilin-evveline-olkenin-iqtisadi-ve-inzibati-rayonlarinin-erazisi-ehalisinin-sayi-ve-sixligi",
+   "resource": "https://admin.opendata.az/dataset/15b26503-254a-486f-9a24-4a9048a49082/resource/c7f7ce50-c75d-4b02-9257-09701bf4070f/download/014_1.csv"
+  },
+  {
+   "dataset": "İlin əvvəlinə ölkənin iqtisadi rayonları və inzibati ərazi vahidləri üzrə əlilliyi olan şəxslər",
+   "slug": "i-lin-evveline-olkenin-iqtisadi-rayonlari-ve-inzibati-erazi-vahidleri-uzre-elilliyi-olan-sexsler",
+   "organization": "Azərbaycan Respublikasının Dövlət Statistika Komitəsi",
+   "license": "cc-zero",
+   "modified": "2026-10-12",
+   "url": "https://opendata.az/@dsk/i-lin-evveline-olkenin-iqtisadi-rayonlari-ve-inzibati-erazi-vahidleri-uzre-elilliyi-olan-sexsler",
+   "resource": "https://www.azstat.gov.az/AsisOpenDataApi/csv?table_id=DT_AG_016&lang=az"
+  },
+  {
+   "dataset": "Binaların, qurğuların və süxurların zədələnməsi, dağılması və qəflətən uçması hadisələri",
+   "slug": "binalarin-qurgularin-ve-suxurlarin-zedelenmesi-dagilmasi-ve-qefleten-ucmasi",
+   "organization": "Azərbaycan Respublikasının Fövqəladə Hallar Nazirliyi",
+   "license": "notspecified",
+   "modified": "2026-10-21",
+   "url": "https://opendata.az/@fovqelade-hallar-nazirliyi/binalarin-qurgularin-ve-suxurlarin-zedelenmesi-dagilmasi-ve-qefleten-ucmasi",
+   "resource": "https://admin.opendata.az/dataset/32ad2b34-f4fd-47dd-b763-27e675963d0e/resource/1d8f90da-4bb1-42e1-bcc9-f1bec3180794/download/2007-2025-binalarn-qurularn-v-suxurlarn-zdlnmsi-zdlnm-tsirindn-dalmas-v-qfltn-ucmas.csv"
+  }
+ ],
+ "counts": {
+  "metroStationsWithExits": 27,
+  "metroExits": 98,
+  "ridershipStations": 27,
+  "venues": 20,
+  "districts": 12,
+  "collapseYears": 19
+ },
+ "metroExits": {
+  "xocesen": {
+   "name": "Xocəsən",
+   "nameEn": "Khojasan",
+   "exits": [
+    {
+     "lat": 40.421499,
+     "lng": 49.778066,
+     "label": "Çıxış 1",
+     "address": "Dairəvi yol"
+    }
+   ]
+  },
+  "avtovagzal": {
+   "name": "Avtovağzal",
+   "nameEn": "Avtovaghzal",
+   "exits": [
+    {
+     "lat": 40.42176,
+     "lng": 49.796061,
+     "label": "Çıxış 1",
+     "address": "Bakı Sumqayıt yolu"
+    },
+    {
+     "lat": 40.421344,
+     "lng": 49.795113,
+     "label": "Çıxış 2",
+     "address": "Bakı Sumqayıt yolu"
+    },
+    {
+     "lat": 40.420451,
+     "lng": 49.795884,
+     "label": "Çıxış 3",
+     "address": "Bakı Sumqayıt yolu"
+    },
+    {
+     "lat": 40.420312,
+     "lng": 49.795509,
+     "label": "Çıxış 4",
+     "address": "Bakı Sumqayıt yolu"
+    }
+   ]
+  },
+  "memarecemi": {
+   "name": "Memar Əcəmi",
+   "nameEn": "Memar Ajami",
+   "exits": [
+    {
+     "lat": 40.412073,
+     "lng": 49.815008,
+     "label": "Çıxış 1",
+     "address": "Cavadxan küçəsi"
+    },
+    {
+     "lat": 40.411792,
+     "lng": 49.814919,
+     "label": "Çıxış 2",
+     "address": "Cavadxan küçəsi"
+    },
+    {
+     "lat": 40.410435,
+     "lng": 49.815237,
+     "label": "Çıxış 3",
+     "address": "Cavadxan küçəsi"
+    },
+    {
+     "lat": 40.410251,
+     "lng": 49.814793,
+     "label": "Çıxış 4",
+     "address": "Cavadxan küçəsi"
+    }
+   ]
+  },
+  "memarecemi2": {
+   "name": "Memar Əcəmi 2",
+   "nameEn": "Memar Ajami 2",
+   "exits": [
+    {
+     "lat": 40.410365,
+     "lng": 49.811939,
+     "label": "Çıxış 1",
+     "address": "Cavadxan küçəsi"
+    },
+    {
+     "lat": 40.410717,
+     "lng": 49.8137,
+     "label": "Çıxış 2",
+     "address": "Cavadxan küçəsi"
+    }
+   ]
+  },
+  "8noyabr": {
+   "name": "8 Noyabr",
+   "nameEn": "8 Novabr",
+   "exits": [
+    {
+     "lat": 40.402263,
+     "lng": 49.819552,
+     "label": "Çıxış 1",
+     "address": "Ceyhun Səlimov küçəsi"
+    },
+    {
+     "lat": 40.401717,
+     "lng": 49.820776,
+     "label": "Çıxış 2",
+     "address": "Ceyhun Səlimov küçəsi"
+    },
+    {
+     "lat": 40.40137,
+     "lng": 49.822054,
+     "label": "Çıxış 3",
+     "address": "Ceyhun Səlimov küçəsi"
+    },
+    {
+     "lat": 40.402646,
+     "lng": 49.819923,
+     "label": "Çıxış 4",
+     "address": "Ceyhun Səlimov küçəsi"
+    }
+   ]
+  },
+  "nesimi": {
+   "name": "Nəsimi",
+   "nameEn": "Nasimi",
+   "exits": [
+    {
+     "lat": 40.424112,
+     "lng": 49.824204,
+     "label": "Çıxış 1",
+     "address": "Svetlana Məmmədova küçəsi"
+    },
+    {
+     "lat": 40.42449,
+     "lng": 49.824127,
+     "label": "Çıxış 2",
+     "address": "Svetlana Məmmədova küçəsi"
+    },
+    {
+     "lat": 40.424811,
+     "lng": 49.826502,
+     "label": "Çıxış 3",
+     "address": "Svetlana Məmmədova küçəsi"
+    },
+    {
+     "lat": 40.424415,
+     "lng": 49.826474,
+     "label": "Çıxış 4",
+     "address": "Svetlana Məmmədova küçəsi"
+    }
+   ]
+  },
+  "azadliqprospekti": {
+   "name": "Azadlıq prospekti",
+   "nameEn": "Azadliq prospekti",
+   "exits": [
+    {
+     "lat": 40.425958,
+     "lng": 49.842833,
+     "label": "Çıxış 1",
+     "address": "Süleyman sani Axundov küçəsi"
+    },
+    {
+     "lat": 40.425245,
+     "lng": 49.842692,
+     "label": "Çıxış 2",
+     "address": "Süleyman sani Axundov küçəsi"
+    },
+    {
+     "lat": 40.425272,
+     "lng": 49.840899,
+     "label": "Çıxış 3",
+     "address": "Süleyman sani Axundov küçəsi"
+    },
+    {
+     "lat": 40.425866,
+     "lng": 49.840901,
+     "label": "Çıxış 4",
+     "address": "Süleyman sani Axundov küçəsi"
+    }
+   ]
+  },
+  "dernegul": {
+   "name": "Dərnəgül",
+   "nameEn": "Darnagul",
+   "exits": [
+    {
+     "lat": 40.424955,
+     "lng": 49.860638,
+     "label": "Çıxış 1",
+     "address": "Süleyman sani Axundov küçəsi"
+    },
+    {
+     "lat": 40.425694,
+     "lng": 49.860696,
+     "label": "Çıxış 2",
+     "address": "Süleyman sani Axundov küçəsi"
+    },
+    {
+     "lat": 40.425625,
+     "lng": 49.862902,
+     "label": "Çıxış 3",
+     "address": "Süleyman sani Axundov küçəsi"
+    },
+    {
+     "lat": 40.424839,
+     "lng": 49.862609,
+     "label": "Çıxış 4",
+     "address": "Süleyman sani Axundov küçəsi"
+    }
+   ]
+  },
+  "20yanvar": {
+   "name": "20 Yanvar",
+   "nameEn": "20 Yanvar",
+   "exits": [
+    {
+     "lat": 40.403402,
+     "lng": 49.807583,
+     "label": "Çıxış 1",
+     "address": "Zərdabi prospekti"
+    },
+    {
+     "lat": 40.403369,
+     "lng": 49.807902,
+     "label": "Çıxış 2",
+     "address": "Tblisi prospekti"
+    },
+    {
+     "lat": 40.403537,
+     "lng": 49.808488,
+     "label": "Çıxış 3",
+     "address": "Tblisi prospekti"
+    },
+    {
+     "lat": 40.40482,
+     "lng": 49.807982,
+     "label": "Çıxış 4",
+     "address": "Moskva prospekti"
+    },
+    {
+     "lat": 40.404423,
+     "lng": 49.807058,
+     "label": "Çıxış 5",
+     "address": "Moskva prospekti"
+    },
+    {
+     "lat": 40.402775,
+     "lng": 49.807052,
+     "label": "Çıxış 6",
+     "address": "Zərdabi prospekti"
+    },
+    {
+     "lat": 40.403242,
+     "lng": 49.806938,
+     "label": "Çıxış 7",
+     "address": "Zərdabi prospekti"
+    }
+   ]
+  },
+  "insaatcilar": {
+   "name": "İnşaatçılar",
+   "nameEn": "Insahatchilar",
+   "exits": [
+    {
+     "lat": 40.391379,
+     "lng": 49.802764,
+     "label": "Çıxış 1",
+     "address": "Şərifzadə küçəsi"
+    },
+    {
+     "lat": 40.391391,
+     "lng": 49.802163,
+     "label": "Çıxış 2",
+     "address": "Şərifzadə küçəsi"
+    },
+    {
+     "lat": 40.388998,
+     "lng": 49.802512,
+     "label": "Çıxış 3",
+     "address": "Şərifzadə küçəsi"
+    },
+    {
+     "lat": 40.388996,
+     "lng": 49.803148,
+     "label": "Çıxış 4",
+     "address": "Şərifzadə küçəsi"
+    }
+   ]
+  },
+  "elmlerakademiyasi": {
+   "name": "Elmlər Akademiyası",
+   "nameEn": "Elmler Akademiyasi",
+   "exits": [
+    {
+     "lat": 40.375083,
+     "lng": 49.812417,
+     "label": "Çıxış 1",
+     "address": "Bəxtiyar Vahabzadə küçəsi"
+    },
+    {
+     "lat": 40.37541,
+     "lng": 49.811811,
+     "label": "Çıxış 2",
+     "address": "Bəxtiyar Vahabzadə küçəsi"
+    },
+    {
+     "lat": 40.375308,
+     "lng": 49.81239,
+     "label": "Çıxış 3",
+     "address": "Bəxtiyar Vahabzadə küçəsi"
+    },
+    {
+     "lat": 40.375056,
+     "lng": 49.811605,
+     "label": "Çıxış 4",
+     "address": "Bəxtiyar Vahabzadə küçəsi"
+    },
+    {
+     "lat": 40.375105,
+     "lng": 49.815491,
+     "label": "Çıxış 5",
+     "address": "Hüseyn Cavid küçəsi"
+    }
+   ]
+  },
+  "nizami": {
+   "name": "Nizami",
+   "nameEn": "Nizami",
+   "exits": [
+    {
+     "lat": 40.37919,
+     "lng": 49.830063,
+     "label": "Çıxış 1",
+     "address": "Cəfər Cabbarlı küçəsi"
+    }
+   ]
+  },
+  "28may": {
+   "name": "28 May",
+   "nameEn": "28 May",
+   "exits": [
+    {
+     "lat": 40.379712,
+     "lng": 49.848843,
+     "label": "Çıxış 1",
+     "address": "Dilarə Əliyeva küçəsi"
+    },
+    {
+     "lat": 40.38271,
+     "lng": 49.846801,
+     "label": "Çıxış 2",
+     "address": "Azadlıq prospekti"
+    }
+   ]
+  },
+  "genclik": {
+   "name": "Gənclik",
+   "nameEn": "Ganjlik",
+   "exits": [
+    {
+     "lat": 40.400468,
+     "lng": 49.850587,
+     "label": "Çıxış 1",
+     "address": "Fətəli xan Xoyski küçəsi"
+    },
+    {
+     "lat": 40.401303,
+     "lng": 49.852152,
+     "label": "Çıxış 2",
+     "address": "Fətəli xan Xoyski küçəsi"
+    },
+    {
+     "lat": 40.40082,
+     "lng": 49.851524,
+     "label": "Çıxış 3",
+     "address": "Fətəli xan Xoyski küçəsi"
+    },
+    {
+     "lat": 40.399895,
+     "lng": 49.850974,
+     "label": "Çıxış 4",
+     "address": "Əhmədbəy Ağaoğlu küçəsi"
+    },
+    {
+     "lat": 40.40056,
+     "lng": 49.852542,
+     "label": "Çıxış 5",
+     "address": "Vaqif prospekti"
+    },
+    {
+     "lat": 40.399397,
+     "lng": 49.850735,
+     "label": "Çıxış 6",
+     "address": "Əhmədbəy Ağaoğlu küçəsi"
+    }
+   ]
+  },
+  "nerimanov": {
+   "name": "Nəriman Nərimanov",
+   "nameEn": "Nariman Narimanov",
+   "exits": [
+    {
+     "lat": 40.40254,
+     "lng": 49.868876,
+     "label": "Çıxış 1",
+     "address": "Əhməd Rəcəbli küçəsi"
+    },
+    {
+     "lat": 40.401952,
+     "lng": 49.869499,
+     "label": "Çıxış 2",
+     "address": "Təbriz küçəsi"
+    },
+    {
+     "lat": 40.402818,
+     "lng": 49.8715,
+     "label": "Çıxış 3",
+     "address": "Təbriz küçəsi"
+    },
+    {
+     "lat": 40.403389,
+     "lng": 49.870936,
+     "label": "Çıxış 4",
+     "address": "Təbriz küçəsi"
+    }
+   ]
+  },
+  "ulduz": {
+   "name": "Ulduz",
+   "nameEn": "Ulduz",
+   "exits": [
+    {
+     "lat": 40.414779,
+     "lng": 49.892668,
+     "label": "Çıxış 1",
+     "address": "Rövşən Əliyev küçəsi"
+    },
+    {
+     "lat": 40.415139,
+     "lng": 49.892568,
+     "label": "Çıxış 2",
+     "address": "Rövşən Əliyev küçəsi"
+    },
+    {
+     "lat": 40.414882,
+     "lng": 49.890251,
+     "label": "Çıxış 3",
+     "address": "Araz küç"
+    },
+    {
+     "lat": 40.414343,
+     "lng": 49.890401,
+     "label": "Çıxış 4",
+     "address": "Araz küç"
+    }
+   ]
+  },
+  "koroglu": {
+   "name": "Koroğlu",
+   "nameEn": "Koroglu",
+   "exits": [
+    {
+     "lat": 40.419433,
+     "lng": 49.919821,
+     "label": "Çıxış 1",
+     "address": "Heydər Əliyev prospekti"
+    },
+    {
+     "lat": 40.419647,
+     "lng": 49.919581,
+     "label": "Çıxış 2",
+     "address": "Heydər Əliyev prospekti"
+    },
+    {
+     "lat": 40.420956,
+     "lng": 49.918028,
+     "label": "Çıxış 3",
+     "address": "Heydər Əliyev prospekti"
+    },
+    {
+     "lat": 40.420251,
+     "lng": 49.917757,
+     "label": "Çıxış 4",
+     "address": "Heydər Əliyev prospekti"
+    },
+    {
+     "lat": 40.420122,
+     "lng": 49.916497,
+     "label": "Çıxış 5",
+     "address": "Heydər Əliyev prospekti"
+    },
+    {
+     "lat": 40.421491,
+     "lng": 49.91644,
+     "label": "Çıxış 6",
+     "address": "Heydər Əliyev prospekti"
+    },
+    {
+     "lat": 40.421699,
+     "lng": 49.916555,
+     "label": "Çıxış 7",
+     "address": "Heydər Əliyev prospekti"
+    }
+   ]
+  },
+  "qaraqarayev": {
+   "name": "Qara Qarayev",
+   "nameEn": "Gara Garayev",
+   "exits": [
+    {
+     "lat": 40.417506,
+     "lng": 49.93554,
+     "label": "Çıxış 1",
+     "address": "Qara Qarayev prospekti"
+    },
+    {
+     "lat": 40.417063,
+     "lng": 49.935335,
+     "label": "Çıxış 2",
+     "address": "Qara Qarayev prospekti"
+    },
+    {
+     "lat": 40.417579,
+     "lng": 49.932686,
+     "label": "Çıxış 3",
+     "address": "Qara Qarayev prospekti"
+    },
+    {
+     "lat": 40.417519,
+     "lng": 49.93297,
+     "label": "Çıxış 4",
+     "address": "Qara Qarayev prospekti"
+    },
+    {
+     "lat": 40.418048,
+     "lng": 49.932773,
+     "label": "Çıxış 5",
+     "address": "Qara Qarayev prospekti"
+    },
+    {
+     "lat": 40.417962,
+     "lng": 49.933199,
+     "label": "Çıxış 6",
+     "address": "Qara Qarayev prospekti"
+    }
+   ]
+  },
+  "neftciler": {
+   "name": "Neftçilər",
+   "nameEn": "Neftchilar",
+   "exits": [
+    {
+     "lat": 40.411849,
+     "lng": 49.942465,
+     "label": "Çıxış 1",
+     "address": "Qara Qarayev prospekti"
+    },
+    {
+     "lat": 40.411564,
+     "lng": 49.941833,
+     "label": "Çıxış 2",
+     "address": "Qara Qarayev prospekti"
+    },
+    {
+     "lat": 40.410543,
+     "lng": 49.943487,
+     "label": "Çıxış 3",
+     "address": "Qara Qarayev prospekti"
+    },
+    {
+     "lat": 40.410051,
+     "lng": 49.943848,
+     "label": "Çıxış 4",
+     "address": "Qara Qarayev prospekti"
+    },
+    {
+     "lat": 40.409739,
+     "lng": 49.94317,
+     "label": "Çıxış 5",
+     "address": "Qara Qarayev prospekti"
+    },
+    {
+     "lat": 40.410267,
+     "lng": 49.942772,
+     "label": "Çıxış 6",
+     "address": "Qara Qarayev prospekti"
+    }
+   ]
+  },
+  "xalqlardostlugu": {
+   "name": "Xalqlar Dostluğu",
+   "nameEn": "Khalglar Dostlughu",
+   "exits": [
+    {
+     "lat": 40.398585,
+     "lng": 49.952052,
+     "label": "Çıxış 1",
+     "address": "Qara Qarayev prospekti"
+    },
+    {
+     "lat": 40.398356,
+     "lng": 49.95162,
+     "label": "Çıxış 2",
+     "address": "Qara Qarayev prospekti"
+    },
+    {
+     "lat": 40.396683,
+     "lng": 49.952848,
+     "label": "Çıxış 3",
+     "address": "Qara Qarayev prospekti"
+    },
+    {
+     "lat": 40.397126,
+     "lng": 49.953076,
+     "label": "Çıxış 4",
+     "address": "Qara Qarayev prospekti"
+    }
+   ]
+  },
+  "ehmedli": {
+   "name": "Əhmədli",
+   "nameEn": "Akhmedli",
+   "exits": [
+    {
+     "lat": 40.385988,
+     "lng": 49.953697,
+     "label": "Çıxış 1",
+     "address": "Məhəmməd Hadi küçəsi"
+    },
+    {
+     "lat": 40.385957,
+     "lng": 49.954227,
+     "label": "Çıxış 2",
+     "address": "Məhəmməd Hadi küçəsi"
+    },
+    {
+     "lat": 40.384344,
+     "lng": 49.954252,
+     "label": "Çıxış 3",
+     "address": "Məhəmməd Hadi küçəsi"
+    },
+    {
+     "lat": 40.38433,
+     "lng": 49.953734,
+     "label": "Çıxış 4",
+     "address": "Məhəmməd Hadi küçəsi"
+    }
+   ]
+  },
+  "heziaslanov": {
+   "name": "Həzi Aslanov",
+   "nameEn": "Hazi Aslanov",
+   "exits": [
+    {
+     "lat": 40.373863,
+     "lng": 49.953849,
+     "label": "Çıxış 1",
+     "address": "Məhəmməd Hadi küçəsi"
+    },
+    {
+     "lat": 40.37395,
+     "lng": 49.953447,
+     "label": "Çıxış 2",
+     "address": "Məhəmməd Hadi küçəsi"
+    },
+    {
+     "lat": 40.374094,
+     "lng": 49.953456,
+     "label": "Çıxış 3",
+     "address": "Məhəmməd Hadi küçəsi"
+    },
+    {
+     "lat": 40.372033,
+     "lng": 49.953748,
+     "label": "Çıxış 4",
+     "address": "Məhəmməd Hadi küçəsi"
+    },
+    {
+     "lat": 40.372109,
+     "lng": 49.95311,
+     "label": "Çıxış 5",
+     "address": "Məhəmməd Hadi küçəsi"
+    }
+   ]
+  },
+  "sahil": {
+   "name": "Sahil",
+   "nameEn": "Sahil",
+   "exits": [
+    {
+     "lat": 40.371751,
+     "lng": 49.844644,
+     "label": "Çıxış 1",
+     "address": "Bülbül prospekti"
+    }
+   ]
+  },
+  "iceriseher": {
+   "name": "İçərişəhər",
+   "nameEn": "Icherisheher",
+   "exits": [
+    {
+     "lat": 40.365899,
+     "lng": 49.831529,
+     "label": "Çıxış 1",
+     "address": "İstiqlaliyyət küçəsi"
+    }
+   ]
+  },
+  "cefercabbarli": {
+   "name": "Cəfər Cabbarlı",
+   "nameEn": "Jafar Jabbarly",
+   "exits": [
+    {
+     "lat": 40.379585,
+     "lng": 49.848716,
+     "label": "Çıxış 1",
+     "address": "Dilarə Əliyeva küçəsi"
+    },
+    {
+     "lat": 40.379608,
+     "lng": 49.849222,
+     "label": "Çıxış 2",
+     "address": "Dilarə Əliyeva küçəsi"
+    }
+   ]
+  },
+  "xetai": {
+   "name": "Şah İsmayıl Xətai",
+   "nameEn": "Shah Ismail Khatai",
+   "exits": [
+    {
+     "lat": 40.383066,
+     "lng": 49.871971,
+     "label": "Çıxış 1",
+     "address": "Xocalı prospekti"
+    }
+   ]
+  },
+  "bakmil": {
+   "name": "Bakmil",
+   "nameEn": "Bakmil",
+   "exits": [
+    {
+     "lat": 40.414152,
+     "lng": 49.879007,
+     "label": "Çıxış 1",
+     "address": "Ələsgər Qayıbov küçəsi"
+    }
+   ]
+  }
+ },
+ "metroRidership": {
+  "20yanvar": {
+   "name": "20 Yanvar",
+   "avgDaily": 49019,
+   "days": 365
+  },
+  "28may": {
+   "name": "28 May",
+   "avgDaily": 50755,
+   "days": 365
+  },
+  "8noyabr": {
+   "name": "8 Noyabr",
+   "avgDaily": 4281,
+   "days": 365
+  },
+  "avtovagzal": {
+   "name": "Avtovağzal",
+   "avgDaily": 12113,
+   "days": 365
+  },
+  "azadliqprospekti": {
+   "name": "Azadlıq prospekti",
+   "avgDaily": 21244,
+   "days": 365
+  },
+  "bakmil": {
+   "name": "Bakmil",
+   "avgDaily": 1572,
+   "days": 365
+  },
+  "cefercabbarli": {
+   "name": "Cəfər Cabbarlı",
+   "avgDaily": 3299,
+   "days": 365
+  },
+  "dernegul": {
+   "name": "Dərnəgül",
+   "avgDaily": 3308,
+   "days": 365
+  },
+  "elmlerakademiyasi": {
+   "name": "Elmlər Akademiyası",
+   "avgDaily": 36946,
+   "days": 365
+  },
+  "ehmedli": {
+   "name": "Əhmədli",
+   "avgDaily": 31753,
+   "days": 365
+  },
+  "genclik": {
+   "name": "Gənclik",
+   "avgDaily": 43609,
+   "days": 365
+  },
+  "heziaslanov": {
+   "name": "Həzi Aslanov",
+   "avgDaily": 17672,
+   "days": 365
+  },
+  "xalqlardostlugu": {
+   "name": "Xalqlar Dostluğu",
+   "avgDaily": 27400,
+   "days": 365
+  },
+  "xetai": {
+   "name": "Xətai",
+   "avgDaily": 12923,
+   "days": 365
+  },
+  "xocesen": {
+   "name": "Xocəsən",
+   "avgDaily": 2911,
+   "days": 365
+  },
+  "iceriseher": {
+   "name": "İçərişəhər",
+   "avgDaily": 19385,
+   "days": 365
+  },
+  "insaatcilar": {
+   "name": "İnşaatçılar",
+   "avgDaily": 30273,
+   "days": 365
+  },
+  "koroglu": {
+   "name": "Koroglu",
+   "avgDaily": 55479,
+   "days": 365
+  },
+  "qaraqarayev": {
+   "name": "Qara Qarayev",
+   "avgDaily": 23780,
+   "days": 365
+  },
+  "memarecemi": {
+   "name": "Memar Əcəmi",
+   "avgDaily": 25736,
+   "days": 365
+  },
+  "memarecemi2": {
+   "name": "Memar Əcəmi-2",
+   "avgDaily": 1571,
+   "days": 365
+  },
+  "neftciler": {
+   "name": "Neftçilər",
+   "avgDaily": 35957,
+   "days": 365
+  },
+  "nerimanov": {
+   "name": "Nəriman Nərimanov",
+   "avgDaily": 44489,
+   "days": 365
+  },
+  "nesimi": {
+   "name": "Nəsimi",
+   "avgDaily": 9554,
+   "days": 365
+  },
+  "nizami": {
+   "name": "Nizami",
+   "avgDaily": 18965,
+   "days": 365
+  },
+  "sahil": {
+   "name": "Sahil",
+   "avgDaily": 28911,
+   "days": 365
+  },
+  "ulduz": {
+   "name": "Ulduz",
+   "avgDaily": 8473,
+   "days": 365
+  }
+ },
+ "venues": [
+  {
+   "name": "Tofiq Bəhramov adına Respublika Stadionu",
+   "address": "Nərimanov rayonu, Fətəli xan Xoyski 98a",
+   "location": {
+    "lat": 40.397283,
+    "lng": 49.852413
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "Respublika Velosiped Treki",
+   "address": "Bakı şəhəri, Nəsimi Rayonu, Rövşən Cəfərov 10",
+   "location": {
+    "lat": 40.403478,
+    "lng": 49.810139
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "Respublika Olimpiya Mərkəzi",
+   "address": "Olimpiya küçəsi 5",
+   "location": {
+    "lat": 40.399287,
+    "lng": 49.855269
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "Heydər Əliyev adına İdman Konsert Kompleksi",
+   "address": "Nəsimi rayonu, Tiblisi prospekti 12",
+   "location": {
+    "lat": 40.391993,
+    "lng": 49.825057
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "İdman-Tennis Kompleksi",
+   "address": "Nərimanov rayonu, Əbülfəz Əbdürəhmanov 11",
+   "location": {
+    "lat": 40.405274,
+    "lng": 49.852358
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "Stend Atıcılığı üzrə İdman Kompleksi",
+   "address": "Bakı şəhəri, Binəqədi rayonu, Biləcəri ŞTQ, Sumqayıt şosesi 3d",
+   "location": {
+    "lat": 40.411992,
+    "lng": 49.792308
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "Olimpiya növləri üzrə Milli komandalar üçün təlim-məşq mərkəzi MMC",
+   "address": "Azadlıq prospekti 128",
+   "location": {
+    "lat": 40.4029,
+    "lng": 49.838176
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "“Milli Gimnastika Arenası” MMC",
+   "address": "Heydər Əliyev prospeki 178",
+   "location": {
+    "lat": 40.418978,
+    "lng": 49.917016
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "“Su İdmanı Sarayı” MMC",
+   "address": "Səbail rayonu, Əhəd Yaqubov küçəsi 15",
+   "location": {
+    "lat": 40.333889,
+    "lng": 49.837183
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "Avropa Oyunları Parkı",
+   "address": "Səbail rayonu, Əhəd Yaqubov küçəsi 15",
+   "location": {
+    "lat": 40.334,
+    "lng": 49.835
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "Səbail Velopark",
+   "address": "Səbail rayonu, Salyan şosesi, Dostluq parkı 10",
+   "location": {
+    "lat": 40.309,
+    "lng": 49.801
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "“Bakı İdman Sarayı” MMC",
+   "address": "Bakı şəhəri, Səbail rayonu, Mikayıl Hüseynov küçəsi 26a",
+   "location": {
+    "lat": 40.358558,
+    "lng": 49.834584
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "“Balaxanı İdman Zalı” MMC",
+   "address": "Sabunçu rayonu, Balaxanı qəsəbəsi, Milli ordu küçəsi",
+   "location": {
+    "lat": 40.45677,
+    "lng": 49.919174
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "“Binə İdman Zalı” MMC",
+   "address": "Bakı şəhəri, Binə qəsəbəsi, Xaqani küçəsi",
+   "location": {
+    "lat": 40.450644,
+    "lng": 50.083581
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "“Pirşağı-Kürdəxanı İdman Zalı” MMC",
+   "address": "Bakı şəhəri, Sabunçu rayonu, Pirşağı qəsəbəsi, Pirşağı şosesi, döngə 1",
+   "location": {
+    "lat": 40.413755,
+    "lng": 49.804001
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "Azərreyl voleybol klubu",
+   "address": "Əliyar Əliyev 108 B",
+   "location": {
+    "lat": 40.418,
+    "lng": 49.86
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "Xocasən stadionu",
+   "address": "Binəqədi rayonu, Sulutəpə qəsəbəsi, Cumhuriyyət küçəsi",
+   "location": {
+    "lat": 40.415,
+    "lng": 49.764
+   },
+   "source": "idman-qurgulari-ve-stadionlar"
+  },
+  {
+   "name": "“Bakı Olimpiya İdman Kompleksi” MMC",
+   "address": "Bakı, Olimpiya küç. 7",
+   "location": {
+    "lat": 40.398,
+    "lng": 49.8531
+   },
+   "source": "olimpiya-idman-kompleksleri"
+  },
+  {
+   "name": "“Hövsan Olimpiya İdman Kompleksi” MMC",
+   "address": "Bakı şəhəri, Suraxanı rayonu, Hövsan qəsəbəsi, Elman Qasımov küçəsi 15k",
+   "location": {
+    "lat": 40.366199,
+    "lng": 50.075732
+   },
+   "source": "olimpiya-idman-kompleksleri"
+  },
+  {
+   "name": "“Abşeron Olimpiya İdman Kompleksi” MMC",
+   "address": "Bakı-Quba yolu, 17-ci km, Xırdalan",
+   "location": {
+    "lat": 40.481691,
+    "lng": 49.726896
+   },
+   "source": "olimpiya-idman-kompleksleri"
+  }
+ ],
+ "districts": {
+  "Binəqədi": {
+   "population": 307900,
+   "areaKm2": 130,
+   "densityPerKm2": 2368,
+   "year": 2024,
+   "disabledPersons": 11827,
+   "disabledYear": 2026
+  },
+  "Xətai": {
+   "population": 276100,
+   "areaKm2": 30,
+   "densityPerKm2": 9203,
+   "year": 2024,
+   "disabledPersons": 12015,
+   "disabledYear": 2026
+  },
+  "Xəzər": {
+   "population": 205500,
+   "areaKm2": 370,
+   "densityPerKm2": 555,
+   "year": 2024,
+   "disabledPersons": 6829,
+   "disabledYear": 2026
+  },
+  "Qaradağ": {
+   "population": 117000,
+   "areaKm2": 1080,
+   "densityPerKm2": 108,
+   "year": 2024,
+   "disabledPersons": 5614,
+   "disabledYear": 2026
+  },
+  "Nərimanov": {
+   "population": 180700,
+   "areaKm2": 20,
+   "densityPerKm2": 9035,
+   "year": 2024,
+   "disabledPersons": 7957,
+   "disabledYear": 2026
+  },
+  "Nəsimi": {
+   "population": 219200,
+   "areaKm2": 10,
+   "densityPerKm2": 21920,
+   "year": 2024,
+   "disabledPersons": 7580,
+   "disabledYear": 2026
+  },
+  "Nizami": {
+   "population": 185300,
+   "areaKm2": 20,
+   "densityPerKm2": 9265,
+   "year": 2024,
+   "disabledPersons": 7534,
+   "disabledYear": 2026
+  },
+  "Pirallahı": {
+   "population": 18800,
+   "areaKm2": 30,
+   "densityPerKm2": 627,
+   "year": 2024,
+   "disabledPersons": 469,
+   "disabledYear": 2026
+  },
+  "Sabunçu": {
+   "population": 330600,
+   "areaKm2": 240,
+   "densityPerKm2": 1378,
+   "year": 2024,
+   "disabledPersons": 12420,
+   "disabledYear": 2026
+  },
+  "Səbail": {
+   "population": 101800,
+   "areaKm2": 30,
+   "densityPerKm2": 3393,
+   "year": 2024,
+   "disabledPersons": 3713,
+   "disabledYear": 2026
+  },
+  "Suraxanı": {
+   "population": 208200,
+   "areaKm2": 120,
+   "densityPerKm2": 1735,
+   "year": 2024,
+   "disabledPersons": 10515,
+   "disabledYear": 2026
+  },
+  "Yasamal": {
+   "population": 193800,
+   "areaKm2": 20,
+   "densityPerKm2": 9690,
+   "year": 2024,
+   "disabledPersons": 9813,
+   "disabledYear": 2026
+  }
+ },
+ "collapseStats": [
+  {
+   "year": 2007,
+   "incidents": 55,
+   "deaths": 35,
+   "injured": 20,
+   "rescued": 0
+  },
+  {
+   "year": 2008,
+   "incidents": 2,
+   "deaths": 2,
+   "injured": 0,
+   "rescued": 0
+  },
+  {
+   "year": 2009,
+   "incidents": 49,
+   "deaths": 24,
+   "injured": 12,
+   "rescued": 13
+  },
+  {
+   "year": 2010,
+   "incidents": 20,
+   "deaths": 4,
+   "injured": 11,
+   "rescued": 5
+  },
+  {
+   "year": 2011,
+   "incidents": 15,
+   "deaths": 4,
+   "injured": 4,
+   "rescued": 7
+  },
+  {
+   "year": 2012,
+   "incidents": 26,
+   "deaths": 9,
+   "injured": 11,
+   "rescued": 6
+  },
+  {
+   "year": 2013,
+   "incidents": 12,
+   "deaths": 4,
+   "injured": 4,
+   "rescued": 4
+  },
+  {
+   "year": 2014,
+   "incidents": 43,
+   "deaths": 20,
+   "injured": 11,
+   "rescued": 12
+  },
+  {
+   "year": 2015,
+   "incidents": 14,
+   "deaths": 0,
+   "injured": 2,
+   "rescued": 12
+  },
+  {
+   "year": 2016,
+   "incidents": 10,
+   "deaths": 0,
+   "injured": 8,
+   "rescued": 2
+  },
+  {
+   "year": 2017,
+   "incidents": 27,
+   "deaths": 6,
+   "injured": 18,
+   "rescued": 3
+  },
+  {
+   "year": 2018,
+   "incidents": 13,
+   "deaths": 4,
+   "injured": 6,
+   "rescued": 3
+  },
+  {
+   "year": 2019,
+   "incidents": 16,
+   "deaths": 6,
+   "injured": 6,
+   "rescued": 4
+  },
+  {
+   "year": 2020,
+   "incidents": 15,
+   "deaths": 13,
+   "injured": 2,
+   "rescued": 0
+  },
+  {
+   "year": 2021,
+   "incidents": 2,
+   "deaths": 2,
+   "injured": 0,
+   "rescued": 0
+  },
+  {
+   "year": 2022,
+   "incidents": 2,
+   "deaths": 2,
+   "injured": 0,
+   "rescued": 0
+  },
+  {
+   "year": 2023,
+   "incidents": 12,
+   "deaths": 0,
+   "injured": 6,
+   "rescued": 6
+  },
+  {
+   "year": 2024,
+   "incidents": 15,
+   "deaths": 3,
+   "injured": 8,
+   "rescued": 4
+  },
+  {
+   "year": 2025,
+   "incidents": 6,
+   "deaths": 2,
+   "injured": 2,
+   "rescued": 2
+  }
+ ]
+}

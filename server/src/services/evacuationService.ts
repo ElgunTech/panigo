@@ -1,6 +1,6 @@
 import { CRISIS_RULES, type AssemblyPoint, type EvacuationPlan, type LatLng, type RerouteReason, type RoadClosure, type RouteProfile } from '@shared/types';
 import { haversine, polylineHitsCircle } from '../domain/geo';
-import { eligible, rankPoints } from '../domain/recommendation';
+import { eligible, rankPoints, targetOf } from '../domain/recommendation';
 import { occupancyPct } from '../domain/crisisEngine';
 import type { RoutingService } from '../routing/routingService';
 import type { Store } from './store';
@@ -42,7 +42,13 @@ export class EvacuationService {
     if (!candidates.length) candidates = options.filter((o) => !exclude.includes(o.point.id)); // everything full → least bad
     const top = candidates.slice(0, 3);
 
-    const routed = await Promise.all(top.map(async (o) => ({ o, route: await this.routing.route(origin, o.point.location, closures, profile) })));
+    // Route pedestrians to the nearest real entrance (e.g. the closest metro exit), not the station centre
+    const routed = await Promise.all(
+      top.map(async (o) => {
+        const target = targetOf(o.point, origin);
+        return { o, target, route: await this.routing.route(origin, target, closures, profile) };
+      }),
+    );
     // Final choice: walking time inflated by projected crowding
     routed.sort((a, b) => cost(a.route.walkS, a.o.point) - cost(b.route.walkS, b.o.point));
     const best = routed[0];
@@ -60,6 +66,7 @@ export class EvacuationService {
       origin,
       options: options.slice(0, 8),
       destination: destination ? this.store.points.get(destination.id)! : null,
+      entrance: best && 'label' in best.target && best.target.label ? { lat: best.target.lat, lng: best.target.lng, label: best.target.label } : undefined,
       route: best?.route ?? null,
       reason,
       profile,

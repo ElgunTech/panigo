@@ -34,7 +34,11 @@ export function ZonesLayer({ zones, sos, alerts, focus }: { zones: Zone[]; sos: 
             <Tooltip direction="center" permanent className="!bg-transparent !shadow-none !text-slate-300 !text-[11px] !font-semibold">
               {z.name}
               {n ? ` · ${n} SOS` : ''}
-              {z.population ? <span className="block text-[9px] font-normal text-slate-500">{Math.round(z.population / 1000)}k</span> : null}
+              {z.population ? (
+                <span className="block text-[9px] font-normal text-slate-500">
+                  {Math.round(z.population / 1000)}k{z.disabledPersons ? ` · ♿ ${(z.disabledPersons / 1000).toFixed(1)}k` : ''}
+                </span>
+              ) : null}
             </Tooltip>
           </Circle>
         );

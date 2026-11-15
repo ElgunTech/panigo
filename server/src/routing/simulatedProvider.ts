@@ -15,6 +15,8 @@ const BARRIER_RADIUS_M = 60;
 export class SimulatedProvider implements RoutingProvider {
   readonly id = 'simulated' as const;
   readonly closureAware = true;
+  /** abstract street lattice — serves every profile as the always-available fallback */
+  readonly mode = 'foot' as const;
   /** average urban driving speed under crisis traffic, m/s */
   private readonly speed = 7;
   private barrierCost?: Map<string, number>;

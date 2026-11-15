@@ -207,7 +207,8 @@ const dist = (a: LatLng, b: LatLng) => (a.lat - b.lat) ** 2 + (a.lng - b.lng) **
 
 function buildProviders(cfg: AppConfig): RoutingProvider[] {
   const registry: Record<string, () => RoutingProvider> = {
-    osrm: () => new OsrmProvider(cfg.osrmUrl, cfg.osrmTimeoutMs),
+    'osrm-foot': () => new OsrmProvider('osrm-foot', cfg.osrmFootUrl, 'foot', 'foot', ['standard', 'accessible'], cfg.osrmTimeoutMs),
+    osrm: () => new OsrmProvider('osrm', cfg.osrmUrl, 'driving', 'vehicle', ['vehicle', 'accessible'], cfg.osrmTimeoutMs),
     simulated: () => new SimulatedProvider(new RoadNetwork(), BARRIERS),
   };
   return cfg.routingProviders.filter((id) => registry[id]).map((id) => registry[id]());

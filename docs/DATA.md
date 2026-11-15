@@ -1,5 +1,39 @@
 # Real data — mənbələr və metodologiya
 
+Sistem iki real mənbəyə əsaslanır: **opendata.az** (rəsmi dövlət datası, üstünlük bunundur) və **OpenStreetMap + Wikidata** (xəritə həndəsəsi, park və stadion poliqonları, pilləkənlər).
+
+## 1. opendata.az — Azərbaycan Respublikası Açıq Məlumatlar Portalı
+
+İdxal skripti: [`scripts/fetch-opendata-az.mjs`](../scripts/fetch-opendata-az.mjs). Nəticə: [`server/src/data/opendata-az.json`](../server/src/data/opendata-az.json). Portal CKAN əsaslıdır (`https://admin.opendata.az/api/3/action`). Skript hər dataseti adına (slug) görə tapır və onun son resursunu yükləyir. Portal müvəqqəti xəta qaytaranda sorğunu təkrarlayır.
+
+### Analiz
+Kataloqdakı **2 071 datasetin hamısı** API ilə çəkildi və açar sözlərə görə qiymətləndirildi: sığınacaq, fövqəladə hal, səhiyyə, əhali, məkanlar, Bakı, koordinat. 183 dataset uyğun çıxdı. Onlardan koordinatı olan, Bakıya aid və prototipə real dəyər verən 7-si seçildi:
+
+| Dataset | Təşkilat | Sistemdə istifadəsi |
+|---|---|---|
+| Metro çıxışları üzrə koordinatlar (98 çıxış) | Bakı Metropoliteni | 27 işləyən stansiya sığınacaq kimi; piyada **ən yaxın real çıxışa** yönləndirilir |
+| Stansiyalar üzrə gündəlik sərnişin sayı (2025) | Bakı Metropoliteni | Metro sığınacaqlarının ilkin doluluğu orta gündəlik yükə mütənasibdir (20–80%) |
+| İdman qurğuları və stadionlar | Gənclər və İdman Nazirliyi | Rəsmi obyektlər; mövcud olmayanlar ehtiyat məntəqəyə əlavə olunur |
+| Olimpiya İdman Kompleksləri | Gənclər və İdman Nazirliyi | Bakıdakı kompleks ehtiyat məntəqələr |
+| Rayonların ərazisi, əhalisi və sıxlığı (2024) | DSK | Zonaların rəsmi əhalisi və sıxlığı (Wikidata 2019 əvəzinə) |
+| İnzibati ərazi vahidləri üzrə əlilliyi olan şəxslər | DSK | Zonada xüsusi qayğıya ehtiyacı olanların sayı (Drop 1 ilə əlaqəli) |
+| Binaların dağılması və uçması hadisələri (2007–2025) | FHN | Dispetçer panelində tarixi risk qrafiki |
+
+### İstifadə olunmayanlar və səbəbi
+- **Tibb müəssisələri** (Səhiyyə Nazirliyi): yalnız ad və e-poçt var, koordinat yoxdur. Əvəzində OSM-dəki 104 xəstəxana istifadə olunur.
+- **FHN qurumları və regional mərkəzlər:** yalnız ünvan var, koordinat yoxdur. Prototipdə geokodlaşdırma etibarlı olmadığı üçün daxil edilmədi.
+- **Təbii və texnogen hadisələrin statistikası (2024–2025):** ölkə üzrə aqreqatdır, məkan bölgüsü yoxdur.
+- Qəbələ, Ağdaş və başqa rayonların datası əməliyyat ərazisindən (Bakı) kənardadır.
+
+### Keyfiyyət tapıntıları
+- OSM-də "metro sığınacağı" kimi düşən 7 obyekt (tikilən Y14, Y15, Y16 və 20 Sentyabr stansiyaları, depo, təkrar yazılışlar) rəsmi siyahıda yoxdur və çıxarıldı.
+- Mənbə faylında Excel "28 May" adını tarixə çevirib. Skript bunu bərpa edir.
+- Rəsmi idman obyektlərinin bir hissəsi Bayıl sahilindədir. Bu, daxili sahil modelinin düzəldilməsinə səbəb oldu (OSM plitələri ilə yoxlanılıb).
+
+**Lisenziya:** dataset metadata-sında göstərildiyi kimi (CC-BY, CC0 və ya "notspecified"). Mənbə linkləri dispetçer panelində göstərilir.
+
+## 2. OpenStreetMap + Wikidata
+
 Sistem Bakı şəhərinin real coğrafi datası üzərində işləyir. İdxal skripti: [`scripts/fetch-osm-data.mjs`](../scripts/fetch-osm-data.mjs). Nəticə faylı: [`server/src/data/baku-osm.json`](../server/src/data/baku-osm.json).
 
 ## Mənbələr

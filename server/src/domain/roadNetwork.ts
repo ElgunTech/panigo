@@ -27,7 +27,8 @@ const DLNG = 0.0056;
 
 /** Rough Caspian coastline (lat below which there is sea) by longitude. */
 const COAST: [number, number][] = [
-  [49.79, 40.348], [49.82, 40.352], [49.84, 40.360], [49.86, 40.367],
+  // Bayıl / Şıx shore lies further south (verified against OSM tiles with official opendata.az venues)
+  [49.79, 40.290], [49.83, 40.300], [49.842, 40.325], [49.848, 40.355], [49.86, 40.367],
   // east of Ağ Şəhər the shore turns south towards Zığ (verified against OSM tiles)
   [49.88, 40.371], [49.90, 40.373], [49.92, 40.365], [49.94, 40.355], [49.98, 40.350],
 ];

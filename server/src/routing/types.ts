@@ -17,4 +17,8 @@ export interface RoutingProvider {
   route(from: LatLng, to: LatLng, closures: RoadClosure[], profile?: RouteProfile): Promise<RawRoute[]>;
   /** Whether the provider natively avoids closures (otherwise the service filters results). */
   readonly closureAware: boolean;
+  /** Network the geometry follows: pedestrian paths or roads. */
+  readonly mode: 'foot' | 'vehicle';
+  /** Profiles this provider may serve (undefined = all). */
+  readonly supports?: RouteProfile[];
 }

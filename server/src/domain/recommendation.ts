@@ -15,7 +15,7 @@ export function rankPoints(origin: LatLng, points: AssemblyPoint[], fullPct: num
       const projected = ((point.occupancy + point.incoming) / point.capacity) * 100;
       return {
         point,
-        distanceM: Math.round(haversine(origin, point.location)),
+        distanceM: Math.round(haversine(origin, targetOf(point, origin))),
         occupancyPct: Math.round(pct * 10) / 10,
         full: pct >= fullPct,
         projected,
@@ -30,6 +30,15 @@ function score(o: { distanceM: number; projected: number; full: boolean }): numb
   if (o.full) return 1e9 + o.distanceM;
   const crowdPenalty = o.projected > 70 ? 1 + (o.projected - 70) / 20 : 1;
   return o.distanceM * crowdPenalty;
+}
+
+/**
+ * Where a pedestrian should actually walk to: the nearest real entrance
+ * (official metro exits from opendata.az) or the point itself.
+ */
+export function targetOf(point: AssemblyPoint, origin: LatLng): LatLng & { label?: string } {
+  if (!point.entrances?.length) return point.location;
+  return point.entrances.reduce((best, e) => (haversine(origin, e) < haversine(origin, best) ? e : best));
 }
 
 /** Candidates eligible as destination (not full), best first. */

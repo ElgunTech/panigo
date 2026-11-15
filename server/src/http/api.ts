@@ -2,6 +2,7 @@ import { Router } from 'express';
 import type { DispatchSnapshot, PublicSnapshot } from '@shared/types';
 import type { Engine } from '../services/engine';
 import { BARRIERS, CLOSURE_PRESETS, DATASET } from '../data/seed';
+import { ODAZ } from '../data/opendata';
 import rateLimit from 'express-rate-limit';
 import { can, issueGuestToken, issueToken, PERMISSIONS } from '../security/auth';
 import { UserRepository } from '../security/userRepository';
@@ -21,6 +22,7 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
     res.json({
       roles: PERMISSIONS,
       closurePresets: CLOSURE_PRESETS,
+      opendata: ODAZ ? { source: ODAZ.source, fetchedAt: ODAZ.fetchedAt, sources: ODAZ.sources, collapseStats: ODAZ.collapseStats } : null,
       dataset: DATASET ? { source: DATASET.source, fetchedAt: DATASET.fetchedAt, points: DATASET.points.length, brigades: DATASET.brigades.length, hospitals: DATASET.hospitals.length } : null,
     }),
   );
