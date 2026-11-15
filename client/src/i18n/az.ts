@@ -105,6 +105,12 @@ export const az = {
     bpm: 'bpm',
     estimate: 'təxmini',
     camera: 'kamera',
+    rear: 'Arxa kamera (fənər)',
+    front: 'Ön kamera (ekran işığı)',
+    frontInstruction: 'Ekran ağ işıq verəcək. Telefonun parlaqlığını maksimuma qaldırın və barmağın ucunu ön kameraya yüngülcə qoyun. 20 saniyə hərəkətsiz qalın.',
+    frontLight: 'Barmağı ön kameraya qoyun — ekran işıq mənbəyidir',
+    pressHint: 'Çox sıxmayın — yüngül toxunuş daha yaxşı nəticə verir',
+    diag: 'Diaqnostika',
   },
   hazard: {
     fire: 'Yanğın',

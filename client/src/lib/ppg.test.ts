@@ -27,6 +27,21 @@ describe('camera PPG pulse estimate', () => {
     });
   }
 
+  it('torch saturates RED at 255 → reads the pulse from GREEN', () => {
+    const s = synth(84).map((x, i) => ({ ...x, r: 255, g: 120 + 1.5 * Math.sin(2 * Math.PI * 1.4 * (x.t / 1000)) + 0.6 * Math.sin(i * 7.31) }));
+    const r = estimatePulse(s)!;
+    expect(r).not.toBeNull();
+    expect(r.channel).toBe('g');
+    expect(Math.abs(r.bpm - 84)).toBeLessThanOrEqual(4);
+  });
+
+  it('weak real-world amplitude with auto-exposure drift is still measured', () => {
+    const s = synth(70, 20, 1.0).map((x) => ({ ...x, r: 190 + 0.8 * Math.sin(2 * Math.PI * (70 / 60) * (x.t / 1000)) + 12 * (x.t / 20000) + 0.5 * Math.sin(x.t * 0.37) }));
+    const r = estimatePulse(s)!;
+    expect(r).not.toBeNull();
+    expect(Math.abs(r.bpm - 70)).toBeLessThanOrEqual(4);
+  });
+
   it('rejects pure noise (no finger / moving) with low quality or null', () => {
     const noise = synth(75, 20, 0).map((x, i) => ({ ...x, r: 190 + 8 * Math.sin(i * 12.9898) * Math.cos(i * 78.233) }));
     const r = estimatePulse(noise);
@@ -40,6 +55,7 @@ describe('camera PPG pulse estimate', () => {
   it('detects a fingertip on the lens (bright red) vs open camera', () => {
     expect(fingerDetected({ r: 200, g: 40, b: 30 })).toBe(true);
     expect(fingerDetected({ r: 120, g: 115, b: 110 })).toBe(false);
+    expect(fingerDetected({ r: 255, g: 190, b: 120 })).toBe(true); // torch-saturated fingertip
   });
 
   it('flags abnormal resting pulse', () => {
