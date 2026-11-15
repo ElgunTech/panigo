@@ -1,0 +1,33 @@
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import type { AppConfig } from './config';
+import { apiRouter } from './http/api';
+import { authenticate, errorHandler, HttpError } from './http/middleware';
+import type { Engine } from './services/engine';
+
+/** Express app factory — no listen(), so tests can mount it with supertest. */
+export function createApp(engine: Engine, config: AppConfig) {
+  const app = express();
+  app.disable('x-powered-by');
+  app.set('trust proxy', 1);
+  app.use(helmet());
+  app.use(cors({ origin: config.corsOrigins, credentials: false }));
+  app.use(express.json({ limit: '32kb' }));
+  app.use(
+    '/api',
+    rateLimit({
+      windowMs: 60_000,
+      limit: config.rateLimitPerMin,
+      standardHeaders: 'draft-7',
+      legacyHeaders: false,
+      message: { error: 'RATE_LIMITED' },
+    }),
+  );
+  app.use(authenticate(config.jwtSecret));
+  app.use('/api', apiRouter(engine));
+  app.use('/api', (_req, _res, next) => next(new HttpError(404, 'NOT_FOUND')));
+  app.use(errorHandler);
+  return app;
+}
