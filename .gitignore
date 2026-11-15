@@ -6,3 +6,4 @@ dist/
 coverage/
 *.log
 scripts/.cache/
+ppg-recordings/

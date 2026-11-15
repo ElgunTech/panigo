@@ -3,17 +3,72 @@ import clsx from 'clsx';
 import { Camera, HeartPulse, Loader2, RotateCcw, Send, Smartphone, X } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { api } from '../lib/api';
-import { estimatePulse, fingerDetected, MIN_QUALITY, pulseAbnormal, signalStats, type PulseEstimate, type Sample } from '../lib/ppg';
+import { estimatePulseRobust as estimatePulse, fingerDetected, pulseAbnormal, ROBUST_MIN_QUALITY as MIN_QUALITY, SETTLE_MS, signalStats, type PulseEstimate, type Sample } from '../lib/ppg';
 
-const MEASURE_MS = 20_000;
-const LIVE_AFTER_MS = 7_000;
+/** measuring window incl. the auto-exposure settling time that is discarded */
+const MEASURE_MS = 20_000 + SETTLE_MS;
+const LIVE_AFTER_MS = 8_000 + SETTLE_MS;
 /** consecutive "no finger" frames (~0.7 s) before the window restarts — tolerates small moves */
 const LOST_FRAMES = 20;
 
 type Phase = 'intro' | 'starting' | 'measuring' | 'result' | 'weak' | 'error';
+
+const isMobile = typeof navigator !== 'undefined' && /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
 type Facing = 'environment' | 'user';
 
-type VideoWithRvfc = HTMLVideoElement & { requestVideoFrameCallback?: (cb: () => void) => number; cancelVideoFrameCallback?: (h: number) => void };
+const VIDEO: MediaTrackConstraints = { width: { ideal: 320 }, height: { ideal: 240 }, frameRate: { ideal: 30 } };
+const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+async function openCamera(video: HTMLVideoElement, extra: MediaTrackConstraints): Promise<{ stream: MediaStream; torchOn: boolean }> {
+  const stream = await navigator.mediaDevices.getUserMedia({ video: { ...VIDEO, ...extra }, audio: false });
+  video.srcObject = stream;
+  await video.play();
+  return { stream, torchOn: false };
+}
+
+/** Try to switch the torch on; some Android devices expose it only after frames start flowing. */
+async function enableTorch(track: MediaStreamTrack): Promise<boolean> {
+  for (const delay of [0, 400, 1000]) {
+    if (delay) await wait(delay);
+    try {
+      const caps = (track.getCapabilities?.() ?? {}) as { torch?: boolean };
+      if (!caps.torch) continue;
+      await track.applyConstraints({ advanced: [{ torch: true } as MediaTrackConstraintSet] });
+      return true;
+    } catch {
+      /* retry */
+    }
+  }
+  return false;
+}
+
+/**
+ * Multi-lens Android phones often give the ultra-wide lens for facingMode=environment,
+ * which has no flash. Try the default rear camera first, then every other rear camera
+ * until one supports the torch; fall back to the default (no torch) if none does.
+ */
+async function openRearWithTorch(video: HTMLVideoElement): Promise<{ stream: MediaStream; torchOn: boolean }> {
+  const first = await openCamera(video, { facingMode: { ideal: 'environment' } });
+  if (await enableTorch(first.stream.getVideoTracks()[0])) return { stream: first.stream, torchOn: true };
+  try {
+    const usedId = first.stream.getVideoTracks()[0].getSettings().deviceId;
+    const cams = (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === 'videoinput' && d.deviceId !== usedId && !/front|user|ön/i.test(d.label));
+    for (const cam of cams) {
+      first.stream.getTracks().forEach((t) => t.stop());
+      const next = await openCamera(video, { deviceId: { exact: cam.deviceId } }).catch(() => null);
+      if (!next) continue;
+      if (await enableTorch(next.stream.getVideoTracks()[0])) return { stream: next.stream, torchOn: true };
+      next.stream.getTracks().forEach((t) => t.stop());
+    }
+  } catch {
+    /* enumerateDevices unsupported */
+  }
+  // nothing had a torch → reopen the default rear camera
+  if (first.stream.getVideoTracks()[0].readyState === 'live') return first;
+  return openCamera(video, { facingMode: { ideal: 'environment' } });
+}
+
+type VideoWithRvfc =HTMLVideoElement & { requestVideoFrameCallback?: (cb: () => void) => number; cancelVideoFrameCallback?: (h: number) => void };
 
 /**
  * Phone-camera pulse (PPG).
@@ -24,7 +79,8 @@ type VideoWithRvfc = HTMLVideoElement & { requestVideoFrameCallback?: (cb: () =>
 export function PulseMeter({ token, onClose, onSent }: { token: string | null; onClose: () => void; onSent: (bpm: number) => void }) {
   const { t } = useI18n();
   const [phase, setPhase] = useState<Phase>('intro');
-  const [facing, setFacing] = useState<Facing>('environment');
+  // phones: rear camera + torch; computers have no torch → default to the screen light
+  const [facing, setFacing] = useState<Facing>(isMobile ? 'environment' : 'user');
   const [finger, setFinger] = useState(false);
   const [progress, setProgress] = useState(0);
   const [live, setLive] = useState<number | null>(null);
@@ -38,6 +94,26 @@ export function PulseMeter({ token, onClose, onSent }: { token: string | null; o
   const streamRef = useRef<MediaStream | null>(null);
   const frameRef = useRef<{ raf?: number; rvfc?: number }>({});
   const samples = useRef<Sample[]>([]);
+  /** every frame since start (incl. finger-lost frames) — dev diagnostics only */
+  const rawAll = useRef<Sample[]>([]);
+  const torchRef = useRef(true);
+
+  /**
+   * DEV ONLY: send per-frame mean colours (no images) so the algorithm can be tuned
+   * on real phones. Vite strips this branch from production builds.
+   */
+  const uploadDebug = (outcome: 'result' | 'weak' | 'aborted', estimate: PulseEstimate | null) => {
+    if (!import.meta.env.DEV || !rawAll.current.length) return;
+    const t0 = rawAll.current[0].t;
+    const payload = {
+      facing,
+      torch: torchRef.current,
+      outcome,
+      estimate,
+      samples: rawAll.current.map((x) => [Math.round(x.t - t0), +x.r.toFixed(2), +x.g.toFixed(2), +x.b.toFixed(2)]),
+    };
+    void api('/citizen/ppg-debug', { body: payload, token }).catch(() => undefined);
+  };
 
   const stop = useCallback(() => {
     const v = videoRef.current;
@@ -93,25 +169,15 @@ export function PulseMeter({ token, onClose, onSent }: { token: string | null; o
     setProgress(0);
     setDiag(null);
     samples.current = [];
+    rawAll.current = [];
+    torchRef.current = true;
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: facing }, width: { ideal: 320 }, height: { ideal: 240 }, frameRate: { ideal: 30 } },
-        audio: false,
-      });
+      const video = videoRef.current!;
+      const { stream, torchOn } = facing === 'environment' ? await openRearWithTorch(video) : await openCamera(video, { facingMode: { ideal: 'user' } });
       streamRef.current = stream;
       const track = stream.getVideoTracks()[0];
-      if (facing === 'environment') {
-        try {
-          const caps = (track.getCapabilities?.() ?? {}) as { torch?: boolean };
-          if (caps.torch) await track.applyConstraints({ advanced: [{ torch: true } as MediaTrackConstraintSet] });
-          else setTorch(false);
-        } catch {
-          setTorch(false);
-        }
-      }
-      const video = videoRef.current!;
-      video.srcObject = stream;
-      await video.play();
+      setTorch(torchOn);
+      torchRef.current = torchOn;
       setPhase('measuring');
 
       const canvas = document.createElement('canvas');
@@ -136,6 +202,7 @@ export function PulseMeter({ token, onClose, onSent }: { token: string | null; o
         }
         const n = data.length / 4;
         const s: Sample = { t: performance.now(), r: r / n, g: g / n, b: b / n };
+        if (rawAll.current.length < 2400) rawAll.current.push(s);
         const ok = fingerDetected(s);
         lost = ok ? 0 : lost + 1;
         setFinger(ok || lost < LOST_FRAMES);
@@ -166,10 +233,12 @@ export function PulseMeter({ token, onClose, onSent }: { token: string | null; o
           if (elapsed >= MEASURE_MS) {
             stop();
             const e = estimatePulse(samples.current);
-            if (e && e.quality >= MIN_QUALITY) {
+            const ok = !!e && e.quality >= MIN_QUALITY;
+            if (ok) {
               setResult(e);
               setPhase('result');
             } else setPhase('weak');
+            uploadDebug(ok ? 'result' : 'weak', e);
             return;
           }
         }
@@ -200,6 +269,7 @@ export function PulseMeter({ token, onClose, onSent }: { token: string | null; o
   };
 
   const close = () => {
+    if (phase === 'measuring') uploadDebug('aborted', estimatePulse(samples.current));
     stop();
     onClose();
   };
@@ -254,6 +324,7 @@ export function PulseMeter({ token, onClose, onSent }: { token: string | null; o
                 </button>
               ))}
             </div>
+            {!isMobile && <p className="mt-3 rounded-lg bg-sky-50 px-3 py-2 text-[11px] leading-snug text-sky-800">{t.pulse.desktopHint}</p>}
             <p className="mt-3 text-sm text-slate-600">{facing === 'user' ? t.pulse.frontInstruction : t.pulse.instruction}</p>
             <p className="mt-1 text-[11px] text-slate-500">{t.pulse.pressHint}</p>
             <button onClick={start} className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-red-500 py-3 text-sm font-bold text-white shadow-lg shadow-red-500/25 hover:bg-red-600">

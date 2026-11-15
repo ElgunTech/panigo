@@ -112,6 +112,7 @@ export const en: Dict = {
     frontLight: 'Finger on the front camera — the screen is the light source',
     pressHint: 'Do not press hard — a light touch works best',
     diag: 'Diagnostics',
+    desktopHint: 'This feature is meant for phones. Computer webcams have no torch, so the pulse is often not detected — at least choose "Front camera (screen light)".',
   },
   hazard: { fire: 'Fire', collapse: 'Collapse', flood: 'Flooding', medical: 'Medical help' },
   pointType: { shelter: 'Shelter', park: 'Park', stadium: 'Stadium' },

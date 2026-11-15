@@ -145,6 +145,45 @@ export function estimatePulse(samples: Sample[], hz = HZ): PulseEstimate | null 
   return cands.sort((x, y) => y.quality - x.quality)[0];
 }
 
+/**
+ * Acceptance threshold for the sliding-window estimate. Picking the best of many
+ * windows inflates quality on noise, so the bar is higher than MIN_QUALITY.
+ * Calibrated on real recordings: lit fingertip ≈ 0.76, unlit webcam noise ≈ 0.33.
+ */
+export const ROBUST_MIN_QUALITY = 0.5;
+/** Auto-exposure settles within ~3 s after the finger covers the lens. */
+export const SETTLE_MS = 3000;
+
+/** Drop frames before the finger is on the lens and the auto-exposure settling time. */
+export function settle(samples: Sample[]): Sample[] {
+  const first = samples.findIndex(fingerDetected);
+  if (first < 0) return [];
+  const t0 = samples[first].t + SETTLE_MS;
+  return samples.filter((s) => s.t >= t0);
+}
+
+/**
+ * Robust estimate for real devices: the first seconds after the finger lands are
+ * dominated by auto-exposure jumps, and a brief finger movement spoils a part of
+ * the recording. We therefore evaluate sliding windows (≥ 8 s) and keep the
+ * cleanest one. Learned from real recordings (see lib/__fixtures__).
+ */
+export function estimatePulseRobust(samples: Sample[], hz = HZ, minWindowMs = 8000): PulseEstimate | null {
+  samples = settle(samples);
+  if (samples.length < 2) return null;
+  const tEnd = samples[samples.length - 1].t;
+  let best: PulseEstimate | null = null;
+  for (let start = samples[0].t; tEnd - start >= minWindowMs; start += 2000) {
+    for (const end of [tEnd, tEnd - 4000]) {
+      if (end - start < minWindowMs) continue;
+      const win = samples.filter((s) => s.t >= start && s.t <= end);
+      const e = estimatePulse(win, hz);
+      if (e && (!best || e.quality > best.quality)) best = e;
+    }
+  }
+  return best;
+}
+
 /** Live diagnostics for the UI (helps tuning on real phones). */
 export function signalStats(samples: Sample[]) {
   const last = samples.slice(-60);

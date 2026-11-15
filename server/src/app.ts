@@ -15,6 +15,8 @@ export function createApp(engine: Engine, config: AppConfig, users: UserReposito
   app.set('trust proxy', 1);
   app.use(helmet());
   app.use(cors({ origin: config.corsOrigins, credentials: false }));
+  // larger body only for the dev PPG recording endpoint (~600 frames × 4 numbers)
+  app.use('/api/citizen/ppg-debug', express.json({ limit: '256kb' }));
   app.use(express.json({ limit: '32kb' }));
   app.use(
     '/api',

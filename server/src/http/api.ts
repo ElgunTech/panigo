@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { Router } from 'express';
 import type { DispatchSnapshot, PublicSnapshot } from '@shared/types';
 import type { Engine } from '../services/engine';
@@ -112,6 +114,21 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
   });
   r.post('/citizen/vitals', requirePermission('citizen:status'), validate(vitalsSchema), (req, res) => {
     res.status(201).json(engine.recordVitals(req.user!.sub, req.body));
+  });
+  /**
+   * DEV ONLY — raw camera colour averages from a pulse measurement, so the PPG algorithm
+   * can be tuned on real phones. No images, only per-frame mean R/G/B. Disabled in production.
+   */
+  r.post('/citizen/ppg-debug', requirePermission('citizen:status'), (req, res) => {
+    if (config.env === 'production') throw new HttpError(404, 'NOT_FOUND');
+    const b = req.body ?? {};
+    if (!Array.isArray(b.samples) || b.samples.length > 3000) throw new HttpError(400, 'VALIDATION_ERROR');
+    const rec = { at: new Date().toISOString(), ua: String(req.headers['user-agent'] ?? '').slice(0, 200), facing: String(b.facing ?? ''), torch: !!b.torch, outcome: String(b.outcome ?? ''), estimate: b.estimate ?? null, samples: b.samples.filter((x: unknown) => Array.isArray(x) && x.length === 4).map((x: number[]) => x.map(Number)) };
+    const dir = path.resolve('ppg-recordings');
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, `${Date.now()}.json`), JSON.stringify(rec));
+    console.log(`[ppg-debug] ${rec.samples.length} samples · ${rec.facing} · torch=${rec.torch} · ${rec.outcome}`);
+    res.status(201).json({ stored: rec.samples.length });
   });
   r.post('/citizen/status', requirePermission('citizen:status'), validate(safeSchema), (req, res) => {
     res.json(engine.markSafe(req.user!.sub, req.body.safe, req.body.location));

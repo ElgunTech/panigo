@@ -111,6 +111,7 @@ export const az = {
     frontLight: 'Barmağı ön kameraya qoyun — ekran işıq mənbəyidir',
     pressHint: 'Çox sıxmayın — yüngül toxunuş daha yaxşı nəticə verir',
     diag: 'Diaqnostika',
+    desktopHint: 'Bu funksiya telefon üçündür. Kompüter kamerasında fənər yoxdur, ona görə nəbz çox vaxt tutulmur — ən azı "Ön kamera (ekran işığı)" seçin.',
   },
   hazard: {
     fire: 'Yanğın',
