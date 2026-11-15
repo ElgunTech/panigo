@@ -1,6 +1,6 @@
 # Süni intellektdən istifadə haqqında bəyannamə
 
-> Bu sənəd layihədə süni intellekt alətlərindən **harada, necə və hansı nəzarətlə** istifadə olunduğunu göstərir. Komanda üzvlərinin adları və rolları bölmə 4-də komanda tərəfindən doldurulmalıdır.
+> Bu sənəd layihədə süni intellekt alətlərindən **harada, necə və hansı nəzarətlə** istifadə olunduğunu göstərir. Hər üzvün süni intellekt nəticələrini hansı sahədə yoxladığı bölmə 4-dədir.
 
 ## 1. İstifadə olunan alətlər
 
@@ -44,10 +44,10 @@ Başqa generativ alət istifadə olunmayıb. Xəritə datası süni intellekt t�
 
 4. **Təhlükəsizlik:** sirr və şifrələr kodda yalnız demo default kimi var, productionda env məcburidir. Süni intellektə heç bir real şəxsi data verilməyib.
 
-## 4. Komanda (komanda tərəfindən doldurulur)
+## 4. Komanda
 
 | Üzv | Rol | Süni intellekt nəticələrini yoxladığı sahə |
 |---|---|---|
-| _[ad, soyad]_ | _[məs. backend / data]_ | _[məs. böhran alqoritmi testləri]_ |
-| _[ad, soyad]_ | _[məs. frontend / demo]_ | _[məs. UI və ssenari]_ |
-| _[ad, soyad]_ | _[məs. arxitektura / müdafiə]_ | _[məs. drop həlləri]_ |
+| **Şükürov Elgün Ramin oğlu** | Full-Stack Developer, AI/ML Engineer (Kaggle) | Arxitektura qərarları, backend və frontend kodunun yoxlanması, marşrutlaşdırma və böhran alqoritmi, real data inteqrasiyası (OSM, opendata.az), kamera ilə nəbz (PPG) alqoritmi, challenge drop həlləri |
+| **Məlikova Fatimə Xəyal qızı** | QA, Testing and AI Documentation | Avtomatik testlərin və test ssenarilərinin yoxlanması, brauzer və telefonda manual test, demo ssenarisi, sənədlərin (README, arxitektura, Word) və bu AI bəyannaməsinin dəqiqliyi |
+| **Mehdiyev İsgəndər Azər oğlu** | Security | Autentifikasiya və RBAC (JWT, scrypt, rol eskalasiyasının qarşısı), giriş validasiyası, rate limiting, prioritet saxtalaşdırmasının qarşısı, audit jurnalı, xəta inyeksiyası və davamlılıq (Drop 2) |

@@ -99,6 +99,14 @@ Nəticə `server/src/data/baku-osm.json` faylına yazılır və repoya commit ol
 | [docs/AI_DECLARATION.md](docs/AI_DECLARATION.md) | Süni intellekt alətlərindən istifadə haqqında bəyannamə |
 | [docs/UCE_Texniki_Izah.docx](docs/UCE_Texniki_Izah.docx) | Texniki izah sənədi (Word) |
 
-## 4. Texnologiyalar
+## 4. Komanda
+
+| Üzv | Rol |
+|---|---|
+| **Şükürov Elgün Ramin oğlu** | Full-Stack Developer, AI/ML Engineer (Kaggle) |
+| **Məlikova Fatimə Xəyal qızı** | QA, Testing and AI Documentation |
+| **Mehdiyev İsgəndər Azər oğlu** | Security |
+
+## 5. Texnologiyalar
 
 React 18 + TypeScript + Vite + Tailwind + Leaflet · Node.js + Express + Socket.IO + Zod · SQLite (`node:sqlite`) · OSRM (xarici marşrut API) + daxili A* yol qrafı · JWT + scrypt + Helmet + rate limiting · Vitest + Supertest (112 test).
