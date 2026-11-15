@@ -48,7 +48,7 @@ function makeOps(token: string, onAuthError: () => void) {
     execute: (id: string) => call(`/dispatch/alerts/${id}/execute`, undefined, 'POST'),
     dismiss: (id: string) => call(`/dispatch/alerts/${id}/dismiss`, undefined, 'POST'),
     assign: (brigadeId: string, sosIds: string[]) => call('/dispatch/assign', { brigadeId, sosIds }),
-    addClosure: (name: string, location: LatLng, radiusM = 250, reason = 'Operator') => call('/dispatch/closures', { name, location, radiusM, reason }),
+    addClosure: (name: string, location: LatLng, radiusM = 250, reason = '') => call('/dispatch/closures', { name, location, radiusM, reason }),
     removeClosure: (id: string) => call(`/dispatch/closures/${id}`, undefined, 'DELETE'),
     setPoint: (id: string, patch: { occupancyPct?: number; status?: string }) => call(`/dispatch/points/${id}`, patch, 'PATCH'),
     scenario: () => call('/sim/scenario', {}),
@@ -88,7 +88,7 @@ function Console({ token, user, onLogout }: { token: string; user: User; onLogou
     <div className="dark-map flex h-full flex-col bg-ink-950 text-slate-200">
       {/* Top bar */}
       <header className={clsx('flex flex-wrap items-center gap-3 border-b px-4 py-2.5', openAlerts ? 'border-red-500/40 bg-gradient-to-r from-red-950/60 to-ink-900' : 'border-white/5 bg-ink-900')}>
-        <Link to="/" className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5" aria-label="Back">
+        <Link to="/" className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5" aria-label={t.common.back}>
           <ArrowLeft className="h-4 w-4" />
         </Link>
         <Logo dark />
@@ -134,7 +134,7 @@ function Console({ token, user, onLogout }: { token: string; user: User; onLogou
               <MapClick
                 onClick={(p) => {
                   setClosureMode(false);
-                  ops.addClosure(`${t.dispatch.addClosure} #${closures.length + 1}`, p).catch(() => undefined);
+                  ops.addClosure(`${t.dispatch.addClosure} #${closures.length + 1}`, p, 250, t.dispatch.reasonOperator).catch(() => undefined);
                 }}
               />
             )}

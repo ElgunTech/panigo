@@ -80,6 +80,10 @@ export class RoadNetwork {
     }
   }
 
+  neighbours(id: number): number[] {
+    return this.adj[id].map((e) => e.to);
+  }
+
   nearestNode(p: LatLng, closures: RoadClosure[] = []): number {
     let best = -1;
     let bestD = Infinity;

@@ -11,7 +11,24 @@ export interface LatLng {
 export type Hazard = 'fire' | 'collapse' | 'flood' | 'medical';
 export const HAZARDS: Hazard[] = ['fire', 'collapse', 'flood', 'medical'];
 
-export type Role = 'citizen' | 'dispatcher' | 'admin';
+/**
+ * mobility_impaired = citizen with reduced mobility / special-care needs
+ * (Challenge Drop 1): SOS is auto-escalated to Priority #1 and evacuation is
+ * restricted to step-free, wheelchair/medical-transport accessible routes.
+ */
+export type Role = 'citizen' | 'mobility_impaired' | 'dispatcher' | 'admin';
+export const ROLES: Role[] = ['citizen', 'mobility_impaired', 'dispatcher', 'admin'];
+
+/** 1 = critical (special-needs citizen), 2 = normal */
+export type SosPriority = 1 | 2;
+
+export type RouteProfile = 'standard' | 'accessible';
+
+export interface Barrier {
+  lat: number;
+  lng: number;
+  kind: 'steps' | 'underpass';
+}
 
 export interface Zone {
   id: string;
@@ -41,6 +58,8 @@ export interface AssemblyPoint {
   zoneId: string;
   capacity: number;
   occupancy: number;
+  /** step-free / wheelchair accessible (ramps, no stairs) */
+  accessible: boolean;
   /** citizens currently routed towards this point */
   incoming: number;
   status: AssemblyPointStatus;
@@ -66,6 +85,10 @@ export interface SosSignal {
   zoneId: string;
   note?: string;
   status: SosStatus;
+  /** 1 = Kritik Prioritet (special-needs citizen) */
+  priority: SosPriority;
+  /** sender has reduced mobility — needs accessible / medical transport */
+  specialNeeds: boolean;
   createdAt: number;
   updatedAt: number;
   brigadeId?: string;
@@ -88,7 +111,7 @@ export interface Brigade {
   updatedAt: number;
 }
 
-export type AlertKind = 'sos_cluster' | 'capacity';
+export type AlertKind = 'sos_cluster' | 'capacity' | 'priority_sos';
 export type AlertStatus = 'open' | 'executed' | 'dismissed';
 
 export interface AlertRecommendation {
@@ -133,6 +156,9 @@ export interface RouteResult {
   walkS: number;
   /** true when served by a fallback provider */
   degraded: boolean;
+  profile: RouteProfile;
+  /** stairs / stair-underpasses near the chosen route (0 = step-free) */
+  barriersNear: number;
 }
 
 export interface PointOption {
@@ -151,6 +177,7 @@ export interface EvacuationPlan {
   destination: AssemblyPoint | null;
   route: RouteResult | null;
   reason: RerouteReason;
+  profile: RouteProfile;
   previousPointId?: string;
   createdAt: number;
 }
@@ -173,6 +200,7 @@ export interface SystemStatus {
 export interface PublicSnapshot {
   zones: Zone[];
   hospitals?: Facility[];
+  barriers?: Barrier[];
   dataSource?: string;
   points: AssemblyPoint[];
   closures: RoadClosure[];

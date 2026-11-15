@@ -91,10 +91,11 @@ export class UserRepository {
       .run(u.username, u.name, u.role, u.phone ?? null, u.disabled ? 1 : 0, u.createdAt, u.lastLoginAt ?? null, u.salt, u.hash);
   }
 
-  register(input: { username: string; password: string; name: string; phone?: string }): PublicUser {
+  /** Self-registration: citizen, or mobility_impaired when the user declares reduced mobility. Never a staff role. */
+  register(input: { username: string; password: string; name: string; phone?: string }, mobilityImpaired = false): PublicUser {
     const username = input.username.toLowerCase();
     if (this.users.has(username)) throw new UserError('USERNAME_TAKEN', 409);
-    const u: UserRecord = { username, name: input.name, phone: input.phone, role: 'citizen', disabled: false, createdAt: Date.now(), lastLoginAt: Date.now(), ...hashPassword(input.password) };
+    const u: UserRecord = { username, name: input.name, phone: input.phone, role: mobilityImpaired ? 'mobility_impaired' : 'citizen', disabled: false, createdAt: Date.now(), lastLoginAt: Date.now(), ...hashPassword(input.password) };
     this.save(u);
     return toPublic(u);
   }

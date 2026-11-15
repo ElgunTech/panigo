@@ -1,4 +1,4 @@
-import { getSession } from './session';
+import { getSession, isCitizenRole } from './session';
 /** Thin typed fetch wrapper. Token is per-app ("citizen" | "operator") and kept in localStorage. */
 export type TokenKind = 'citizen' | 'operator';
 
@@ -50,11 +50,11 @@ export async function api<T>(path: string, opts: { method?: string; body?: unkno
  * Token for the citizen app: the signed-in account if there is one, otherwise
  * an anonymous guest session (one-click SOS must never require sign-up).
  */
-export async function ensureCitizenToken(): Promise<string> {
+export async function ensureCitizenToken(care?: boolean): Promise<string> {
   const s = getSession();
-  if (s && s.user.role === 'citizen') return s.token;
+  if (s && isCitizenRole(s.user.role)) return s.token;
   const existing = getToken('citizen');
-  if (existing) {
+  if (existing && care === undefined) {
     try {
       await api('/citizen/me', { token: existing });
       return existing;
@@ -62,7 +62,7 @@ export async function ensureCitizenToken(): Promise<string> {
       /* expired/invalid → issue a new one */
     }
   }
-  const { token } = await api<{ token: string }>('/auth/guest', { method: 'POST' });
+  const { token } = await api<{ token: string }>('/auth/guest', { body: { mobilityImpaired: !!care } });
   setToken('citizen', token);
   return token;
 }

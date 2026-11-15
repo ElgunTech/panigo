@@ -39,11 +39,13 @@ export const registerSchema = z.object({
     .regex(/^\+?[0-9 ()-]{7,20}$/)
     .optional()
     .or(z.literal('').transform(() => undefined)),
+  /** Challenge Drop 1: self-declared reduced mobility → role mobility_impaired */
+  mobilityImpaired: z.boolean().optional(),
 });
 
 export const userPatchSchema = z
   .object({
-    role: z.enum(['citizen', 'dispatcher', 'admin']).optional(),
+    role: z.enum(['citizen', 'mobility_impaired', 'dispatcher', 'admin']).optional(),
     disabled: z.boolean().optional(),
   })
   .refine((v) => v.role !== undefined || v.disabled !== undefined, 'empty patch');

@@ -1,4 +1,4 @@
-import { CRISIS_RULES, type AssemblyPoint, type EvacuationPlan, type LatLng, type RerouteReason, type RoadClosure } from '@shared/types';
+import { CRISIS_RULES, type AssemblyPoint, type EvacuationPlan, type LatLng, type RerouteReason, type RoadClosure, type RouteProfile } from '@shared/types';
 import { haversine, polylineHitsCircle } from '../domain/geo';
 import { eligible, rankPoints } from '../domain/recommendation';
 import { occupancyPct } from '../domain/crisisEngine';
@@ -8,6 +8,7 @@ import type { Store } from './store';
 interface Session {
   citizenId: string;
   origin: LatLng;
+  profile: RouteProfile;
   plan: EvacuationPlan;
 }
 
@@ -25,9 +26,14 @@ export class EvacuationService {
     private readonly routing: RoutingService,
   ) {}
 
-  async plan(citizenId: string, origin: LatLng, reason: RerouteReason = 'initial', exclude: string[] = [], preferredPointId?: string): Promise<EvacuationPlan> {
+  /**
+   * @param profile 'accessible' (mobility-impaired citizen): only step-free / wheelchair
+   *   accessible points + barrier-avoiding route. Defaults to the profile of the existing session.
+   */
+  async plan(citizenId: string, origin: LatLng, reason: RerouteReason = 'initial', exclude: string[] = [], preferredPointId?: string, profileArg?: RouteProfile): Promise<EvacuationPlan> {
+    const profile: RouteProfile = profileArg ?? this.sessions.get(citizenId)?.profile ?? 'standard';
     const closures = this.store.openClosures();
-    const options = rankPoints(origin, [...this.store.points.values()]);
+    const options = rankPoints(origin, [...this.store.points.values()], CRISIS_RULES.rerouteFullPct, profile === 'accessible');
     let candidates = eligible(options, exclude);
     if (preferredPointId) {
       const pref = candidates.find((c) => c.point.id === preferredPointId);
@@ -36,7 +42,7 @@ export class EvacuationService {
     if (!candidates.length) candidates = options.filter((o) => !exclude.includes(o.point.id)); // everything full → least bad
     const top = candidates.slice(0, 3);
 
-    const routed = await Promise.all(top.map(async (o) => ({ o, route: await this.routing.route(origin, o.point.location, closures) })));
+    const routed = await Promise.all(top.map(async (o) => ({ o, route: await this.routing.route(origin, o.point.location, closures, profile) })));
     // Final choice: walking time inflated by projected crowding
     routed.sort((a, b) => cost(a.route.walkS, a.o.point) - cost(b.route.walkS, b.o.point));
     const best = routed[0];
@@ -56,10 +62,11 @@ export class EvacuationService {
       destination: destination ? this.store.points.get(destination.id)! : null,
       route: best?.route ?? null,
       reason,
+      profile,
       previousPointId: reason !== 'initial' && prevPointId !== destination?.id ? prevPointId : undefined,
       createdAt: Date.now(),
     };
-    this.sessions.set(citizenId, { citizenId, origin, plan });
+    this.sessions.set(citizenId, { citizenId, origin, profile, plan });
     if (reason !== 'initial' && reason !== 'manual') this.stats.reroutes++;
 
     const status = this.store.citizens.get(citizenId);

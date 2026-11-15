@@ -1,7 +1,7 @@
 import { useEffect, type ReactNode } from 'react';
 import L from 'leaflet';
 import { Circle, CircleMarker, MapContainer, Marker, Polyline, TileLayer, Tooltip, useMap, useMapEvents } from 'react-leaflet';
-import type { Facility, AssemblyPoint, Brigade, LatLng, RoadClosure, RouteResult, SosSignal } from '@shared/types';
+import type { Barrier, Facility, AssemblyPoint, Brigade, LatLng, RoadClosure, RouteResult, SosSignal } from '@shared/types';
 import { HAZARD_COLOR, occColor, pct } from '../lib/format';
 
 export const BAKU_CENTER: LatLng = { lat: 40.395, lng: 49.865 };
@@ -108,8 +108,8 @@ export function SosLayer({ sos, label }: { sos: SosSignal[]; label: (s: SosSigna
         <CircleMarker
           key={s.id}
           center={[s.location.lat, s.location.lng]}
-          radius={s.status === 'new' ? 7 : 5}
-          pathOptions={{ color: s.status === 'new' ? '#fff' : HAZARD_COLOR[s.hazard], weight: 2, fillColor: HAZARD_COLOR[s.hazard], fillOpacity: s.status === 'resolved' ? 0.25 : 0.95 }}
+          radius={s.priority === 1 && s.status !== 'resolved' ? 11 : s.status === 'new' ? 7 : 5}
+          pathOptions={{ color: s.priority === 1 && s.status !== 'resolved' ? '#a855f7' : s.status === 'new' ? '#fff' : HAZARD_COLOR[s.hazard], weight: s.priority === 1 ? 4 : 2, fillColor: HAZARD_COLOR[s.hazard], fillOpacity: s.status === 'resolved' ? 0.25 : 0.95 }}
         >
           <Tooltip>{label(s)}</Tooltip>
         </CircleMarker>
@@ -157,6 +157,19 @@ export function HospitalsLayer({ hospitals }: { hospitals: Facility[] }) {
         <Marker key={i} position={[h.location.lat, h.location.lng]} icon={hospitalIcon} zIndexOffset={-500}>
           <Tooltip>🏥 {h.name}</Tooltip>
         </Marker>
+      ))}
+    </>
+  );
+}
+
+/** Wheelchair barriers (real OSM stairs / underpasses) — shown in special-care mode. */
+export function BarriersLayer({ barriers, label }: { barriers: Barrier[]; label: string }) {
+  return (
+    <>
+      {barriers.map((b, i) => (
+        <CircleMarker key={i} center={[b.lat, b.lng]} radius={3} pathOptions={{ color: '#b45309', weight: 1, fillColor: '#f59e0b', fillOpacity: 0.8 }}>
+          <Tooltip>{label}</Tooltip>
+        </CircleMarker>
       ))}
     </>
   );

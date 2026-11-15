@@ -1,4 +1,4 @@
-import type { LatLng, RoadClosure, RouteProviderId } from '@shared/types';
+import type { LatLng, RoadClosure, RouteProfile, RouteProviderId } from '@shared/types';
 
 export interface RawRoute {
   geometry: LatLng[];
@@ -13,8 +13,8 @@ export interface RawRoute {
  */
 export interface RoutingProvider {
   readonly id: RouteProviderId;
-  /** Candidate routes, best first. */
-  route(from: LatLng, to: LatLng, closures: RoadClosure[]): Promise<RawRoute[]>;
+  /** Candidate routes, best first. `profile=accessible` → step-free (wheelchair / medical transport). */
+  route(from: LatLng, to: LatLng, closures: RoadClosure[], profile?: RouteProfile): Promise<RawRoute[]>;
   /** Whether the provider natively avoids closures (otherwise the service filters results). */
   readonly closureAware: boolean;
 }

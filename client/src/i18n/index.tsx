@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { az, type Dict } from './az';
 import { en } from './en';
 
@@ -35,6 +35,9 @@ function initialLang(): Lang {
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(initialLang);
+  useEffect(() => {
+    document.documentElement.lang = lang; // correct hyphenation, screen readers, casing
+  }, [lang]);
   const setLang = useCallback((l: Lang) => {
     setLangState(l);
     document.documentElement.lang = l;

@@ -60,6 +60,27 @@ export class CrisisService {
     return alert;
   }
 
+  /** Priority #1 SOS (special-needs citizen): immediate RED alert, medical transport recommended. */
+  raisePriority(sos: SosSignal): CrisisAlert {
+    const now = Date.now();
+    const alert: CrisisAlert = {
+      id: this.store.nextId('alert'),
+      kind: 'priority_sos',
+      zoneId: sos.zoneId,
+      center: sos.location,
+      sosIds: [sos.id],
+      distinctCitizens: 1,
+      status: 'open',
+      // medical brigade = accessible transport (stretcher / wheelchair lift); no new point needed
+      recommendation: { brigadeId: pickBrigade(sos.location, 'medical', [...this.store.brigades.values()])?.id },
+      createdAt: now,
+      updatedAt: now,
+    };
+    this.store.upsertAlert(alert);
+    this.store.log('system', 'alert.raised', { alertId: alert.id, kind: alert.kind, sosId: sos.id, priority: 1 });
+    return alert;
+  }
+
   evaluatePoint(point: AssemblyPoint): CrisisAlert | null {
     if (!isOverCapacity(point, this.rules)) return null;
     const open = [...this.store.alerts.values()].find((a) => a.kind === 'capacity' && a.pointId === point.id && a.status === 'open');
@@ -105,15 +126,17 @@ export class CrisisService {
     if (alert.status !== 'open') throw new CrisisError('ALERT_ALREADY_DECIDED', 409);
 
     // Re-validate at decision time — state may have changed since the alert was raised
-    const hazard = this.dominantHazard(alert);
+    const hazard = alert.kind === 'priority_sos' ? 'medical' : this.dominantHazard(alert);
     const brigade =
       (alert.recommendation.brigadeId && this.store.brigades.get(alert.recommendation.brigadeId)?.status === 'available'
         ? this.store.brigades.get(alert.recommendation.brigadeId)
         : undefined) ?? pickBrigade(alert.center, hazard, [...this.store.brigades.values()]);
-    const reserve =
-      (alert.recommendation.newPointId && this.store.points.get(alert.recommendation.newPointId)?.status === 'reserve'
+    const recommendedReserve =
+      alert.recommendation.newPointId && this.store.points.get(alert.recommendation.newPointId)?.status === 'reserve'
         ? this.store.points.get(alert.recommendation.newPointId)
-        : undefined) ?? pickReservePoint(alert.center, [...this.store.points.values()]);
+        : undefined;
+    // A Priority #1 alert needs accessible transport, not a new assembly point
+    const reserve = alert.kind === 'priority_sos' ? undefined : (recommendedReserve ?? pickReservePoint(alert.center, [...this.store.points.values()]));
 
     const outcome: string[] = [];
     if (brigade) {
@@ -122,7 +145,9 @@ export class CrisisService {
       outcome.push(`brigade:${brigade.id}`);
     } else outcome.push('brigade:none_available');
 
-    if (reserve) {
+    if (alert.kind === 'priority_sos') {
+      /* single special-needs citizen: transport, not a new assembly point */
+    } else if (reserve) {
       reserve.status = 'open';
       this.store.upsertPoint(reserve);
       outcome.push(`point:${reserve.id}`);

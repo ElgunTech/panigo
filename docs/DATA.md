@@ -25,6 +25,10 @@ Sistemə yüklənənlər: **67 toplanış məntəqəsi** (56 açıq, 11 ehtiyat)
 | Park | sahə × 50% (istifadəyə yararlı) ÷ 2 m²/nəfər, 500 ilə 20 000 arası | Açıq toplanış sahələri üçün geniş yayılmış 2 m²/nəfər normativi. Sahə OSM bounding box × 0,65 ilə təxmin edilir |
 | Stadion | oturacaq sayı (OSM/Wikidata), maksimum 30 000. Məlumat yoxdursa 3 000 | Meydança xidmət və tibbi zona üçün saxlanılır, izdiham təhlükəsizliyi üçün üst hədd qoyulub |
 
+## Əlçatanlıq (Drop 1)
+- **Məntəqə:** OSM `wheelchair` teqi əsasdır. Teq yoxdursa: park və stadion yerüstü açıq sahə kimi əlçatandır, dərin metro stansiyaları (eskalator və pilləkən, lift datası yoxdur) əlçatan deyil. Nəticədə 67 məntəqədən 38-i əlçatandır.
+- **Maneələr:** `highway=steps` və pilləkənli yeraltı piyada keçidləri (`highway=footway` + `tunnel=yes` və ya `layer=-1`), cəmi 761 nöqtə. Əlçatan marşrut bunlardan qaçınır.
+
 ## Süzgəclər (təhlükəsizlik və etika)
 Hökumət iqamətgahları, xiyabanlar və memorial ərazilər, zoopark və qəbiristanlıqlar toplanış məntəqəsi siyahısından çıxarılır (`EXCLUDE` regex).
 

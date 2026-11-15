@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import type { DispatchSnapshot, PublicSnapshot } from '@shared/types';
 import type { Engine } from '../services/engine';
-import { CLOSURE_PRESETS, DATASET } from '../data/seed';
+import { BARRIERS, CLOSURE_PRESETS, DATASET } from '../data/seed';
 import rateLimit from 'express-rate-limit';
-import { issueGuestToken, issueToken, PERMISSIONS } from '../security/auth';
+import { can, issueGuestToken, issueToken, PERMISSIONS } from '../security/auth';
 import { UserRepository } from '../security/userRepository';
 import { ah, HttpError, keyedLimiter, requirePermission, validate } from './middleware';
 import { registerSchema, userPatchSchema, closureSchema, dispatchSchema, loginSchema, outageSchema, planSchema, pointPatchSchema, safeSchema, scenarioSchema, sosSchema } from './schemas';
@@ -36,13 +36,13 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
     res.json(session(p));
   });
   r.post('/auth/register', authLimiter, validate(registerSchema), (req, res) => {
-    const u = users.register(req.body);
+    const u = users.register(req.body, req.body.mobilityImpaired === true);
     store.log(u.username, 'auth.register');
     res.status(201).json(session({ sub: u.username, role: u.role, name: u.name }));
   });
   /** Guest session (no account) — one-tap SOS must never be blocked by sign-up. */
-  r.post('/auth/guest', (_req, res) => {
-    const { token, principal } = issueGuestToken(config.jwtSecret);
+  r.post('/auth/guest', (req, res) => {
+    const { token, principal } = issueGuestToken(config.jwtSecret, req.body?.mobilityImpaired === true);
     res.json({ token, user: principal });
   });
   r.post('/auth/citizen', (_req, res) => {
@@ -65,7 +65,7 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
 
   // ---------- Public read model ----------
   r.get('/public/snapshot', (_req, res) => {
-    const snap: PublicSnapshot = { zones: store.zones, points: [...store.points.values()], closures: store.openClosures(), dataSource: DATASET?.source };
+    const snap: PublicSnapshot = { zones: store.zones, points: [...store.points.values()], closures: store.openClosures(), barriers: BARRIERS, dataSource: DATASET?.source };
     res.json(snap);
   });
 
@@ -75,7 +75,8 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
     requirePermission('evac:plan'),
     validate(planSchema),
     ah(async (req, res) => {
-      res.json(await engine.evacuation.plan(req.user!.sub, req.body.location, req.body.pointId ? 'manual' : 'initial', [], req.body.pointId));
+      const profile = can(req.user!.role, 'evac:accessible') ? 'accessible' : 'standard';
+      res.json(await engine.evacuation.plan(req.user!.sub, req.body.location, req.body.pointId ? 'manual' : 'initial', [], req.body.pointId, profile));
     }),
   );
   r.get('/citizen/me', requirePermission('citizen:status'), (req, res) => {
@@ -92,7 +93,8 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
     keyedLimiter(config.sosPerCitizenPerMin, (req) => req.user?.sub),
     validate(sosSchema),
     (req, res) => {
-      res.status(201).json(engine.createSos(req.user!.sub, req.body.hazard, req.body.location, req.body.note));
+      // Priority is derived from the authenticated role, never from the request body
+      res.status(201).json(engine.createSos(req.user!.sub, req.body.hazard, req.body.location, req.body.note, can(req.user!.role, 'sos:priority')));
     },
   );
   r.post('/citizen/sos/:id/cancel', requirePermission('sos:cancel'), (req, res) => {

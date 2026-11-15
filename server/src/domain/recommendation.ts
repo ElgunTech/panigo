@@ -7,9 +7,9 @@ import { occupancyPct } from './crisisEngine';
  * already en route ("incoming") so that we do not send everyone to the same
  * half-empty point (herding effect).
  */
-export function rankPoints(origin: LatLng, points: AssemblyPoint[], fullPct: number = CRISIS_RULES.rerouteFullPct): PointOption[] {
+export function rankPoints(origin: LatLng, points: AssemblyPoint[], fullPct: number = CRISIS_RULES.rerouteFullPct, accessibleOnly = false): PointOption[] {
   return points
-    .filter((p) => p.status === 'open')
+    .filter((p) => p.status === 'open' && (!accessibleOnly || p.accessible))
     .map((point) => {
       const pct = occupancyPct(point);
       const projected = ((point.occupancy + point.incoming) / point.capacity) * 100;

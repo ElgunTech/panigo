@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import clsx from 'clsx';
-import { LogIn, LogOut, AlertTriangle, ArrowLeft, Check, CheckCircle2, Clock, Crosshair, Footprints, Car, Info, Loader2, MapPin, Navigation, RotateCcw, ShieldCheck, X } from 'lucide-react';
+import { Accessibility, LogIn, LogOut, AlertTriangle, ArrowLeft, Check, CheckCircle2, Clock, Crosshair, Footprints, Car, Info, Loader2, MapPin, Navigation, RotateCcw, ShieldCheck, X } from 'lucide-react';
 import { HAZARDS, type EvacuationPlan, type Hazard, type LatLng, type PublicSnapshot, type RouteResult, type SosSignal } from '@shared/types';
 import { useI18n } from '../i18n';
 import { api, ApiError, ensureCitizenToken } from '../lib/api';
 import { useLive } from '../lib/useLive';
-import { setSession, useSession } from '../lib/session';
+import { isCitizenRole, setSession, tokenRole, useSession } from '../lib/session';
 import { fmtDistance, fmtMinutes, HAZARD_COLOR, occColor, pct, timeAgo } from '../lib/format';
-import { CityMap, ClosuresLayer, FitTo, MapClick, PointsLayer, RouteLayer, YouMarker } from '../components/CityMap';
+import { BarriersLayer, CityMap, ClosuresLayer, FitTo, MapClick, PointsLayer, RouteLayer, YouMarker } from '../components/CityMap';
 import { ConnBadge, HazardIcon, LangSwitch, Logo, OccupancyBar, PointIcon } from '../components/ui';
 
 const DEFAULT_LOC: LatLng = { lat: 40.3889, lng: 49.8413 };
@@ -26,12 +26,29 @@ export default function Citizen() {
   const [bannerDismissed, setBannerDismissed] = useState<number>(0);
   const lastPlan = useRef<EvacuationPlan | null>(null);
 
+  const [params] = useSearchParams();
+  const session = useSession();
+  const registered = !!session && !session.user.guest && isCitizenRole(session.user.role);
+  const care = tokenRole(token) === 'mobility_impaired';
+
   useEffect(() => {
-    ensureCitizenToken()
+    // /citizen?care=1 → guest special-care session (from the login page)
+    ensureCitizenToken(params.get('care') === '1' && !registered ? true : undefined)
       .then(setToken)
       .catch(() => setToast({ kind: 'err', text: t.common.offline }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /** Guests can switch special-care mode themselves; registered users' role is managed by admin. */
+  const toggleCare = async () => {
+    if (registered) return;
+    try {
+      setState((s) => ({ ...s, plan: null }));
+      setToken(await ensureCitizenToken(!care));
+    } catch {
+      setToast({ kind: 'err', text: t.common.offline });
+    }
+  };
 
   const loadSnapshot = useCallback(async () => {
     const [snap, me] = await Promise.all([api<PublicSnapshot>('/public/snapshot'), api<{ sos: SosSignal[]; status: { safe: boolean } | null }>('/citizen/me', { token })]);
@@ -117,12 +134,12 @@ export default function Citizen() {
       (pos) => {
         const p = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         if (p.lat < 40.3 || p.lat > 40.5 || p.lng < 49.7 || p.lng > 50.1) {
-          setToast({ kind: 'info', text: 'GPS: Bakı xaricindəsiniz — demo üçün rayon seçin' });
+          setToast({ kind: 'info', text: t.citizen.gpsOutside });
           return;
         }
         setLocation(p);
       },
-      () => setToast({ kind: 'err', text: 'GPS əlçatmazdır' }),
+      () => setToast({ kind: 'err', text: t.citizen.gpsUnavailable }),
       { enableHighAccuracy: true, timeout: 8000 },
     );
   };
@@ -142,7 +159,7 @@ export default function Citizen() {
       <aside className="order-2 flex min-h-0 flex-1 flex-col lg:order-1 lg:w-[420px] lg:flex-none lg:border-r lg:border-slate-200">
         <header className="flex items-center justify-between gap-2 border-b border-slate-200 bg-white px-4 py-3">
           <div className="flex items-center gap-2">
-            <Link to="/" className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100" aria-label="Back">
+            <Link to="/" className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100" aria-label={t.common.back}>
               <ArrowLeft className="h-4 w-4" />
             </Link>
             <Logo />
@@ -189,6 +206,34 @@ export default function Citizen() {
             </p>
           </section>
 
+          {/* Challenge Drop 1 — special-care (reduced mobility) mode */}
+          <section className={clsx('rounded-2xl border p-3', care ? 'border-violet-300 bg-violet-50' : 'border-slate-200 bg-white shadow-sm')}>
+            <div className="flex items-start gap-3">
+              <div className={clsx('grid h-9 w-9 shrink-0 place-items-center rounded-xl', care ? 'bg-violet-600 text-white' : 'bg-slate-100 text-slate-500')}>
+                <Accessibility className="h-5 w-5" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className={clsx('text-sm font-bold', care ? 'text-violet-900' : 'text-slate-800')}>{care ? t.citizen.careModeOn : t.citizen.careMode}</div>
+                <p className={clsx('mt-0.5 text-[11px] leading-snug', care ? 'text-violet-800/80' : 'text-slate-500')}>{t.citizen.careModeDesc}</p>
+                {registered ? (
+                  !care && <p className="mt-1.5 text-[11px] text-slate-400">{t.citizen.careAdminOnly}</p>
+                ) : (
+                  <button
+                    onClick={toggleCare}
+                    role="switch"
+                    aria-checked={care}
+                    className={clsx(
+                      'mt-2 rounded-lg px-3 py-1.5 text-xs font-semibold transition',
+                      care ? 'border border-violet-300 bg-white text-violet-700 hover:bg-violet-100' : 'bg-violet-600 text-white hover:bg-violet-700',
+                    )}
+                  >
+                    {care ? t.citizen.careDisable : t.citizen.careEnable}
+                  </button>
+                )}
+              </div>
+            </div>
+          </section>
+
           {/* Re-route banner */}
           {showBanner && plan && (
             <div role="alert" className="animate-slideIn flex gap-3 rounded-2xl border border-amber-300 bg-amber-50 p-3 text-amber-900">
@@ -230,12 +275,32 @@ export default function Citizen() {
                       <h2 className="truncate text-base font-bold">{dest.name}</h2>
                       <p className="text-xs text-slate-500">
                         {t.pointType[dest.type]} · {dest.capacity.toLocaleString()} {t.common.people}
+                        {dest.accessible && (
+                          <span className="ml-1.5 inline-flex items-center gap-0.5 rounded bg-violet-100 px-1 py-px text-[10px] font-semibold text-violet-700">
+                            <Accessibility className="h-2.5 w-2.5" /> {t.citizen.accessiblePoint}
+                          </span>
+                        )}
                       </p>
                     </div>
                   </div>
+                  {plan.profile === 'accessible' && (
+                    <div className="mt-3 rounded-xl border border-violet-200 bg-violet-50 p-2.5 text-[11px] text-violet-900">
+                      <div className="flex items-center gap-1.5 font-bold">
+                        <Accessibility className="h-3.5 w-3.5" /> {t.citizen.accessibleRoute}
+                      </div>
+                      <p className="mt-0.5 text-violet-800/80">{t.citizen.accessibleRouteDesc}</p>
+                      <p className={clsx('mt-1 font-semibold', plan.route.barriersNear ? 'text-amber-700' : 'text-emerald-700')}>
+                        {plan.route.barriersNear ? fmt(t.citizen.barriersNear, { n: plan.route.barriersNear }) : `✓ ${t.citizen.stepFree}`}
+                      </p>
+                    </div>
+                  )}
                   <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-                    <Stat icon={<Footprints className="h-4 w-4" />} value={`${fmtMinutes(plan.route.walkS)} ${t.common.minutes}`} label={t.citizen.walk} />
-                    <Stat icon={<Car className="h-4 w-4" />} value={`${fmtMinutes(plan.route.durationS)} ${t.common.minutes}`} label={t.citizen.drive} />
+                    <Stat
+                      icon={plan.profile === 'accessible' ? <Accessibility className="h-4 w-4" /> : <Footprints className="h-4 w-4" />}
+                      value={`${fmtMinutes(plan.route.walkS)} ${t.common.minutes}`}
+                      label={plan.profile === 'accessible' ? t.citizen.wheelchair : t.citizen.walk}
+                    />
+                    <Stat icon={<Car className="h-4 w-4" />} value={`${fmtMinutes(plan.route.durationS)} ${t.common.minutes}`} label={plan.profile === 'accessible' ? t.citizen.medicalTransport : t.citizen.drive} />
                     <Stat icon={<Navigation className="h-4 w-4" />} value={fmtDistance(plan.route.distanceM, t.common)} label="" />
                   </div>
                   <div className="mt-4">
@@ -273,6 +338,7 @@ export default function Citizen() {
               <h3 className="text-sm font-bold uppercase tracking-wide text-red-600">{t.citizen.sosTitle}</h3>
             </div>
             <p className="mt-1 hidden text-xs text-slate-500 lg:block">{t.citizen.sosHint}</p>
+            {care && <p className="mt-1 hidden text-xs font-semibold text-violet-700 lg:block">♿ {t.citizen.priorityHint}</p>}
             <div className="mt-3 hidden grid-cols-2 gap-2 lg:grid">
               {HAZARDS.map((h) => (
                 <button
@@ -306,6 +372,7 @@ export default function Citizen() {
                     <li key={s.id} className="flex items-center gap-2 rounded-lg bg-slate-50 px-2.5 py-2 text-sm">
                       <HazardIcon hazard={s.hazard} className="h-4 w-4 shrink-0" />
                       <span className="font-medium">{t.hazard[s.hazard]}</span>
+                      {s.priority === 1 && <span className="rounded bg-violet-600 px-1 py-px text-[9px] font-extrabold text-white">{t.citizen.priority1}</span>}
                       <span
                         className={clsx(
                           'ml-auto rounded-full px-2 py-0.5 text-[11px] font-semibold',
@@ -355,6 +422,7 @@ export default function Citizen() {
                         )}
                       >
                         <PointIcon type={live.type} className="h-5 w-5 shrink-0 text-slate-500" />
+                        {live.accessible && <Accessibility className="-ml-2 h-3.5 w-3.5 shrink-0 text-violet-600" aria-label={t.citizen.accessiblePoint} />}
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
                             <span className="truncate text-sm font-semibold">{live.name}</span>
@@ -386,11 +454,12 @@ export default function Citizen() {
           <ClosuresLayer closures={closures} />
           <RouteLayer route={safe ? null : (plan?.route ?? null)} previous={previous} />
           <PointsLayer
-            points={points.filter((p) => p.status === 'open')}
+            points={points.filter((p) => p.status === 'open' && (!care || p.accessible))}
             highlight={dest?.id}
             onSelect={(p) => pct(p) < 90 && requestPlan(location, p.id)}
             labels={(p) => `${p.name} — ${pct(p).toFixed(0)}%`}
           />
+          {care && <BarriersLayer barriers={state.barriers} label={t.citizen.barrierTip} />}
           <YouMarker at={location} />
           <FitTo points={fitPoints} deps={plan?.createdAt} />
         </CityMap>
@@ -417,7 +486,7 @@ export default function Citizen() {
             <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
           </span>
           <span className="text-[11px] font-bold uppercase tracking-wider text-red-600">{t.citizen.sosTitle}</span>
-          <span className="ml-auto truncate text-[10px] text-slate-400">{t.citizen.sosHintShort}</span>
+          <span className={clsx('ml-auto truncate text-[10px]', care ? 'font-semibold text-violet-600' : 'text-slate-400')}>{care ? '♿ ' + t.citizen.priority1 : t.citizen.sosHintShort}</span>
         </div>
         <div className="grid grid-cols-4 gap-1.5">
           {HAZARDS.map((h) => (
@@ -463,7 +532,7 @@ function Stat({ icon, value, label }: { icon: React.ReactNode; value: string; la
 function AccountButton() {
   const { t } = useI18n();
   const session = useSession();
-  const user = session && !session.user.guest && session.user.role === 'citizen' ? session.user : null;
+  const user = session && !session.user.guest && isCitizenRole(session.user.role) ? session.user : null;
   if (!user)
     return (
       <Link to="/login?next=/citizen" className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-slate-700">

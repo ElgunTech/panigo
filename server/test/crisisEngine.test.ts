@@ -11,6 +11,8 @@ const sos = (citizenId: string, lat: number, lng: number, zoneId = 'nasimi', ago
   location: { lat, lng },
   zoneId,
   status,
+  priority: 2,
+  specialNeeds: false,
   createdAt: NOW - agoMs,
   updatedAt: NOW - agoMs,
 });
@@ -57,7 +59,7 @@ describe('detectSosCluster (critical crisis algorithm)', () => {
 
 describe('capacity rule', () => {
   const p = (occ: number, status: AssemblyPoint['status'] = 'open'): AssemblyPoint => ({
-    id: 'p', name: 'p', type: 'park', location: { lat: 0, lng: 0 }, zoneId: 'z', capacity: 1000, occupancy: occ, incoming: 0, status, updatedAt: 0,
+    id: 'p', name: 'p', type: 'park', location: { lat: 0, lng: 0 }, zoneId: 'z', capacity: 1000, occupancy: occ, accessible: true, incoming: 0, status, updatedAt: 0,
   });
   it('alerts strictly above 95%', () => {
     expect(isOverCapacity(p(950))).toBe(false);

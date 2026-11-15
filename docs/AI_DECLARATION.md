@@ -18,8 +18,9 @@ Başqa generativ alət istifadə olunmayıb. Xəritə datası süni intellekt t�
 | Tələblərin təhlili | Tapşırıq mətni modullara və qəbul meyarlarına bölündü (90%, 95%, 500 m, 5 dəq, ≥4 fərqli vətəndaş) | Komanda tapşırığı verdi, prioritetləri və "peşəkar React" tələbini müəyyən etdi |
 | Arxitektura seçimi | Hexagonal quruluş, provider chain + circuit breaker, event bus + batch broadcast, RBAC matrisi təklif edildi. Drop-lar üçün genişlənmə nöqtələri əvvəlcədən qoyuldu | Stack (React, Node) və real data tələbi komandanındır |
 | Kod yazılması | Backend (domen, servislər, API, təhlükəsizlik) və frontend (vətəndaş, dispetçer, login, admin) kodu yaradıldı | Kod TypeScript strict rejimində tip yoxlamasından keçdi, testlərlə və brauzerdə yoxlandı |
-| Testlər | 53 avtomatik test yazıldı: alqoritm, marşrutlaşdırma və fallback, API inteqrasiya, təhlükəsizlik, istifadəçi idarəetməsi, reducer | Testlər işlədildi, hamısı keçir. Bir uğursuz test (səhv test datası) aşkarlanıb düzəldildi |
+| Testlər | 66 avtomatik test yazıldı: alqoritm, marşrutlaşdırma və fallback, API inteqrasiya, təhlükəsizlik, istifadəçi idarəetməsi, reducer | Testlər işlədildi, hamısı keçir. Bir uğursuz test (səhv test datası) aşkarlanıb düzəldildi |
 | Real data | Overpass və Wikidata idxal skripti, tutum evristikaları, uyğunsuz obyektlərin süzgəci yazıldı | Real data istifadəsi komandanın qərarıdır. Nəticə əl ilə yoxlandı |
+| Drop 1 (xüsusi qayğı rolu + i18n) | Rol, Prioritet #1, əlçatan profil, OSM əlçatanlıq datası, i18n auditi və 13 test təklif edilib yazıldı | Brauzerdə yoxlandı: qayğı rejimi, P1 SOS, dispetçer kartı, AZ↔EN keçidi |
 | Challenge drop-lar | Hər drop üçün mövcud mexanizm və dəyişiklik nöqtəsi sənədləşdirildi ([ARCHITECTURE.md §4](ARCHITECTURE.md)) | Drop elan olunanda həll komanda tərəfindən təsdiqlənir |
 | Yük testi | `scripts/loadtest.mjs` yazıldı və işlədildi | Rəqəmlər real ölçmədir, uydurulmayıb |
 | Sənədlər | README, arxitektura, data və bu bəyannamə yazıldı, Word sənədi hazırlandı | Komanda oxuyub təsdiqləyir |

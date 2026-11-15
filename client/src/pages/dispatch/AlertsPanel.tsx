@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import clsx from 'clsx';
-import { Ambulance, BellRing, CheckCircle2, Loader2, MapPinPlus, ShieldAlert, XCircle } from 'lucide-react';
+import { Accessibility, Ambulance, BellRing, CheckCircle2, Loader2, MapPinPlus, ShieldAlert, XCircle } from 'lucide-react';
 import type { CrisisAlert, LatLng } from '@shared/types';
 import { useI18n } from '../../i18n';
 import type { LiveState } from '../../lib/liveState';
@@ -56,17 +56,28 @@ function AlertCard({ alert: a, state, ops, onFocus }: { alert: CrisisAlert; stat
     }
   };
 
-  const title = a.kind === 'sos_cluster' ? fmt(t.dispatch.alertCluster, { zone, n: a.distinctCitizens }) : fmt(t.dispatch.alertCapacity, { point: point?.name ?? '', pct: (a.occupancyPct ?? 0).toFixed(0) });
+  const priority = a.kind === 'priority_sos';
+  const title = priority
+    ? fmt(t.dispatch.alertPriority, { zone })
+    : a.kind === 'sos_cluster'
+      ? fmt(t.dispatch.alertCluster, { zone, n: a.distinctCitizens })
+      : fmt(t.dispatch.alertCapacity, { point: point?.name ?? '', pct: (a.occupancyPct ?? 0).toFixed(0) });
 
   return (
     <article
       className={clsx(
         'animate-slideIn rounded-xl border p-3 transition',
-        isOpen ? 'animate-pulseRing border-red-500/60 bg-gradient-to-br from-red-600/25 to-red-950/40' : 'border-white/5 bg-ink-850 opacity-70',
+        isOpen && priority && 'animate-pulseRing border-violet-400/70 bg-gradient-to-br from-violet-600/30 to-red-950/40',
+        isOpen && !priority && 'animate-pulseRing border-red-500/60 bg-gradient-to-br from-red-600/25 to-red-950/40',
+        !isOpen && 'border-white/5 bg-ink-850 opacity-70',
       )}
     >
       <button onClick={() => onFocus(a.center)} className="flex w-full items-start gap-2 text-left">
-        <ShieldAlert className={clsx('mt-0.5 h-4 w-4 shrink-0', isOpen ? 'text-red-400' : 'text-slate-500')} />
+        {priority ? (
+          <Accessibility className={clsx('mt-0.5 h-4 w-4 shrink-0', isOpen ? 'text-violet-300' : 'text-slate-500')} />
+        ) : (
+          <ShieldAlert className={clsx('mt-0.5 h-4 w-4 shrink-0', isOpen ? 'text-red-400' : 'text-slate-500')} />
+        )}
         <div className="min-w-0 flex-1">
           <div className={clsx('text-[10px] font-extrabold uppercase tracking-widest', isOpen ? 'text-red-300' : 'text-slate-500')}>
             {isOpen ? t.dispatch.redAlert : a.status === 'executed' ? t.dispatch.executed : t.dispatch.dismissed}
@@ -84,14 +95,16 @@ function AlertCard({ alert: a, state, ops, onFocus }: { alert: CrisisAlert; stat
         <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">{t.dispatch.recommendation}</div>
         <div className="flex items-center gap-2 text-slate-200">
           <Ambulance className="h-3.5 w-3.5 shrink-0 text-amber-400" />
-          <span className="text-slate-400">{t.dispatch.sendBrigade}:</span>
+          <span className="text-slate-400">{priority ? t.dispatch.accessibleTransport : t.dispatch.sendBrigade}:</span>
           <b className="truncate">{brigade?.name ?? t.common.none}</b>
         </div>
-        <div className="flex items-center gap-2 text-slate-200">
-          <MapPinPlus className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
-          <span className="text-slate-400">{t.dispatch.openPoint}:</span>
-          <b className="truncate">{newPoint?.name.replace(/\s*\(.*\)$/, '') ?? t.common.none}</b>
-        </div>
+        {!priority && (
+          <div className="flex items-center gap-2 text-slate-200">
+            <MapPinPlus className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
+            <span className="text-slate-400">{t.dispatch.openPoint}:</span>
+            <b className="truncate">{newPoint?.name.replace(/\s*\(.*\)$/, '') ?? t.common.none}</b>
+          </div>
+        )}
       </div>
 
       {isOpen && (
@@ -109,7 +122,7 @@ function AlertCard({ alert: a, state, ops, onFocus }: { alert: CrisisAlert; stat
           </button>
         </div>
       )}
-      {err && <p className="mt-2 text-[11px] text-red-300">{err}</p>}
+      {err && <p className="mt-2 text-[11px] text-red-300">{t.common.errorGeneric}: {err}</p>}
     </article>
   );
 }

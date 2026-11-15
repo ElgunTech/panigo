@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import type { AssemblyPoint, AssemblyPointType, Brigade, BrigadeType, LatLng, Zone } from '@shared/types';
+import type { AssemblyPoint, AssemblyPointType, Barrier, Brigade, BrigadeType, LatLng, Zone } from '@shared/types';
 
 /**
  * Real-world dataset imported from OpenStreetMap + Wikidata by
@@ -11,7 +11,8 @@ import type { AssemblyPoint, AssemblyPointType, Brigade, BrigadeType, LatLng, Zo
 interface OsmDataset {
   source: string;
   fetchedAt: string;
-  points: { id: string; name: string; type: AssemblyPointType; location: LatLng; capacity: number; status: 'open' | 'reserve'; source: string }[];
+  points: { id: string; name: string; type: AssemblyPointType; location: LatLng; capacity: number; status: 'open' | 'reserve'; source: string; accessible?: boolean }[];
+  barriers?: Barrier[];
   brigades: { id: string; name: string; type: BrigadeType; location: LatLng; source: string }[];
   districts: { name: string; population?: number; populationYear?: string; populationSource?: string }[];
   hospitals: { name: string; location: LatLng }[];
@@ -26,6 +27,9 @@ function loadDataset(): OsmDataset | null {
   }
 }
 export const DATASET = loadDataset();
+
+/** Wheelchair barriers (real OSM steps + stair underpasses). */
+export const BARRIERS: Barrier[] = DATASET?.barriers ?? [];
 
 /** Bakı şəhəri — rayon zonaları (təxmini mərkəzlər). */
 export const ZONES: Zone[] = [
@@ -112,6 +116,7 @@ export function seedPoints(now = Date.now()): AssemblyPoint[] {
         location: p.location,
         zoneId: zoneOf(p.location).id,
         capacity: p.capacity,
+        accessible: p.accessible ?? p.type !== 'shelter',
         occupancy: Math.round((p.capacity * occPct) / 100),
         incoming: 0,
         status: p.status,
@@ -126,6 +131,7 @@ export function seedPoints(now = Date.now()): AssemblyPoint[] {
     location: { lat, lng },
     zoneId: zoneOf({ lat, lng }).id,
     capacity,
+    accessible: type !== 'shelter',
     occupancy: Math.round((capacity * occPct) / 100),
     incoming: 0,
     status: reserve ? 'reserve' : 'open',

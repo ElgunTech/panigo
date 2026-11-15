@@ -1,14 +1,16 @@
 {
   "source": "OpenStreetMap contributors (ODbL) via Overpass API",
-  "fetchedAt": "2026-11-15T07:53:08.494Z",
+  "fetchedAt": "2026-11-15T08:07:37.974Z",
   "bbox": "40.345,49.770,40.460,49.990",
   "counts": {
+    "barriers": 761,
     "metro": 31,
     "parks": 29,
     "stadiums": 7,
     "fireStations": 21,
     "hospitals": 104,
-    "districts": 12
+    "districts": 12,
+    "accessiblePoints": 38
   },
   "points": [
     {
@@ -21,7 +23,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-nizami",
@@ -33,7 +37,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-metro-elmler",
@@ -45,7 +51,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "osm:wheelchair=yes"
     },
     {
       "id": "m-insaatcilar",
@@ -57,7 +65,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-nesimi",
@@ -69,7 +79,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "osm:wheelchair=limited"
     },
     {
       "id": "m-bakmil",
@@ -81,7 +93,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-koroglu",
@@ -93,7 +107,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-qara-qarayev",
@@ -105,7 +121,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-neftciler",
@@ -117,7 +135,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-xalqlar-dostlugu",
@@ -129,7 +149,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-ehmedli",
@@ -141,7 +163,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-hezi-aslanov",
@@ -153,7 +177,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-azadliq-prospekti",
@@ -165,7 +191,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-dernegul",
@@ -177,7 +205,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-20-yanvar-st",
@@ -189,7 +219,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-cefer-cabbarli",
@@ -201,7 +233,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-ulduz",
@@ -213,7 +247,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-memar-ecemi",
@@ -225,7 +261,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-avtovagzal",
@@ -237,7 +275,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-28-may-2-ci-cixis",
@@ -249,7 +289,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-y15",
@@ -261,7 +303,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-y14",
@@ -273,7 +317,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-20-sentyabr",
@@ -285,7 +331,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-8-noyabr",
@@ -297,7 +345,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-y16",
@@ -309,7 +359,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-neriman-nerimanov",
@@ -321,7 +373,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-genclik",
@@ -333,7 +387,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-sahil",
@@ -345,7 +401,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-iceriseher",
@@ -357,7 +415,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "osm:wheelchair=no"
     },
     {
       "id": "m-dernegul-deposu",
@@ -369,7 +429,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "m-xocesen",
@@ -381,7 +443,9 @@
       },
       "capacity": 1500,
       "source": "osm:station=subway",
-      "status": "open"
+      "status": "open",
+      "accessible": false,
+      "accessSource": "rule:deep-metro-stairs"
     },
     {
       "id": "k-denizkenari-milli-park",
@@ -394,7 +458,9 @@
       "capacity": 20000,
       "areaM2": 420944,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-nebabet-bagi-botanika-bagi",
@@ -407,7 +473,9 @@
       "capacity": 20000,
       "areaM2": 418545,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-genclik-parki-zig-sossesi",
@@ -420,7 +488,9 @@
       "capacity": 20000,
       "areaM2": 293640,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-ag-seher-bulvari-baki",
@@ -433,7 +503,9 @@
       "capacity": 20000,
       "areaM2": 275658,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-merkezi-park",
@@ -446,7 +518,9 @@
       "capacity": 20000,
       "areaM2": 107668,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-nizami-gencevi-parki",
@@ -459,7 +533,9 @@
       "capacity": 20000,
       "areaM2": 104524,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-zefer-parki",
@@ -472,7 +548,9 @@
       "capacity": 20000,
       "areaM2": 79903,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-demiryolcular-parki",
@@ -485,7 +563,9 @@
       "capacity": 18200,
       "areaM2": 72673,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-heyder-eliyev-parki",
@@ -498,7 +578,9 @@
       "capacity": 16700,
       "areaM2": 66805,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-sevgi-parki",
@@ -511,7 +593,9 @@
       "capacity": 15500,
       "areaM2": 62140,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-dede-qorqud-parki",
@@ -524,7 +608,9 @@
       "capacity": 15300,
       "areaM2": 61345,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-qis-parki",
@@ -537,7 +623,9 @@
       "capacity": 14800,
       "areaM2": 59169,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-ramiz-aboyev-adina-medeniyyet-ve-istirah",
@@ -550,7 +638,9 @@
       "capacity": 14800,
       "areaM2": 59067,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-yasamal-parki",
@@ -563,7 +653,9 @@
       "capacity": 14200,
       "areaM2": 56789,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-heyder-eliyev-parki-8-ci-km",
@@ -576,7 +668,9 @@
       "capacity": 12900,
       "areaM2": 51588,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-sehriyar-bagi",
@@ -589,7 +683,9 @@
       "capacity": 12600,
       "areaM2": 50514,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-samir-xasiyev-parki",
@@ -602,7 +698,9 @@
       "capacity": 12100,
       "areaM2": 48347,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-qelebe-parki",
@@ -615,7 +713,9 @@
       "capacity": 12000,
       "areaM2": 47995,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-merkezi-park-yuxari-sovetski",
@@ -628,7 +728,9 @@
       "capacity": 11700,
       "areaM2": 46648,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-ataturk-parki",
@@ -641,7 +743,9 @@
       "capacity": 11500,
       "areaM2": 45960,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-mese-parki-samaxinka",
@@ -654,7 +758,9 @@
       "capacity": 9800,
       "areaM2": 39133,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-neftciler-parki",
@@ -667,7 +773,9 @@
       "capacity": 9800,
       "areaM2": 39085,
       "source": "osm:leisure=park",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-nerimanov-parki",
@@ -680,7 +788,9 @@
       "capacity": 9200,
       "areaM2": 36836,
       "source": "osm:leisure=park",
-      "status": "reserve"
+      "status": "reserve",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-dagustu-park",
@@ -693,7 +803,9 @@
       "capacity": 8700,
       "areaM2": 34627,
       "source": "osm:leisure=park",
-      "status": "reserve"
+      "status": "reserve",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-port-baku-parki",
@@ -706,7 +818,9 @@
       "capacity": 8300,
       "areaM2": 33105,
       "source": "osm:leisure=park",
-      "status": "reserve"
+      "status": "reserve",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-alov-parki",
@@ -719,7 +833,9 @@
       "capacity": 7200,
       "areaM2": 28763,
       "source": "osm:leisure=park",
-      "status": "reserve"
+      "status": "reserve",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-huseyn-cavid-parki",
@@ -732,7 +848,9 @@
       "capacity": 7100,
       "areaM2": 28373,
       "source": "osm:leisure=park",
-      "status": "reserve"
+      "status": "reserve",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-zabitler-parki",
@@ -745,7 +863,9 @@
       "capacity": 7000,
       "areaM2": 28065,
       "source": "osm:leisure=park",
-      "status": "reserve"
+      "status": "reserve",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "k-zerife-eliyeva-parki",
@@ -758,7 +878,9 @@
       "capacity": 6300,
       "areaM2": 25126,
       "source": "osm:leisure=park",
-      "status": "reserve"
+      "status": "reserve",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "s-tofiq-behramov-adina-respublika-stadionu",
@@ -771,7 +893,9 @@
       "seats": 31200,
       "capacity": 30000,
       "source": "osm:leisure=stadium; capacity=wikidata:Q1138958#P1083",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "s-neftci-idman-bazasi",
@@ -783,7 +907,9 @@
       },
       "capacity": 3000,
       "source": "osm:leisure=stadium; capacity=default",
-      "status": "reserve"
+      "status": "reserve",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "s-spartak-stadionu",
@@ -795,7 +921,9 @@
       },
       "capacity": 3000,
       "source": "osm:leisure=stadium; capacity=default",
-      "status": "reserve"
+      "status": "reserve",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "s-ismet-qayibov-stadionu",
@@ -807,7 +935,9 @@
       },
       "capacity": 3000,
       "source": "osm:leisure=stadium; capacity=default",
-      "status": "reserve"
+      "status": "reserve",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "s-baki-olimpiya-stadionu",
@@ -820,7 +950,9 @@
       "seats": 69870,
       "capacity": 30000,
       "source": "osm:leisure=stadium; capacity=wikidata:Q2612138#P1083",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "s-palms-sports-arena",
@@ -833,7 +965,9 @@
       "seats": 15000,
       "capacity": 15000,
       "source": "osm:leisure=stadium; capacity=wikidata:Q4032454#P1083",
-      "status": "open"
+      "status": "open",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     },
     {
       "id": "s-30-nomreli-mekteb-stadionu",
@@ -845,7 +979,9 @@
       },
       "capacity": 3000,
       "source": "osm:leisure=stadium; capacity=default",
-      "status": "reserve"
+      "status": "reserve",
+      "accessible": true,
+      "accessSource": "rule:ground-level-open-area"
     }
   ],
   "brigades": [
@@ -1250,6 +1386,3813 @@
       "populationSource": "wikidata:Q12843909#P1082",
       "adminLevel": "8",
       "wikidata": "Q12843909"
+    }
+  ],
+  "barriers": [
+    {
+      "lat": 40.37352,
+      "lng": 49.84209,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.36743,
+      "lng": 49.83924,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.44094,
+      "lng": 49.98605,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43978,
+      "lng": 49.96161,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4404,
+      "lng": 49.98641,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43922,
+      "lng": 49.96175,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36633,
+      "lng": 49.83617,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36441,
+      "lng": 49.81869,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.36539,
+      "lng": 49.83508,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36748,
+      "lng": 49.82519,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37185,
+      "lng": 49.85121,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37019,
+      "lng": 49.81669,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.35799,
+      "lng": 49.83001,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37133,
+      "lng": 49.84507,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37095,
+      "lng": 49.84528,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37034,
+      "lng": 49.84562,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37095,
+      "lng": 49.84528,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37016,
+      "lng": 49.84572,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.36281,
+      "lng": 49.83486,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.41481,
+      "lng": 49.89275,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41521,
+      "lng": 49.89266,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41477,
+      "lng": 49.89246,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.41515,
+      "lng": 49.89233,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37176,
+      "lng": 49.85127,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35256,
+      "lng": 49.83467,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.35255,
+      "lng": 49.83481,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35257,
+      "lng": 49.83392,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3629,
+      "lng": 49.83463,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36208,
+      "lng": 49.83508,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3619,
+      "lng": 49.83546,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.36198,
+      "lng": 49.83554,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37946,
+      "lng": 49.8505,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37382,
+      "lng": 49.85532,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3733,
+      "lng": 49.85604,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3735,
+      "lng": 49.85598,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37216,
+      "lng": 49.85108,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37098,
+      "lng": 49.84537,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37092,
+      "lng": 49.8452,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37004,
+      "lng": 49.8456,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37031,
+      "lng": 49.84553,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37004,
+      "lng": 49.84591,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37013,
+      "lng": 49.84562,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37037,
+      "lng": 49.84571,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34662,
+      "lng": 49.84051,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.34631,
+      "lng": 49.84011,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3467,
+      "lng": 49.8406,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34921,
+      "lng": 49.83708,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35129,
+      "lng": 49.83549,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35023,
+      "lng": 49.83629,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35248,
+      "lng": 49.83483,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35263,
+      "lng": 49.83481,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35579,
+      "lng": 49.82971,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37726,
+      "lng": 49.90706,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37674,
+      "lng": 49.90737,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37475,
+      "lng": 49.92512,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3745,
+      "lng": 49.92479,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37823,
+      "lng": 49.89201,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37782,
+      "lng": 49.89148,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36776,
+      "lng": 49.94015,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.368,
+      "lng": 49.9407,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36635,
+      "lng": 49.94363,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36589,
+      "lng": 49.94348,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36198,
+      "lng": 49.94636,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36191,
+      "lng": 49.94693,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43417,
+      "lng": 49.7831,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43388,
+      "lng": 49.7827,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36953,
+      "lng": 49.83494,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36982,
+      "lng": 49.83607,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36908,
+      "lng": 49.83592,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37389,
+      "lng": 49.84377,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37965,
+      "lng": 49.85108,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.3795,
+      "lng": 49.85125,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37958,
+      "lng": 49.84886,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37957,
+      "lng": 49.84894,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37976,
+      "lng": 49.85137,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37953,
+      "lng": 49.84924,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37919,
+      "lng": 49.85018,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38013,
+      "lng": 49.80786,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37937,
+      "lng": 49.80794,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42479,
+      "lng": 49.82626,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42441,
+      "lng": 49.82634,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.425,
+      "lng": 49.8379,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42489,
+      "lng": 49.83856,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41168,
+      "lng": 49.84093,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41217,
+      "lng": 49.84076,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41106,
+      "lng": 49.83555,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41055,
+      "lng": 49.83566,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4111,
+      "lng": 49.83531,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41105,
+      "lng": 49.83466,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4111,
+      "lng": 49.83531,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40992,
+      "lng": 49.83513,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40997,
+      "lng": 49.83433,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40997,
+      "lng": 49.83433,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40439,
+      "lng": 49.80673,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40481,
+      "lng": 49.80788,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40319,
+      "lng": 49.80688,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40365,
+      "lng": 49.8085,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40286,
+      "lng": 49.8071,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40339,
+      "lng": 49.80774,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40365,
+      "lng": 49.8085,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.36035,
+      "lng": 49.83619,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37136,
+      "lng": 49.84515,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3713,
+      "lng": 49.84497,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37346,
+      "lng": 49.84185,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37352,
+      "lng": 49.84209,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36465,
+      "lng": 49.81849,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36441,
+      "lng": 49.81869,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37323,
+      "lng": 49.85542,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36675,
+      "lng": 49.8404,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39448,
+      "lng": 49.86615,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38017,
+      "lng": 49.80832,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39602,
+      "lng": 49.87,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39565,
+      "lng": 49.87039,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39565,
+      "lng": 49.87039,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.39973,
+      "lng": 49.87608,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3993,
+      "lng": 49.8764,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39936,
+      "lng": 49.8765,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.36645,
+      "lng": 49.8252,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43861,
+      "lng": 49.93598,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43931,
+      "lng": 49.93564,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35738,
+      "lng": 49.96296,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37386,
+      "lng": 49.84368,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37396,
+      "lng": 49.84404,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36755,
+      "lng": 49.83907,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37471,
+      "lng": 49.86215,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37493,
+      "lng": 49.86139,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.4278,
+      "lng": 49.89866,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42826,
+      "lng": 49.89886,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42029,
+      "lng": 49.91759,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42158,
+      "lng": 49.91668,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36151,
+      "lng": 49.83621,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36021,
+      "lng": 49.83416,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3611,
+      "lng": 49.83568,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36079,
+      "lng": 49.83607,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36079,
+      "lng": 49.83607,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36082,
+      "lng": 49.83581,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36154,
+      "lng": 49.83596,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36104,
+      "lng": 49.83567,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36021,
+      "lng": 49.83416,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.36151,
+      "lng": 49.83621,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36154,
+      "lng": 49.83596,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36027,
+      "lng": 49.83379,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36076,
+      "lng": 49.83562,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3674,
+      "lng": 49.83928,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43278,
+      "lng": 49.80466,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43279,
+      "lng": 49.8048,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43565,
+      "lng": 49.80472,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43463,
+      "lng": 49.8048,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43585,
+      "lng": 49.84453,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43588,
+      "lng": 49.8442,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43298,
+      "lng": 49.80465,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35314,
+      "lng": 49.83203,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34693,
+      "lng": 49.80859,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37928,
+      "lng": 49.82083,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37942,
+      "lng": 49.82127,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37936,
+      "lng": 49.82079,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37958,
+      "lng": 49.82098,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37958,
+      "lng": 49.82098,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.41734,
+      "lng": 49.90826,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4169,
+      "lng": 49.90862,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39839,
+      "lng": 49.81247,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39859,
+      "lng": 49.81279,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43124,
+      "lng": 49.80629,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43137,
+      "lng": 49.80627,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42451,
+      "lng": 49.91671,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37085,
+      "lng": 49.83414,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3707,
+      "lng": 49.83419,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37078,
+      "lng": 49.8339,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37064,
+      "lng": 49.83396,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42797,
+      "lng": 49.80314,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42854,
+      "lng": 49.80091,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42806,
+      "lng": 49.80129,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42517,
+      "lng": 49.80065,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42574,
+      "lng": 49.80018,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43136,
+      "lng": 49.80359,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42852,
+      "lng": 49.80266,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36422,
+      "lng": 49.81759,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36395,
+      "lng": 49.8179,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37505,
+      "lng": 49.8336,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37516,
+      "lng": 49.83356,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37536,
+      "lng": 49.83348,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37829,
+      "lng": 49.84211,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37832,
+      "lng": 49.8424,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37883,
+      "lng": 49.84435,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37855,
+      "lng": 49.84227,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37852,
+      "lng": 49.84207,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37892,
+      "lng": 49.84461,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37888,
+      "lng": 49.8445,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37841,
+      "lng": 49.84219,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37841,
+      "lng": 49.84219,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.38971,
+      "lng": 49.89792,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.39006,
+      "lng": 49.8976,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38974,
+      "lng": 49.89812,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41489,
+      "lng": 49.89032,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41478,
+      "lng": 49.89043,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.41476,
+      "lng": 49.89036,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.41441,
+      "lng": 49.89046,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36414,
+      "lng": 49.81822,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42412,
+      "lng": 49.82409,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4245,
+      "lng": 49.824,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4239,
+      "lng": 49.87657,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42433,
+      "lng": 49.87624,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41365,
+      "lng": 49.8791,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41357,
+      "lng": 49.8787,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41808,
+      "lng": 49.86399,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41852,
+      "lng": 49.86365,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38044,
+      "lng": 49.86425,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38048,
+      "lng": 49.86485,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39965,
+      "lng": 49.8466,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39943,
+      "lng": 49.84669,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40096,
+      "lng": 49.8516,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40112,
+      "lng": 49.85226,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3999,
+      "lng": 49.85059,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40095,
+      "lng": 49.85473,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40137,
+      "lng": 49.85503,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40112,
+      "lng": 49.85226,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40045,
+      "lng": 49.85044,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3999,
+      "lng": 49.85059,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40134,
+      "lng": 49.85491,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.412,
+      "lng": 49.84721,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41182,
+      "lng": 49.84634,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37909,
+      "lng": 49.84441,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37905,
+      "lng": 49.84428,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37913,
+      "lng": 49.84453,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40294,
+      "lng": 49.85065,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40307,
+      "lng": 49.85098,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40271,
+      "lng": 49.84959,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40253,
+      "lng": 49.85119,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40219,
+      "lng": 49.84975,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40279,
+      "lng": 49.84993,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43147,
+      "lng": 49.80566,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43151,
+      "lng": 49.80678,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43072,
+      "lng": 49.80678,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43071,
+      "lng": 49.80643,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43069,
+      "lng": 49.80602,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43021,
+      "lng": 49.80604,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43006,
+      "lng": 49.80605,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42993,
+      "lng": 49.8061,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4298,
+      "lng": 49.80637,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4298,
+      "lng": 49.80623,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42941,
+      "lng": 49.8065,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42923,
+      "lng": 49.80652,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42986,
+      "lng": 49.8065,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43031,
+      "lng": 49.8065,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43023,
+      "lng": 49.80718,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42191,
+      "lng": 49.79602,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.42209,
+      "lng": 49.79592,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.4218,
+      "lng": 49.79607,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41985,
+      "lng": 49.79697,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.42083,
+      "lng": 49.79545,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.42029,
+      "lng": 49.79553,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42042,
+      "lng": 49.79591,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38408,
+      "lng": 49.8399,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38552,
+      "lng": 49.85046,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34862,
+      "lng": 49.83583,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34918,
+      "lng": 49.8354,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37489,
+      "lng": 49.83208,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37561,
+      "lng": 49.83336,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37604,
+      "lng": 49.83316,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3748,
+      "lng": 49.83239,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37591,
+      "lng": 49.83212,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37489,
+      "lng": 49.83208,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37598,
+      "lng": 49.83244,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3757,
+      "lng": 49.83332,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37594,
+      "lng": 49.83228,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37517,
+      "lng": 49.83244,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.36816,
+      "lng": 49.83434,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36653,
+      "lng": 49.83493,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40206,
+      "lng": 49.86966,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40256,
+      "lng": 49.86889,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40247,
+      "lng": 49.86897,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.35963,
+      "lng": 49.83187,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35893,
+      "lng": 49.82885,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35914,
+      "lng": 49.8299,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37914,
+      "lng": 49.84459,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37902,
+      "lng": 49.84415,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37494,
+      "lng": 49.86123,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36853,
+      "lng": 49.83501,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39505,
+      "lng": 49.9503,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.39497,
+      "lng": 49.94531,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.39193,
+      "lng": 49.90933,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39172,
+      "lng": 49.90939,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.39134,
+      "lng": 49.90916,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39494,
+      "lng": 49.96523,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39551,
+      "lng": 49.96526,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39494,
+      "lng": 49.96523,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40237,
+      "lng": 49.85054,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40224,
+      "lng": 49.85059,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40279,
+      "lng": 49.84993,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40307,
+      "lng": 49.85098,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.41175,
+      "lng": 49.84692,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40054,
+      "lng": 49.85266,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40054,
+      "lng": 49.85266,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.39959,
+      "lng": 49.85067,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39959,
+      "lng": 49.85067,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.38084,
+      "lng": 49.86418,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40522,
+      "lng": 49.8224,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40552,
+      "lng": 49.82187,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40522,
+      "lng": 49.8224,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37343,
+      "lng": 49.81629,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37343,
+      "lng": 49.81629,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3734,
+      "lng": 49.81595,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37019,
+      "lng": 49.81669,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37017,
+      "lng": 49.81641,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37914,
+      "lng": 49.84893,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37927,
+      "lng": 49.84982,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37931,
+      "lng": 49.84893,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.42014,
+      "lng": 49.91651,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39054,
+      "lng": 49.86705,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39044,
+      "lng": 49.86637,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41958,
+      "lng": 49.92145,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41961,
+      "lng": 49.92128,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41869,
+      "lng": 49.92115,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41872,
+      "lng": 49.92096,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41936,
+      "lng": 49.92416,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41964,
+      "lng": 49.91958,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41969,
+      "lng": 49.91989,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41972,
+      "lng": 49.9199,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.42171,
+      "lng": 49.91658,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4331,
+      "lng": 49.8638,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40339,
+      "lng": 49.80774,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37107,
+      "lng": 49.83583,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37111,
+      "lng": 49.83557,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37126,
+      "lng": 49.83623,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37163,
+      "lng": 49.83772,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3715,
+      "lng": 49.8372,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3698,
+      "lng": 49.83511,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36968,
+      "lng": 49.83619,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37078,
+      "lng": 49.83415,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37073,
+      "lng": 49.83392,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.3707,
+      "lng": 49.83419,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.36629,
+      "lng": 49.83088,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36605,
+      "lng": 49.83083,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36616,
+      "lng": 49.8311,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36604,
+      "lng": 49.83105,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3662,
+      "lng": 49.83086,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.36605,
+      "lng": 49.83083,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.3667,
+      "lng": 49.84032,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3675,
+      "lng": 49.84174,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36807,
+      "lng": 49.84286,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36818,
+      "lng": 49.84349,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36831,
+      "lng": 49.84384,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36918,
+      "lng": 49.84623,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37003,
+      "lng": 49.84919,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36548,
+      "lng": 49.8385,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36517,
+      "lng": 49.83841,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37862,
+      "lng": 49.85096,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37868,
+      "lng": 49.85136,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35784,
+      "lng": 49.82715,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35757,
+      "lng": 49.82896,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35712,
+      "lng": 49.82904,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35765,
+      "lng": 49.83033,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35759,
+      "lng": 49.82996,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35738,
+      "lng": 49.82973,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3575,
+      "lng": 49.82995,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35737,
+      "lng": 49.83,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35777,
+      "lng": 49.82921,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36469,
+      "lng": 49.83202,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36453,
+      "lng": 49.83185,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36439,
+      "lng": 49.83205,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36456,
+      "lng": 49.83224,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3647,
+      "lng": 49.83184,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36463,
+      "lng": 49.83177,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36464,
+      "lng": 49.83189,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36367,
+      "lng": 49.83713,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3619,
+      "lng": 49.8365,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36172,
+      "lng": 49.8355,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36026,
+      "lng": 49.8363,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36038,
+      "lng": 49.83556,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36036,
+      "lng": 49.83573,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3614,
+      "lng": 49.83572,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36089,
+      "lng": 49.83582,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36159,
+      "lng": 49.8356,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36148,
+      "lng": 49.83574,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36151,
+      "lng": 49.83567,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39398,
+      "lng": 49.86566,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40287,
+      "lng": 49.87155,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40294,
+      "lng": 49.8717,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40349,
+      "lng": 49.87111,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.43475,
+      "lng": 49.91525,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43524,
+      "lng": 49.91554,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43393,
+      "lng": 49.91478,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43347,
+      "lng": 49.91444,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43279,
+      "lng": 49.91405,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43217,
+      "lng": 49.91369,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43148,
+      "lng": 49.91309,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35724,
+      "lng": 49.82818,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35601,
+      "lng": 49.82953,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35578,
+      "lng": 49.82919,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36033,
+      "lng": 49.83329,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37869,
+      "lng": 49.88126,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37879,
+      "lng": 49.8819,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37966,
+      "lng": 49.88108,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37976,
+      "lng": 49.88154,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37971,
+      "lng": 49.88127,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37873,
+      "lng": 49.88151,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37873,
+      "lng": 49.88151,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37553,
+      "lng": 49.86925,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37508,
+      "lng": 49.86932,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37553,
+      "lng": 49.86936,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37509,
+      "lng": 49.86942,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37509,
+      "lng": 49.86942,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37589,
+      "lng": 49.87485,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37542,
+      "lng": 49.87489,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37543,
+      "lng": 49.87497,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37641,
+      "lng": 49.88164,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37648,
+      "lng": 49.88231,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37576,
+      "lng": 49.8819,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3758,
+      "lng": 49.88237,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37644,
+      "lng": 49.88194,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37577,
+      "lng": 49.88206,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37577,
+      "lng": 49.88206,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40448,
+      "lng": 49.94725,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40469,
+      "lng": 49.94758,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39107,
+      "lng": 49.82265,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39146,
+      "lng": 49.82361,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39146,
+      "lng": 49.82361,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.35397,
+      "lng": 49.83479,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35384,
+      "lng": 49.83478,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35526,
+      "lng": 49.83474,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35502,
+      "lng": 49.83478,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35662,
+      "lng": 49.83454,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35675,
+      "lng": 49.83454,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37935,
+      "lng": 49.82128,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37942,
+      "lng": 49.82127,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37531,
+      "lng": 49.81182,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37511,
+      "lng": 49.81176,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37531,
+      "lng": 49.81226,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37508,
+      "lng": 49.81227,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37511,
+      "lng": 49.81185,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37518,
+      "lng": 49.81218,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37518,
+      "lng": 49.81218,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.38973,
+      "lng": 49.87676,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38945,
+      "lng": 49.8767,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4389,
+      "lng": 49.9361,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38529,
+      "lng": 49.87987,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.38444,
+      "lng": 49.87998,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.38444,
+      "lng": 49.87998,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.38523,
+      "lng": 49.88028,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38519,
+      "lng": 49.87926,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38454,
+      "lng": 49.87936,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38458,
+      "lng": 49.88043,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38923,
+      "lng": 49.8766,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38942,
+      "lng": 49.87684,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36295,
+      "lng": 49.83577,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3625,
+      "lng": 49.83431,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36256,
+      "lng": 49.83436,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.35905,
+      "lng": 49.82877,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35878,
+      "lng": 49.82841,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37522,
+      "lng": 49.8322,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37799,
+      "lng": 49.82424,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37802,
+      "lng": 49.82443,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42582,
+      "lng": 49.90647,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42537,
+      "lng": 49.90699,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4419,
+      "lng": 49.93389,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.44186,
+      "lng": 49.93343,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34692,
+      "lng": 49.98715,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34658,
+      "lng": 49.9876,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3713,
+      "lng": 49.84862,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37089,
+      "lng": 49.84884,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37492,
+      "lng": 49.8277,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37506,
+      "lng": 49.84329,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.3752,
+      "lng": 49.84336,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37506,
+      "lng": 49.84329,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.375,
+      "lng": 49.84343,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37483,
+      "lng": 49.84325,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37518,
+      "lng": 49.84315,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37493,
+      "lng": 49.82468,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37405,
+      "lng": 49.82836,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37372,
+      "lng": 49.82875,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43183,
+      "lng": 49.95365,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4315,
+      "lng": 49.95382,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42542,
+      "lng": 49.84219,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42584,
+      "lng": 49.84379,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41124,
+      "lng": 49.80369,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41089,
+      "lng": 49.80412,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41093,
+      "lng": 49.80304,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39944,
+      "lng": 49.87664,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4325,
+      "lng": 49.85813,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.43245,
+      "lng": 49.85656,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43247,
+      "lng": 49.85832,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3795,
+      "lng": 49.95512,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3697,
+      "lng": 49.84561,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41435,
+      "lng": 49.85337,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41483,
+      "lng": 49.8532,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40142,
+      "lng": 49.82199,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40168,
+      "lng": 49.82087,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40171,
+      "lng": 49.82108,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40234,
+      "lng": 49.81959,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40257,
+      "lng": 49.81983,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40257,
+      "lng": 49.81983,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.4151,
+      "lng": 49.83589,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41512,
+      "lng": 49.83563,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41202,
+      "lng": 49.89828,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41256,
+      "lng": 49.89789,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41193,
+      "lng": 49.8981,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.3953,
+      "lng": 49.94645,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37961,
+      "lng": 49.82109,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37788,
+      "lng": 49.84192,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37632,
+      "lng": 49.83518,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37668,
+      "lng": 49.8354,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.3768,
+      "lng": 49.83583,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37566,
+      "lng": 49.83375,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40169,
+      "lng": 49.89769,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40157,
+      "lng": 49.89784,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37998,
+      "lng": 49.95457,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41404,
+      "lng": 49.8114,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35611,
+      "lng": 49.8262,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35695,
+      "lng": 49.82504,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37394,
+      "lng": 49.95385,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37396,
+      "lng": 49.95346,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37394,
+      "lng": 49.95385,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.42143,
+      "lng": 49.7783,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.42121,
+      "lng": 49.77893,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42147,
+      "lng": 49.7782,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36317,
+      "lng": 49.82608,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38165,
+      "lng": 49.89138,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4073,
+      "lng": 49.81887,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40699,
+      "lng": 49.81936,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40705,
+      "lng": 49.81919,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40733,
+      "lng": 49.81903,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40731,
+      "lng": 49.8189,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40734,
+      "lng": 49.81908,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40714,
+      "lng": 49.81916,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40696,
+      "lng": 49.81922,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40698,
+      "lng": 49.81922,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40712,
+      "lng": 49.81917,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.38157,
+      "lng": 49.83883,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38164,
+      "lng": 49.83918,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38164,
+      "lng": 49.83918,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.4046,
+      "lng": 49.94765,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.4046,
+      "lng": 49.94765,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40443,
+      "lng": 49.94728,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40446,
+      "lng": 49.94775,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40437,
+      "lng": 49.94732,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41112,
+      "lng": 49.77294,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41118,
+      "lng": 49.7726,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42235,
+      "lng": 49.77858,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42249,
+      "lng": 49.77824,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38621,
+      "lng": 49.95482,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36601,
+      "lng": 49.83624,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39747,
+      "lng": 49.89202,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39735,
+      "lng": 49.89216,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39735,
+      "lng": 49.89216,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.39811,
+      "lng": 49.80853,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41115,
+      "lng": 49.8049,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.41244,
+      "lng": 49.89766,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.41227,
+      "lng": 49.89728,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41193,
+      "lng": 49.8981,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.41172,
+      "lng": 49.89796,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40481,
+      "lng": 49.80788,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.38925,
+      "lng": 49.80316,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36826,
+      "lng": 49.82463,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36911,
+      "lng": 49.82459,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36735,
+      "lng": 49.82516,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36389,
+      "lng": 49.81781,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37966,
+      "lng": 49.80769,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37983,
+      "lng": 49.808,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37944,
+      "lng": 49.80845,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3797,
+      "lng": 49.80872,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37994,
+      "lng": 49.80868,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43911,
+      "lng": 49.85634,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.43329,
+      "lng": 49.86394,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39986,
+      "lng": 49.85095,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43912,
+      "lng": 49.96149,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34865,
+      "lng": 49.9618,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34821,
+      "lng": 49.96164,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38056,
+      "lng": 49.88751,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38053,
+      "lng": 49.88774,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43298,
+      "lng": 49.80465,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42317,
+      "lng": 49.78163,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42309,
+      "lng": 49.78215,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41842,
+      "lng": 49.82655,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36472,
+      "lng": 49.83511,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36943,
+      "lng": 49.83452,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3824,
+      "lng": 49.82403,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39025,
+      "lng": 49.83597,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37633,
+      "lng": 49.80816,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37388,
+      "lng": 49.8217,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37367,
+      "lng": 49.8236,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37365,
+      "lng": 49.8231,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37414,
+      "lng": 49.82061,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37374,
+      "lng": 49.82229,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37365,
+      "lng": 49.82298,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38318,
+      "lng": 49.87202,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38318,
+      "lng": 49.87193,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38321,
+      "lng": 49.87201,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38321,
+      "lng": 49.87192,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3832,
+      "lng": 49.87201,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.38322,
+      "lng": 49.87219,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37986,
+      "lng": 49.84864,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37957,
+      "lng": 49.84894,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.42841,
+      "lng": 49.82445,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36457,
+      "lng": 49.82541,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36336,
+      "lng": 49.82569,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36366,
+      "lng": 49.82561,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36387,
+      "lng": 49.82547,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36361,
+      "lng": 49.82575,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41746,
+      "lng": 49.82551,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35657,
+      "lng": 49.96192,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35669,
+      "lng": 49.9625,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35672,
+      "lng": 49.96272,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35683,
+      "lng": 49.96301,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35748,
+      "lng": 49.96315,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35817,
+      "lng": 49.96311,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36617,
+      "lng": 49.83395,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.363,
+      "lng": 49.83275,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36267,
+      "lng": 49.83234,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36271,
+      "lng": 49.8327,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36325,
+      "lng": 49.83251,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36303,
+      "lng": 49.83216,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36316,
+      "lng": 49.83231,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36318,
+      "lng": 49.83226,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36286,
+      "lng": 49.83245,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36307,
+      "lng": 49.83252,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36991,
+      "lng": 49.83466,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37,
+      "lng": 49.83502,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37025,
+      "lng": 49.83587,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37975,
+      "lng": 49.84888,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37975,
+      "lng": 49.84848,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41743,
+      "lng": 49.82539,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41703,
+      "lng": 49.82514,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41717,
+      "lng": 49.82523,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4173,
+      "lng": 49.82531,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37828,
+      "lng": 49.84211,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37959,
+      "lng": 49.85015,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3784,
+      "lng": 49.85313,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41259,
+      "lng": 49.94273,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41197,
+      "lng": 49.9429,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37072,
+      "lng": 49.81691,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37108,
+      "lng": 49.81713,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.36986,
+      "lng": 49.81703,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.3998,
+      "lng": 49.85096,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34784,
+      "lng": 49.83449,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34574,
+      "lng": 49.83801,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36594,
+      "lng": 49.83388,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37312,
+      "lng": 49.85837,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37242,
+      "lng": 49.85092,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37266,
+      "lng": 49.85066,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37245,
+      "lng": 49.85025,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37227,
+      "lng": 49.85017,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37234,
+      "lng": 49.85045,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3735,
+      "lng": 49.85193,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37338,
+      "lng": 49.85209,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37307,
+      "lng": 49.85198,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37407,
+      "lng": 49.85348,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37388,
+      "lng": 49.85363,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37402,
+      "lng": 49.85228,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37395,
+      "lng": 49.85205,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37411,
+      "lng": 49.85253,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37423,
+      "lng": 49.8529,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37418,
+      "lng": 49.85275,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37357,
+      "lng": 49.85216,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3717,
+      "lng": 49.84956,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3714,
+      "lng": 49.84875,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3918,
+      "lng": 49.84871,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39428,
+      "lng": 49.84666,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.39231,
+      "lng": 49.84362,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37565,
+      "lng": 49.8795,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37556,
+      "lng": 49.87833,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37468,
+      "lng": 49.86228,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37449,
+      "lng": 49.86269,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37449,
+      "lng": 49.86268,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39416,
+      "lng": 49.86614,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39407,
+      "lng": 49.8656,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39438,
+      "lng": 49.86584,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3946,
+      "lng": 49.86608,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39486,
+      "lng": 49.86627,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39515,
+      "lng": 49.86654,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39427,
+      "lng": 49.86594,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39477,
+      "lng": 49.86641,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39508,
+      "lng": 49.86665,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39315,
+      "lng": 49.86548,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34511,
+      "lng": 49.84456,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34555,
+      "lng": 49.84432,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34537,
+      "lng": 49.84442,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35114,
+      "lng": 49.84828,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35125,
+      "lng": 49.84777,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36876,
+      "lng": 49.83406,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.369,
+      "lng": 49.83474,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39753,
+      "lng": 49.89306,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37408,
+      "lng": 49.85503,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37374,
+      "lng": 49.8545,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42515,
+      "lng": 49.91594,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43148,
+      "lng": 49.95426,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.43306,
+      "lng": 49.92292,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.43276,
+      "lng": 49.92249,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40255,
+      "lng": 49.86947,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.4255,
+      "lng": 49.91655,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4229,
+      "lng": 49.91627,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36941,
+      "lng": 49.9492,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37082,
+      "lng": 49.94236,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37094,
+      "lng": 49.9425,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36983,
+      "lng": 49.94381,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36909,
+      "lng": 49.94492,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36853,
+      "lng": 49.94555,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3676,
+      "lng": 49.94654,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37569,
+      "lng": 49.94872,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37546,
+      "lng": 49.94871,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37552,
+      "lng": 49.94739,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37494,
+      "lng": 49.94584,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37398,
+      "lng": 49.94387,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37379,
+      "lng": 49.9443,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.3719,
+      "lng": 49.82523,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.42552,
+      "lng": 49.83965,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37391,
+      "lng": 49.82788,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35846,
+      "lng": 49.96253,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35836,
+      "lng": 49.96268,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34521,
+      "lng": 49.84363,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34534,
+      "lng": 49.84356,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.34561,
+      "lng": 49.84373,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42644,
+      "lng": 49.83793,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35735,
+      "lng": 49.82853,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.45886,
+      "lng": 49.90681,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.45908,
+      "lng": 49.90626,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37401,
+      "lng": 49.95207,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41391,
+      "lng": 49.8869,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.41422,
+      "lng": 49.88646,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41385,
+      "lng": 49.88657,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35802,
+      "lng": 49.96044,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.35636,
+      "lng": 49.9613,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37996,
+      "lng": 49.88786,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41119,
+      "lng": 49.869,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41088,
+      "lng": 49.86925,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41088,
+      "lng": 49.86925,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.40478,
+      "lng": 49.85967,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40449,
+      "lng": 49.85979,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40449,
+      "lng": 49.85979,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.36845,
+      "lng": 49.83506,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36852,
+      "lng": 49.83501,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.38014,
+      "lng": 49.84919,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37772,
+      "lng": 49.84036,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.37765,
+      "lng": 49.84038,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37781,
+      "lng": 49.84071,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39134,
+      "lng": 49.88343,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39122,
+      "lng": 49.88366,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39104,
+      "lng": 49.88423,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39087,
+      "lng": 49.88428,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42605,
+      "lng": 49.8639,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42599,
+      "lng": 49.86363,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42932,
+      "lng": 49.90286,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.41619,
+      "lng": 49.79806,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.4168,
+      "lng": 49.79771,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.41628,
+      "lng": 49.79837,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.41835,
+      "lng": 49.798,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.41951,
+      "lng": 49.79715,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.41763,
+      "lng": 49.7974,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.41749,
+      "lng": 49.79818,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.42204,
+      "lng": 49.81448,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42441,
+      "lng": 49.82304,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40045,
+      "lng": 49.8527,
+      "kind": "underpass"
+    },
+    {
+      "lat": 40.42096,
+      "lng": 49.81463,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42133,
+      "lng": 49.8156,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4226,
+      "lng": 49.81551,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.4222,
+      "lng": 49.82024,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.40072,
+      "lng": 49.85374,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.419,
+      "lng": 49.81826,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.39262,
+      "lng": 49.8568,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.37518,
+      "lng": 49.8157,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.42166,
+      "lng": 49.91667,
+      "kind": "steps"
+    },
+    {
+      "lat": 40.36328,
+      "lng": 49.83423,
+      "kind": "steps"
     }
   ],
   "hospitals": [

@@ -67,7 +67,7 @@ function PointRow({ p, ops, onFocus }: { p: AssemblyPoint; ops: Ops; onFocus: (p
   return (
     <li className={clsx('rounded-xl border p-2.5', v > 95 && p.status === 'open' ? 'border-red-500/50 bg-red-950/30' : 'border-white/5 bg-ink-850')}>
       <div className="flex items-center gap-2">
-        <button onClick={() => onFocus(p.location)} className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-white/5 text-slate-300" aria-label="focus">
+        <button onClick={() => onFocus(p.location)} className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-white/5 text-slate-300" aria-label={t.common.focus}>
           <PointIcon type={p.type} className="h-3.5 w-3.5" />
         </button>
         <div className="min-w-0 flex-1">
@@ -167,7 +167,7 @@ function ControlTab({ state, ops, role, onClosureMode }: { state: LiveState; ops
         <div className="mt-2.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">{t.dispatch.closurePresets}</div>
         <div className="mt-1.5 flex flex-wrap gap-1.5">
           {presets.map((p) => (
-            <button key={p.name} onClick={() => ops.addClosure(p.name, p.location, p.radiusM, 'Dağıntı').catch(() => undefined)} className="rounded-md bg-white/5 px-2 py-1 text-[11px] text-slate-300 hover:bg-white/10">
+            <button key={p.name} onClick={() => ops.addClosure(p.name, p.location, p.radiusM, t.dispatch.reasonCollapse).catch(() => undefined)} className="rounded-md bg-white/5 px-2 py-1 text-[11px] text-slate-300 hover:bg-white/10">
               {p.name}
             </button>
           ))}
@@ -296,7 +296,7 @@ function UsersTab({ ops, me }: { ops: Ops; me: string }) {
     }
   };
   const list = users.filter((u) => !q || (u.username + ' ' + u.name).toLowerCase().includes(q.toLowerCase()));
-  const roleTone = { admin: 'text-red-300', dispatcher: 'text-amber-300', citizen: 'text-slate-300' };
+  const roleTone = { admin: 'text-red-300', dispatcher: 'text-amber-300', mobility_impaired: 'text-violet-300', citizen: 'text-slate-300' };
   return (
     <div>
       <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t.admin.search} className="mb-2.5 w-full rounded-lg border border-white/10 bg-ink-900 px-3 py-2 text-xs text-white outline-none focus:border-red-500/50" />
@@ -326,7 +326,7 @@ function UsersTab({ ops, me }: { ops: Ops; me: string }) {
                   aria-label={t.admin.role}
                   className={clsx('flex-1 rounded-md border border-white/10 bg-ink-900 px-2 py-1 text-[11px] font-semibold disabled:opacity-50', roleTone[u.role])}
                 >
-                  {(['citizen', 'dispatcher', 'admin'] as const).map((r) => (
+                  {(['citizen', 'mobility_impaired', 'dispatcher', 'admin'] as const).map((r) => (
                     <option key={r} value={r}>
                       {t.admin.roles[r]}
                     </option>

@@ -45,4 +45,15 @@ export function useSession(): Session | null {
 }
 
 export const isStaff = (r?: Role) => r === 'dispatcher' || r === 'admin';
+/** Citizen-side roles (citizen + mobility_impaired) use the citizen app. */
+export const isCitizenRole = (r?: Role) => r === 'citizen' || r === 'mobility_impaired';
+
+/** Reads the role claim from a JWT (display only — the server enforces permissions). */
+export function tokenRole(token: string | null): Role | undefined {
+  try {
+    return JSON.parse(atob(token!.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).role;
+  } catch {
+    return undefined;
+  }
+}
 export const homeFor = (r?: Role) => (isStaff(r) ? '/dispatch' : '/citizen');

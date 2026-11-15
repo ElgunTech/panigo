@@ -34,6 +34,9 @@ const QUERY = `[out:json][timeout:120];
   relation["leisure"="stadium"]["name"](${BBOX});
   nwr["amenity"="fire_station"](${BBOX});
   nwr["amenity"="hospital"]["name"](${BBOX});
+  way["highway"="steps"](${BBOX});
+  way["highway"="footway"]["tunnel"="yes"](${BBOX});
+  way["highway"="footway"]["layer"="-1"](${BBOX});
 )->.features;
 .features out geom tags;
 relation["boundary"="administrative"]["admin_level"~"^(6|7|8)$"]["name"](40.25,49.60,40.65,50.40)->.districts;
@@ -142,10 +145,11 @@ console.log(`✓ ${els.length} OSM elements`);
 const metro = dedupe(
   els
     .filter((e) => e.tags?.station === 'subway' || e.tags?.subway === 'yes')
-    .map((e) => ({ name: nameOf(e.tags), location: pos(e) }))
+    .map((e) => ({ name: nameOf(e.tags), location: pos(e), wheelchair: e.tags.wheelchair }))
     .filter((x) => x.name && x.location),
   150,
 ).map((m) => ({
+  wheelchair: m.wheelchair,
   id: `m-${slug(m.name)}`,
   name: `${m.name.replace(/\s*\(.*\)/, '')} m/st sığınacağı`,
   type: 'shelter',
@@ -188,13 +192,14 @@ console.log(`✓ wikidata: ${Object.keys(WD).length} entities`);
 const parksAll = dedupe(
   els
     .filter((e) => e.tags?.leisure === 'park' && pos(e) && !EXCLUDE.test(nameOf(e.tags) ?? ''))
-    .map((e) => ({ name: nameOf(e.tags), location: pos(e), area: areaOf(e) }))
+    .map((e) => ({ name: nameOf(e.tags), location: pos(e), area: areaOf(e), wheelchair: e.tags.wheelchair }))
     .filter((p) => p.name && p.area >= 25_000)
     .sort((a, b) => b.area - a.area),
   300,
 ).map((p) => ({
   id: `k-${slug(p.name)}`,
   name: p.name,
+  wheelchair: p.wheelchair,
   type: 'park',
   location: round(p.location),
   capacity: Math.max(500, Math.min(20_000, Math.round((p.area * 0.5) / 2 / 100) * 100)),
@@ -208,7 +213,7 @@ const stadiums = dedupe(
     .map((e) => {
       const osmCap = parseInt(e.tags.capacity, 10);
       const wdCap = WD[e.tags.wikidata]?.capacity?.value;
-      return { name: nameOf(e.tags), location: pos(e), cap: Number.isFinite(osmCap) ? osmCap : wdCap, capSrc: Number.isFinite(osmCap) ? 'osm:capacity' : wdCap ? `wikidata:${e.tags.wikidata}#P1083` : 'default' };
+      return { wheelchair: e.tags.wheelchair, name: nameOf(e.tags), location: pos(e), cap: Number.isFinite(osmCap) ? osmCap : wdCap, capSrc: Number.isFinite(osmCap) ? 'osm:capacity' : wdCap ? `wikidata:${e.tags.wikidata}#P1083` : 'default' };
     }),
   250,
 )
@@ -216,6 +221,7 @@ const stadiums = dedupe(
   .map((s) => ({
     id: `s-${slug(s.name)}`,
     name: s.name,
+    wheelchair: s.wheelchair,
     type: 'stadium',
     location: round(s.location),
     seats: s.cap,
@@ -231,6 +237,27 @@ const points = [
   ...parksAll.slice(22, 30).map((p) => ({ ...p, status: 'reserve' })),
   ...stadiums.map((s) => ({ ...s, status: s.capacity >= 10_000 ? 'open' : 'reserve' })),
 ];
+
+/**
+ * Step-free accessibility (wheelchair / stretcher):
+ *  - explicit OSM wheelchair=yes|limited → accessible, wheelchair=no → not
+ *  - otherwise: parks & stadiums (ground-level open areas) → accessible;
+ *    deep metro stations (escalators/stairs, no lift data) → not accessible
+ */
+for (const p of points) {
+  const w = p.wheelchair;
+  p.accessible = w ? w === 'yes' || w === 'limited' : p.type !== 'shelter';
+  p.accessSource = w ? `osm:wheelchair=${w}` : p.type === 'shelter' ? 'rule:deep-metro-stairs' : 'rule:ground-level-open-area';
+  delete p.wheelchair;
+}
+
+/** Pedestrian barriers for wheelchairs: real steps and stair-access underpasses (midpoints). */
+const barriers = els
+  .filter((e) => e.type === 'way' && (e.tags?.highway === 'steps' || (e.tags?.highway === 'footway' && (e.tags.tunnel === 'yes' || e.tags.layer === '-1'))) && e.geometry?.length)
+  .map((e) => {
+    const g = e.geometry[Math.floor(e.geometry.length / 2)];
+    return { lat: +g.lat.toFixed(5), lng: +g.lon.toFixed(5), kind: e.tags.highway === 'steps' ? 'steps' : 'underpass' };
+  });
 
 const fire = dedupe(
   els.filter((e) => e.tags?.amenity === 'fire_station' && pos(e)).map((e, i) => ({ name: nameOf(e.tags) || `FHN yanğınsöndürmə hissəsi #${i + 1}`, location: pos(e) })),
@@ -270,11 +297,14 @@ const out = {
   source: 'OpenStreetMap contributors (ODbL) via Overpass API',
   fetchedAt: new Date().toISOString(),
   bbox: BBOX,
-  counts: { metro: metro.length, parks: parksAll.length, stadiums: stadiums.length, fireStations: fire.length, hospitals: hospitals.length, districts: districts.length },
+  counts: { barriers: 0, metro: metro.length, parks: parksAll.length, stadiums: stadiums.length, fireStations: fire.length, hospitals: hospitals.length, districts: districts.length },
   points,
   brigades,
   districts,
+  barriers,
   hospitals: hospitals.map((h) => ({ name: h.name, location: round(h.location) })),
 };
+out.counts.barriers = barriers.length;
+out.counts.accessiblePoints = points.filter((p) => p.accessible).length;
 fs.writeFileSync(OUT, JSON.stringify(out, null, 2));
 console.log('✓ wrote', path.relative(ROOT, OUT), out.counts);

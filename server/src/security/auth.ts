@@ -8,6 +8,8 @@ import type { Role } from '@shared/types';
  */
 export const PERMISSIONS = {
   citizen: ['evac:plan', 'sos:create', 'sos:cancel', 'citizen:status'],
+  // Challenge Drop 1 — new role = one line of data
+  mobility_impaired: ['evac:plan', 'sos:create', 'sos:cancel', 'citizen:status', 'sos:priority', 'evac:accessible'],
   dispatcher: ['dashboard:read', 'alert:decide', 'brigade:dispatch', 'closure:manage', 'point:manage'],
   admin: ['dashboard:read', 'alert:decide', 'brigade:dispatch', 'closure:manage', 'point:manage', 'sim:control', 'system:manage', 'audit:read', 'users:manage'],
 } as const satisfies Record<Role, readonly string[]>;
@@ -30,8 +32,8 @@ export function issueToken(p: Principal, secret: string, ttl: string): string {
 }
 
 /** Anonymous guest citizen — in an emergency nobody should be forced to sign up before sending SOS. */
-export function issueGuestToken(secret: string): { token: string; principal: Principal } {
-  const principal: Principal = { sub: `guest-${randomUUID()}`, role: 'citizen', name: 'Qonaq', guest: true };
+export function issueGuestToken(secret: string, mobilityImpaired = false): { token: string; principal: Principal } {
+  const principal: Principal = { sub: `guest-${randomUUID()}`, role: mobilityImpaired ? 'mobility_impaired' : 'citizen', name: 'Qonaq', guest: true };
   return { token: issueToken(principal, secret, '7d'), principal };
 }
 

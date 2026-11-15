@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import clsx from 'clsx';
-import { ArrowLeft, Building2, ChevronRight, Eye, EyeOff, HeartPulse, Loader2, LogIn, Siren, UserPlus } from 'lucide-react';
+import { Accessibility, ArrowLeft, Building2, ChevronRight, Eye, EyeOff, HeartPulse, Loader2, LogIn, Siren, UserPlus } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { api, ApiError } from '../lib/api';
 import { homeFor, isStaff, setSession, useSession, type Session } from '../lib/session';
@@ -20,6 +20,7 @@ export default function Login() {
   const session = useSession();
   const [mode, setMode] = useState<Mode>(params.get('mode') === 'register' ? 'register' : 'login');
   const [form, setForm] = useState({ username: '', password: '', name: '', phone: '' });
+  const [mobilityImpaired, setMobilityImpaired] = useState(false);
   const [showPw, setShowPw] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -47,7 +48,7 @@ export default function Login() {
       const s =
         mode === 'login'
           ? await api<Session>('/auth/login', { body: { username: form.username, password: form.password } })
-          : await api<Session>('/auth/register', { body: { username: form.username, password: form.password, name: form.name, phone: form.phone } });
+          : await api<Session>('/auth/register', { body: { username: form.username, password: form.password, name: form.name, phone: form.phone, mobilityImpaired } });
       setSession(s);
       nav(next && (isStaff(s.user.role) || !next.startsWith('/dispatch')) ? next : homeFor(s.user.role), { replace: true });
     } catch (err) {
@@ -126,6 +127,12 @@ export default function Login() {
               </span>
               <ChevronRight className="h-5 w-5 shrink-0 transition group-hover:translate-x-0.5" />
             </Link>
+            <Link
+              to="/citizen?care=1"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-4 py-2.5 text-xs font-semibold text-violet-800 transition hover:bg-violet-100"
+            >
+              <Accessibility className="h-4 w-4" /> {t.auth.guestCare}
+            </Link>
 
             <div className="my-6 flex items-center gap-3 text-[11px] uppercase tracking-wider text-slate-400">
               <span className="h-px flex-1 bg-slate-200" /> {t.auth.or} <span className="h-px flex-1 bg-slate-200" />
@@ -175,7 +182,7 @@ export default function Login() {
                     autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
                     className={clsx(input, 'pr-10')}
                   />
-                  <button type="button" onClick={() => setShowPw((v) => !v)} className="absolute right-2.5 top-1/2 mt-[3px] -translate-y-1/2 p-1 text-slate-400 hover:text-slate-700" aria-label="show password">
+                  <button type="button" onClick={() => setShowPw((v) => !v)} className="absolute right-2.5 top-1/2 mt-[3px] -translate-y-1/2 p-1 text-slate-400 hover:text-slate-700" aria-label={t.common.showPassword}>
                     {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
@@ -185,6 +192,18 @@ export default function Login() {
                 <label className="block text-xs font-semibold text-slate-600">
                   {t.auth.phone}
                   <input type="tel" value={form.phone} onChange={set('phone')} autoComplete="tel" placeholder="+994 50 000 00 00" className={input} />
+                </label>
+              )}
+
+              {mode === 'register' && (
+                <label className={clsx('flex cursor-pointer items-start gap-3 rounded-xl border p-3 transition', mobilityImpaired ? 'border-violet-300 bg-violet-50' : 'border-slate-200 hover:bg-slate-50')}>
+                  <input type="checkbox" checked={mobilityImpaired} onChange={(e) => setMobilityImpaired(e.target.checked)} className="mt-0.5 h-4 w-4 accent-violet-600" />
+                  <span>
+                    <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-800">
+                      <Accessibility className="h-4 w-4 text-violet-600" /> {t.auth.mobilityLabel}
+                    </span>
+                    <span className="mt-0.5 block text-[11px] leading-snug text-slate-500">{t.auth.mobilityHint}</span>
+                  </span>
                 </label>
               )}
 

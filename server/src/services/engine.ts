@@ -1,6 +1,7 @@
-import type { AssemblyPoint, Hazard, LatLng, RoadClosure, SosSignal, SystemStatus } from '@shared/types';
+import type { AssemblyPoint, Hazard, LatLng, RoadClosure, SosPriority, SosSignal, SystemStatus } from '@shared/types';
 import type { AppConfig } from '../config';
-import { zoneOf } from '../data/seed';
+import { BARRIERS, zoneOf } from '../data/seed';
+import { RoadNetwork } from '../domain/roadNetwork';
 import { OsrmProvider } from '../routing/osrmProvider';
 import { RoutingService } from '../routing/routingService';
 import { SimulatedProvider } from '../routing/simulatedProvider';
@@ -29,15 +30,20 @@ export class Engine {
     readonly config: AppConfig,
     providers?: RoutingProvider[],
   ) {
-    this.routing = new RoutingService(providers ?? buildProviders(config));
+    this.routing = new RoutingService(providers ?? buildProviders(config), undefined, BARRIERS);
     this.evacuation = new EvacuationService(this.store, this.routing);
     this.dispatch = new DispatchService(this.store, this.routing, config.timeScale);
     this.crisis = new CrisisService(this.store, this.dispatch, this.evacuation);
   }
 
   // ---------- Citizen ----------
-  createSos(citizenId: string, hazard: Hazard, location: LatLng, note?: string): SosSignal {
+  /**
+   * @param specialNeeds sender has reduced mobility (role mobility_impaired) →
+   *   SOS is auto-escalated to Priority #1 (Kritik Prioritet) and raises an immediate alert.
+   */
+  createSos(citizenId: string, hazard: Hazard, location: LatLng, note?: string, specialNeeds = false): SosSignal {
     const now = Date.now();
+    const priority: SosPriority = specialNeeds ? 1 : 2;
     const sos: SosSignal = {
       id: this.store.nextId('sos'),
       citizenId,
@@ -46,10 +52,13 @@ export class Engine {
       zoneId: zoneOf(location).id,
       note,
       status: 'new',
+      priority,
+      specialNeeds,
       createdAt: now,
       updatedAt: now,
     };
     this.store.upsertSos(sos);
+    if (priority === 1) this.crisis.raisePriority(sos);
     const c = this.store.citizens.get(citizenId);
     this.store.upsertCitizen({ ...(c ?? { citizenId }), citizenId, safe: false, location, updatedAt: now });
     this.crisis.evaluateSos(sos);
@@ -199,7 +208,7 @@ const dist = (a: LatLng, b: LatLng) => (a.lat - b.lat) ** 2 + (a.lng - b.lng) **
 function buildProviders(cfg: AppConfig): RoutingProvider[] {
   const registry: Record<string, () => RoutingProvider> = {
     osrm: () => new OsrmProvider(cfg.osrmUrl, cfg.osrmTimeoutMs),
-    simulated: () => new SimulatedProvider(),
+    simulated: () => new SimulatedProvider(new RoadNetwork(), BARRIERS),
   };
   return cfg.routingProviders.filter((id) => registry[id]).map((id) => registry[id]());
 }

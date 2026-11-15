@@ -75,3 +75,4 @@ export function advanceAlong(line: LatLng[], metres: number): { position: LatLng
 }
 
 export const WALK_SPEED_MS = 1.3; // ~4.7 km/h under crowd conditions
+export const WHEELCHAIR_SPEED_MS = 0.8; // manual wheelchair on urban pavement, ~2.9 km/h

@@ -10,7 +10,8 @@ Zəlzələ, sel, sənaye qəzası və kütləvi tədbirlər zamanı **vətənda�
 |---|---|
 | **1. Vətəndaş tətbiqi** (`/citizen`) | Rayon / GPS / xəritə üzrə yer seçimi · ən yaxın məntəqələr və onların canlı doluluğu · tövsiyə olunan təxliyə marşrutu (piyada və avtomobil ETA) · **bir kliklə SOS** (yanğın, dağıntı, su basması, tibbi yardım) · **"TƏHLÜKƏSİZƏM"** statusu · yol bağlananda və ya məntəqə **≥90%** dolanda **avtomatik alternativ marşrut** |
 | **2. Dispetçer mərkəzi** (`/dispatch`) | Zonalar üzrə canlı SOS axını · məntəqələrin doluluğu · briqadaların statusu və hərəkəti · **Kritik böhran alqoritmi** (500 m və ya eyni zona, 5 dəq, ≥4 fərqli vətəndaş, **və ya** doluluq >95%) → **QIRMIZI HƏYƏCAN** → **1 kliklə təsdiq** (əlavə briqada göndərilir və yeni toplanış nöqtəsi açılır) |
-| **Giriş və rollar** (`/login`) | Vahid giriş və qeydiyyat · rollar: vətəndaş / dispetçer / admin · admin istifadəçilərin rolunu dəyişir və onları bloklayır · təcili SOS üçün qeydiyyatsız **qonaq rejimi** |
+| **Xüsusi qayğı (Drop 1)** | Hərəkət məhdudiyyətli şəxs rolu: SOS avtomatik **Prioritet #1**, yalnız əlçatan (panduslu, pilləkənsiz) məntəqə və marşrut, real OSM pilləkənlərindən qaçınma |
+| **Giriş və rollar** (`/login`) | Vahid giriş və qeydiyyat · rollar: vətəndaş / hərəkət məhdudiyyətli / dispetçer / admin · admin istifadəçilərin rolunu dəyişir və onları bloklayır · təcili SOS üçün qeydiyyatsız **qonaq rejimi** |
 
 ---
 
@@ -90,6 +91,7 @@ Nəticə `server/src/data/baku-osm.json` faylına yazılır və repoya commit ol
 
 | Sənəd | Məzmun |
 |---|---|
+| [docs/CHALLENGE_DROPS.md](docs/CHALLENGE_DROPS.md) | **Challenge Drop 1:** hərəkət məhdudiyyətli şəxs rolu, Prioritet #1 SOS, əlçatan marşrut, tam i18n |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Arxitektura sxemi (frontend → backend → DB/API axını), modullar, alqoritmlər, challenge drop-lara uyğunlaşma |
 | [docs/DATA.md](docs/DATA.md) | Real data mənbələri, lisenziya, tutum evristikaları |
 | [docs/AI_DECLARATION.md](docs/AI_DECLARATION.md) | Süni intellekt alətlərindən istifadə haqqında bəyannamə |
@@ -97,4 +99,4 @@ Nəticə `server/src/data/baku-osm.json` faylına yazılır və repoya commit ol
 
 ## 4. Texnologiyalar
 
-React 18 + TypeScript + Vite + Tailwind + Leaflet · Node.js + Express + Socket.IO + Zod · SQLite (`node:sqlite`) · OSRM (xarici marşrut API) + daxili A* yol qrafı · JWT + scrypt + Helmet + rate limiting · Vitest + Supertest (53 test).
+React 18 + TypeScript + Vite + Tailwind + Leaflet · Node.js + Express + Socket.IO + Zod · SQLite (`node:sqlite`) · OSRM (xarici marşrut API) + daxili A* yol qrafı · JWT + scrypt + Helmet + rate limiting · Vitest + Supertest (66 test).

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { SosSignal } from '@shared/types';
 import { applyEvents, emptyState } from './liveState';
 
-const sos = (id: string, createdAt = 0): SosSignal => ({ id, citizenId: 'c', hazard: 'fire', location: { lat: 0, lng: 0 }, zoneId: 'z', status: 'new', createdAt, updatedAt: createdAt });
+const sos = (id: string, createdAt = 0): SosSignal => ({ id, citizenId: 'c', hazard: 'fire', location: { lat: 0, lng: 0 }, zoneId: 'z', status: 'new', priority: 2, specialNeeds: false, createdAt, updatedAt: createdAt });
 
 describe('liveState reducer', () => {
   it('upserts and removes entities immutably', () => {

@@ -1,5 +1,5 @@
-import type { LatLng, ProviderHealth, RoadClosure, RouteResult } from '@shared/types';
-import { haversine, polylineHitsCircle, WALK_SPEED_MS } from '../domain/geo';
+import type { Barrier, LatLng, ProviderHealth, RoadClosure, RouteProfile, RouteResult } from '@shared/types';
+import { haversine, pointToSegment, polylineHitsCircle, WALK_SPEED_MS, WHEELCHAIR_SPEED_MS } from '../domain/geo';
 import { CircuitBreaker } from './circuitBreaker';
 import type { RawRoute, RoutingProvider } from './types';
 
@@ -19,13 +19,17 @@ export class RoutingService {
   private readonly cacheMax = 2000;
   stats = { requests: 0, cacheHits: 0, fallbacks: 0 };
 
-  constructor(providers: RoutingProvider[], breakerFactory: () => CircuitBreaker = () => new CircuitBreaker()) {
+  constructor(
+    providers: RoutingProvider[],
+    breakerFactory: () => CircuitBreaker = () => new CircuitBreaker(),
+    private readonly barriers: Barrier[] = [],
+  ) {
     this.chain = providers.map((provider) => ({ provider, breaker: breakerFactory() }));
   }
 
-  async route(from: LatLng, to: LatLng, closures: RoadClosure[]): Promise<RouteResult> {
+  async route(from: LatLng, to: LatLng, closures: RoadClosure[], profile: RouteProfile = 'standard'): Promise<RouteResult> {
     this.stats.requests++;
-    const key = cacheKey(from, to, closures);
+    const key = `${profile}|${cacheKey(from, to, closures)}`;
     const hit = this.cache.get(key);
     if (hit) {
       this.stats.cacheHits++;
@@ -39,15 +43,19 @@ export class RoutingService {
       const { provider, breaker } = this.chain[i];
       if (!breaker.canRequest()) continue;
       try {
-        const routes = await provider.route(from, to, closures);
+        const routes = await provider.route(from, to, closures, profile);
         breaker.success();
-        const clean = provider.closureAware ? routes[0] : routes.find((r) => !hitsClosure(r, closures));
-        if (clean) result = toResult(provider.id, clean, i > 0);
+        let candidates = provider.closureAware ? routes.slice(0, 1) : routes.filter((r) => !hitsClosure(r, closures));
+        // Accessible: among closure-free alternatives pick the one passing the fewest stairs
+        if (profile === 'accessible' && candidates.length > 1) {
+          candidates = [...candidates].sort((a, b) => this.barriersNear(a.geometry) - this.barriersNear(b.geometry));
+        }
+        if (candidates[0]) result = this.toResult(provider.id, candidates[0], i > 0, profile);
       } catch (err) {
         breaker.failure(err);
       }
     }
-    if (!result) result = straightLine(from, to);
+    if (!result) result = straightLine(from, to, profile);
     if (result.degraded) this.stats.fallbacks++;
 
     this.cache.set(key, result);
@@ -78,32 +86,51 @@ export class RoutingService {
   invalidate() {
     this.cache.clear();
   }
+
+  /** Stairs / stair-underpasses within 15 m of the route (0 = step-free). */
+  barriersNear(line: LatLng[]): number {
+    if (!this.barriers.length || line.length < 2) return 0;
+    let n = 0;
+    for (const b of this.barriers) {
+      for (let i = 1; i < line.length; i++) {
+        if (pointToSegment(b, line[i - 1], line[i]) <= 15) {
+          n++;
+          break;
+        }
+      }
+    }
+    return n;
+  }
+
+  private toResult(provider: RouteResult['provider'], r: RawRoute, degraded: boolean, profile: RouteProfile): RouteResult {
+    return {
+      provider,
+      geometry: r.geometry,
+      distanceM: Math.round(r.distanceM),
+      durationS: Math.round(r.durationS),
+      walkS: Math.round(r.distanceM / (profile === 'accessible' ? WHEELCHAIR_SPEED_MS : WALK_SPEED_MS)),
+      degraded,
+      profile,
+      barriersNear: profile === 'accessible' ? this.barriersNear(r.geometry) : 0,
+    };
+  }
 }
 
 export function hitsClosure(r: { geometry: LatLng[] }, closures: RoadClosure[]): boolean {
   return closures.some((c) => polylineHitsCircle(r.geometry, c.location, c.radiusM));
 }
 
-function toResult(provider: RouteResult['provider'], r: RawRoute, degraded: boolean): RouteResult {
-  return {
-    provider,
-    geometry: r.geometry,
-    distanceM: Math.round(r.distanceM),
-    durationS: Math.round(r.durationS),
-    walkS: Math.round(r.distanceM / WALK_SPEED_MS),
-    degraded,
-  };
-}
-
-function straightLine(from: LatLng, to: LatLng): RouteResult {
+function straightLine(from: LatLng, to: LatLng, profile: RouteProfile): RouteResult {
   const d = haversine(from, to) * 1.3;
   return {
     provider: 'straight',
     geometry: [from, to],
     distanceM: Math.round(d),
     durationS: Math.round(d / 7),
-    walkS: Math.round(d / WALK_SPEED_MS),
+    walkS: Math.round(d / (profile === 'accessible' ? WHEELCHAIR_SPEED_MS : WALK_SPEED_MS)),
     degraded: true,
+    profile,
+    barriersNear: 0,
   };
 }
 

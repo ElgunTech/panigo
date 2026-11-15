@@ -31,7 +31,7 @@ export class Broadcaster {
       socket.join('public');
       const u = socket.data.user;
       if (u && can(u.role, 'dashboard:read')) socket.join('dispatch');
-      if (u?.role === 'citizen') socket.join(`citizen:${u.sub}`);
+      if (u && can(u.role, 'sos:create')) socket.join(`citizen:${u.sub}`);
     });
 
     store.on('event', (e: LiveEvent, a: Audience) => this.enqueue(roomOf(a), e));
