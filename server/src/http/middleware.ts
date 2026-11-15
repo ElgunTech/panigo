@@ -98,7 +98,7 @@ export function errorHandler(err: unknown, _req: Request, res: Response, _next: 
   if (err instanceof HttpError) return res.status(err.status).json({ error: err.code, details: err.details });
   if (err instanceof UserError) return res.status(err.status).json({ error: err.code });
   if (err instanceof CrisisError) return res.status(err.status).json({ error: err.code });
-  if (err instanceof DispatchError) return res.status(409).json({ error: err.code });
+  if (err instanceof DispatchError) return res.status(err.code === 'SOS_NOT_FOUND' ? 404 : 409).json({ error: err.code });
   if (err instanceof ZodError) return res.status(400).json({ error: 'VALIDATION_ERROR', details: err.flatten() });
   if (err && typeof err === 'object' && 'type' in err && (err as { type: string }).type === 'entity.parse.failed') {
     return res.status(400).json({ error: 'INVALID_JSON' });

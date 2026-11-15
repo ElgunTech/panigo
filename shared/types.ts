@@ -132,6 +132,19 @@ export interface Brigade {
   updatedAt: number;
 }
 
+/** Server's choice of the nearest suitable unit for one SOS. */
+export interface BrigadeRecommendation {
+  brigadeId: string;
+  brigadeName: string;
+  brigadeType: BrigadeType;
+  /** type that matches the hazard (medical / fire / rescue) */
+  wantedType: BrigadeType;
+  /** false = no unit of the wanted type was free, nearest other unit chosen */
+  matchedType: boolean;
+  distanceM: number;
+  etaS: number;
+}
+
 export type AlertKind = 'sos_cluster' | 'capacity' | 'priority_sos';
 export type AlertStatus = 'open' | 'executed' | 'dismissed';
 

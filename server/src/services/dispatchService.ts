@@ -1,4 +1,5 @@
-import type { Brigade, LatLng, SosSignal } from '@shared/types';
+import type { Brigade, BrigadeRecommendation, BrigadeType, LatLng, SosSignal } from '@shared/types';
+import { HAZARD_TO_BRIGADE } from '../domain/crisisEngine';
 import { advanceAlong, haversine, polylineLength } from '../domain/geo';
 import type { RoutingService } from '../routing/routingService';
 import type { Store } from './store';
@@ -157,6 +158,42 @@ export class DispatchService {
     b.destinationName = undefined;
     b.destinationKind = undefined;
     this.store.upsertBrigade(b);
+  }
+
+  /**
+   * Nearest SUITABLE unit for an SOS: the brigade type matching the hazard
+   * (medical / Priority #1 → medical, fire → fire, collapse & flood → rescue),
+   * chosen by real road travel time (top-3 by distance are routed), falling back
+   * to any free unit if no unit of that type is free. Returning units count as free.
+   */
+  async recommend(sosId: string): Promise<BrigadeRecommendation | null> {
+    const s = this.store.sos.get(sosId);
+    if (!s) throw new DispatchError('SOS_NOT_FOUND');
+    const wanted: BrigadeType = s.priority === 1 ? 'medical' : HAZARD_TO_BRIGADE[s.hazard];
+    const free = [...this.store.brigades.values()].filter((b) => b.status === 'available' || b.status === 'returning');
+    if (!free.length) return null;
+    const matching = free.filter((b) => b.type === wanted);
+    const pool = matching.length ? matching : free;
+    const top = [...pool].sort((a, b) => haversine(a.location, s.location) - haversine(b.location, s.location)).slice(0, 3);
+    const closures = this.store.openClosures();
+    const routed = await Promise.all(
+      top.map(async (b) => {
+        const r = await this.routing.route(b.location, s.location, closures, 'vehicle');
+        return { b, distanceM: r.distanceM, etaS: Math.round(r.distanceM / BRIGADE_SPEED_MS) };
+      }),
+    );
+    routed.sort((x, y) => x.etaS - y.etaS);
+    const best = routed[0];
+    return { brigadeId: best.b.id, brigadeName: best.b.name, brigadeType: best.b.type, wantedType: wanted, matchedType: best.b.type === wanted, distanceM: best.distanceM, etaS: best.etaS };
+  }
+
+  /** One-click: dispatch the nearest suitable unit to this SOS. */
+  async assignNearest(sosId: string, actor: string) {
+    const rec = await this.recommend(sosId);
+    if (!rec) throw new DispatchError('NO_FREE_BRIGADE');
+    const b = await this.assign(rec.brigadeId, [sosId], actor);
+    this.store.log(actor, 'brigade.assign_nearest', { sosId, brigadeId: rec.brigadeId, etaS: rec.etaS, matchedType: rec.matchedType });
+    return { brigade: b, recommendation: rec };
   }
 
   nearestFree(p: LatLng) {

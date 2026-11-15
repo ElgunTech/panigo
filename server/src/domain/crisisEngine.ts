@@ -71,7 +71,7 @@ export function findMergeableClusterAlert(cluster: SosCluster, alerts: CrisisAle
   );
 }
 
-const HAZARD_TO_BRIGADE: Record<Hazard, BrigadeType> = {
+export const HAZARD_TO_BRIGADE: Record<Hazard, BrigadeType> = {
   fire: 'fire',
   collapse: 'rescue',
   flood: 'rescue',

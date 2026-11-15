@@ -159,6 +159,11 @@ export const en: Dict = {
     closures: 'active road closures',
   },
   dispatch: {
+    assignNearest: 'Send nearest',
+    assignShort: 'Send',
+    manualPick: 'Manual…',
+    noFreeUnit: 'No free brigade',
+    otherType: 'no matching type free',
     arrivedBadge: 'On scene',
     confirmedBadge: 'Citizen confirmed',
     opendata: 'Official open data (opendata.az)',

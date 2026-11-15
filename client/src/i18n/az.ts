@@ -191,6 +191,11 @@ export const az = {
     closures: 'aktiv yol bağlanması',
   },
   dispatch: {
+    assignNearest: 'Ən yaxına göndər',
+    assignShort: 'Göndər',
+    manualPick: 'Əl ilə…',
+    noFreeUnit: 'Boş briqada yoxdur',
+    otherType: 'uyğun növ boş deyil',
     arrivedBadge: 'Yerində',
     confirmedBadge: 'Vətəndaş təsdiqlədi',
     opendata: 'Rəsmi açıq data (opendata.az)',

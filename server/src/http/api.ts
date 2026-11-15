@@ -143,6 +143,10 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
     ah(async (req, res) => res.json(await engine.dispatch.assign(req.body.brigadeId, req.body.sosIds, req.user!.sub))),
   );
 
+  // Nearest SUITABLE brigade (by hazard type, real road ETA) — preview and one-click assign
+  r.get('/dispatch/sos/:id/recommendation', requirePermission('brigade:dispatch'), ah(async (req, res) => res.json(await engine.dispatch.recommend(req.params.id))));
+  r.post('/dispatch/sos/:id/assign-nearest', requirePermission('brigade:dispatch'), ah(async (req, res) => res.json(await engine.dispatch.assignNearest(req.params.id, req.user!.sub))));
+
   r.post(
     '/dispatch/closures',
     requirePermission('closure:manage'),

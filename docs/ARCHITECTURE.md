@@ -87,6 +87,11 @@ Qayda B: open məntəqədə occupancy / capacity > 95%
 - Briqada artıq təyin olunmuş SOS-lar sayılmır. Operator qərar verəndən dərhal sonra eyni həyəcan təkrar yaranmır.
 - **1 klik icra** (`CrisisService.execute`): qərar anında state yenidən yoxlanılır. Tövsiyə olunan briqada artıq məşğuldursa, növbəti ən uyğun briqada seçilir. Sonra briqada göndərilir, ehtiyat məntəqə açılır və həddindən artıq dolu məntəqəyə gedən vətəndaşlar yenidən planlanır. İkinci klik `409` qaytarır (idempotentlik). Qərar audit jurnalına yazılır.
 
+### 3.3.0 Ən yaxın uyğun briqada (bir klik)
+- Növ təhlükəyə görə seçilir: tibbi yardım və Prioritet #1 → təcili tibbi, yanğın → yanğınsöndürən, dağıntı və su basması → xilasetmə.
+- Həmin növün boş və ya qayıdan briqadaları arasından məsafəyə görə ilk 3-ü real yol şəbəkəsi ilə marşrutlanır və **ən qısa ETA** seçilir. Uyğun növ boş deyilsə, ən yaxın istənilən briqada seçilir (`matchedType: false`).
+- `GET /dispatch/sos/:id/recommendation` önbaxış, `POST /dispatch/sos/:id/assign-nearest` təyinat üçündür. Qərar serverdədir. UI-dakı önbaxış düz xətt məsafəsinə görədir, son seçim yol ETA-sına görə fərqli ola bilər.
+
 ### 3.3.1 Briqadanın izlənməsi və "Briqada çatdı"
 - Briqada təyin olunan SOS nöqtələrinə **ardıcıl uğrayır** (nearest-neighbour turu, maksimum 8 dayanacaq). Buna görə klaster həyəcanında da hər vətəndaşa fiziki olaraq çatır.
 - `Store.upsertBrigade` briqadanın mövqeyini həm dispetçerə, həm də xidmət etdiyi vətəndaşların otağına (`citizen:<id>`) göndərir.

@@ -48,6 +48,7 @@ function makeOps(token: string, onAuthError: () => void) {
     execute: (id: string) => call(`/dispatch/alerts/${id}/execute`, undefined, 'POST'),
     dismiss: (id: string) => call(`/dispatch/alerts/${id}/dismiss`, undefined, 'POST'),
     assign: (brigadeId: string, sosIds: string[]) => call('/dispatch/assign', { brigadeId, sosIds }),
+    assignNearest: (sosId: string) => call(`/dispatch/sos/${sosId}/assign-nearest`, undefined, 'POST'),
     addClosure: (name: string, location: LatLng, radiusM = 250, reason = '') => call('/dispatch/closures', { name, location, radiusM, reason }),
     removeClosure: (id: string) => call(`/dispatch/closures/${id}`, undefined, 'DELETE'),
     setPoint: (id: string, patch: { occupancyPct?: number; status?: string }) => call(`/dispatch/points/${id}`, patch, 'PATCH'),
