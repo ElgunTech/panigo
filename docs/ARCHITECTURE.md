@@ -98,6 +98,12 @@ Qayda B: open məntəqədə occupancy / capacity > 95%
 - Server briqadanın SOS-a ≤100 m yaxınlaşmasını özü aşkarlayır (`arrivedAt`). Vətəndaşın təsdiqi (`POST /citizen/sos/:id/arrived`) yalnız briqada həqiqətən ≤100 m (üstəgəl 20 m tolerans) məsafədə olanda qəbul olunur, əks halda `409 BRIGADE_TOO_FAR` qaytarılır. Təsdiq audit jurnalına yazılır.
 - İş bitəndən sonra briqada `returning` statusuna keçir: tibbi briqada ən yaxın real xəstəxanaya (OSM), digərləri bazaya gedir. Xidmət etdiyi vətəndaşlar (`followSosIds`) onu təyinata çatana qədər xəritədə görür. Qayıdan briqadaya yeni tapşırıq vermək olar.
 
+### 3.3.2 Kamera ilə nəbz (PPG — təxmini)
+- **Cihazda emal:** `getUserMedia` (arxa kamera) + fənər (`torch`, Android Chrome). Kadrın mərkəzindən orta qırmızı dəyər götürülür. Barmaq lensi örtmürsə (qırmızı dominantlığı yoxdursa), pəncərə sıfırlanır. Videonun özü heç yerə göndərilmir.
+- **Alqoritm** (`client/src/lib/ppg.ts`): 30 Hz-ə bərabər yenidən seçmə → ~1 s baza xəttinin çıxılması və hamarlama (≈0,7–4 Hz) → 40–180 bpm aralığında avtokorrelyasiya → parabolik dəqiqləşdirmə. Keyfiyyət = normallaşdırılmış avtokorrelyasiya zirvəsi; 0,45-dən aşağı olduqda nəticə rədd edilir.
+- **Server:** `POST /citizen/vitals {bpm, quality, method:'camera_ppg'}` (Zod: 30–220). Nəbz vətəndaşın açıq SOS-larına bağlanır; son 10 dəqiqədə ölçülübsə, yeni SOS-a da keçir. `abnormal` (<50 və ya >120) yalnız işarələnir, **prioritet avtomatik dəyişmir**, qərarı insan verir. Audit jurnalına yazılır.
+- **Məhdudiyyət:** iPhone Safari-də fənəri API ilə yandırmaq mümkün deyil (işıqlı yerdə ölçmək lazımdır). Kamera yalnız HTTPS və ya localhost üzərində işləyir.
+
 ### 3.4 Davamlı marşrutlaşdırma (`routingService.ts`)
 `ROUTING_PROVIDERS=osrm-foot,osrm,simulated`: provider-lər prioritet sırası ilə çağırılır. Hər provider hansı profilə xidmət etdiyini bildirir:
 

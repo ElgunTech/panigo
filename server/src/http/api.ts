@@ -7,7 +7,7 @@ import rateLimit from 'express-rate-limit';
 import { can, issueGuestToken, issueToken, PERMISSIONS } from '../security/auth';
 import { UserRepository } from '../security/userRepository';
 import { ah, HttpError, keyedLimiter, requirePermission, validate } from './middleware';
-import { faultSchema, registerSchema, userPatchSchema, closureSchema, dispatchSchema, loginSchema, outageSchema, planSchema, pointPatchSchema, safeSchema, scenarioSchema, sosSchema } from './schemas';
+import { vitalsSchema, faultSchema, registerSchema, userPatchSchema, closureSchema, dispatchSchema, loginSchema, outageSchema, planSchema, pointPatchSchema, safeSchema, scenarioSchema, sosSchema } from './schemas';
 
 export function apiRouter(engine: Engine, users: UserRepository): Router {
   const r = Router();
@@ -109,6 +109,9 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
     const r2 = engine.confirmArrival(req.user!.sub, req.params.id);
     if ('error' in r2) throw new HttpError(r2.error === 'SOS_NOT_FOUND' ? 404 : 409, r2.error!, 'distanceM' in r2 ? { distanceM: r2.distanceM } : undefined);
     res.json(r2);
+  });
+  r.post('/citizen/vitals', requirePermission('citizen:status'), validate(vitalsSchema), (req, res) => {
+    res.status(201).json(engine.recordVitals(req.user!.sub, req.body));
   });
   r.post('/citizen/status', requirePermission('citizen:status'), validate(safeSchema), (req, res) => {
     res.json(engine.markSafe(req.user!.sub, req.body.safe, req.body.location));

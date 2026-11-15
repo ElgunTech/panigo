@@ -86,6 +86,17 @@ export interface RoadClosure {
   createdAt: number;
 }
 
+/** Self-measured vital sign attached to an SOS. camera_ppg = phone camera + torch (ESTIMATE, not medical). */
+export interface Vitals {
+  bpm: number;
+  /** 0..1 signal periodicity */
+  quality: number;
+  method: 'camera_ppg';
+  /** outside 50–120 bpm (resting adult) — flag for the dispatcher, does NOT change priority */
+  abnormal: boolean;
+  at: number;
+}
+
 export type SosStatus = 'new' | 'assigned' | 'resolved' | 'cancelled';
 
 export interface SosSignal {
@@ -107,6 +118,8 @@ export interface SosSignal {
   arrivedAt?: number;
   /** citizen pressed "Briqada çatdı" (validated server-side: brigade ≤ 100 m) */
   confirmedAt?: number;
+  /** latest self-measured pulse from the citizen's phone */
+  vitals?: Vitals;
 }
 
 export type BrigadeType = 'fire' | 'medical' | 'rescue';
@@ -175,6 +188,7 @@ export interface CitizenStatus {
   safe: boolean;
   location?: LatLng;
   destinationPointId?: string;
+  vitals?: Vitals;
   updatedAt: number;
 }
 

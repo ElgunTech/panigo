@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import clsx from 'clsx';
-import { Accessibility, Loader2, Navigation, Radio } from 'lucide-react';
+import { Accessibility, HeartPulse, Loader2, Navigation, Radio } from 'lucide-react';
 import type { Brigade, BrigadeType, Hazard, LatLng, SosSignal, Zone } from '@shared/types';
 import { useI18n } from '../../i18n';
 import { distanceM, fmtDistance, HAZARD_COLOR, timeAgo } from '../../lib/format';
@@ -64,6 +64,15 @@ export function SosFeed({ sos, brigades, zones, ops, onFocus }: { sos: SosSignal
                 <div className="text-[10px] text-slate-500">
                   {timeAgo(s.createdAt, t.common)} · <span className={clsx(s.status === 'new' && 'text-red-400', s.status === 'assigned' && 'text-amber-400', s.status === 'resolved' && 'text-emerald-400')}>{t.sosStatus[s.status]}</span>
                   {s.brigadeId && ` · ${brigades.find((b) => b.id === s.brigadeId)?.name.split(' · ')[0] ?? ''}`}
+                  {s.vitals && (
+                    <span
+                      className={clsx('ml-1 inline-flex items-center gap-0.5 rounded px-1 py-px font-semibold', s.vitals.abnormal ? 'animate-pulse bg-red-500/25 text-red-300' : 'bg-rose-500/15 text-rose-300')}
+                      title={`${t.pulse.camera}, ${t.pulse.estimate} · ${Math.round(s.vitals.quality * 100)}%`}
+                    >
+                      <HeartPulse className="h-2.5 w-2.5" />~{s.vitals.bpm} {t.pulse.bpm}
+                      <span className="font-normal opacity-70">({t.pulse.estimate})</span>
+                    </span>
+                  )}
                   {s.confirmedAt ? (
                     <span className="ml-1 rounded bg-emerald-500/20 px-1 py-px font-semibold text-emerald-300">✓ {t.dispatch.confirmedBadge}</span>
                   ) : s.arrivedAt && s.status === 'assigned' ? (

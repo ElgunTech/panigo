@@ -1,4 +1,4 @@
-import type { AssemblyPoint, Hazard, LatLng, RoadClosure, SosPriority, SosSignal, SystemStatus } from '@shared/types';
+import type { AssemblyPoint, Hazard, LatLng, RoadClosure, SosPriority, SosSignal, SystemStatus, Vitals } from '@shared/types';
 import type { AppConfig } from '../config';
 import { BARRIERS, zoneOf } from '../data/seed';
 import { haversine } from '../domain/geo';
@@ -56,6 +56,9 @@ export class Engine {
    */
   createSos(citizenId: string, hazard: Hazard, location: LatLng, note?: string, specialNeeds = false): SosSignal {
     const now = Date.now();
+    // a pulse measured shortly before the SOS (≤ 10 min) travels with it
+    const recent = this.store.citizens.get(citizenId)?.vitals;
+    const carriedVitals = recent && now - recent.at < 10 * 60_000 ? recent : undefined;
     const priority: SosPriority = specialNeeds ? 1 : 2;
     const sos: SosSignal = {
       id: this.store.nextId('sos'),
@@ -67,6 +70,7 @@ export class Engine {
       status: 'new',
       priority,
       specialNeeds,
+      vitals: carriedVitals,
       createdAt: now,
       updatedAt: now,
     };
@@ -94,6 +98,27 @@ export class Engine {
     this.store.upsertSos(s);
     this.store.log(citizenId, 'sos.arrival_confirmed', { sosId, brigadeId: b.id, distanceM });
     return { sos: s, distanceM };
+  }
+
+  /**
+   * Self-measured pulse (phone camera PPG). Stored on the citizen and attached to every
+   * open SOS so the dispatcher sees it. It is an ESTIMATE: it flags abnormal values but
+   * never changes the SOS priority automatically — a human decides.
+   */
+  recordVitals(citizenId: string, input: { bpm: number; quality: number; method: 'camera_ppg' }) {
+    const vitals: Vitals = { ...input, abnormal: input.bpm < 50 || input.bpm > 120, at: Date.now() };
+    const prev = this.store.citizens.get(citizenId);
+    this.store.upsertCitizen({ ...(prev ?? { citizenId, safe: false }), citizenId, vitals, updatedAt: Date.now() });
+    const attached: string[] = [];
+    for (const s of this.store.sos.values()) {
+      if (s.citizenId === citizenId && (s.status === 'new' || s.status === 'assigned')) {
+        s.vitals = vitals;
+        this.store.upsertSos(s);
+        attached.push(s.id);
+      }
+    }
+    this.store.log(citizenId, 'vitals.recorded', { bpm: vitals.bpm, quality: Math.round(vitals.quality * 100) / 100, abnormal: vitals.abnormal, sosIds: attached });
+    return { vitals, attachedSosIds: attached };
   }
 
   /** Brigades currently serving this citizen's signals (for the citizen map). */

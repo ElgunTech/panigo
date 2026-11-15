@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import clsx from 'clsx';
-import { WifiOff, Accessibility, DoorOpen, LogIn, LogOut, AlertTriangle, ArrowLeft, Check, CheckCircle2, Clock, Crosshair, Footprints, Car, Info, Loader2, MapPin, Navigation, RotateCcw, ShieldCheck, X } from 'lucide-react';
+import { HeartPulse, WifiOff, Accessibility, DoorOpen, LogIn, LogOut, AlertTriangle, ArrowLeft, Check, CheckCircle2, Clock, Crosshair, Footprints, Car, Info, Loader2, MapPin, Navigation, RotateCcw, ShieldCheck, X } from 'lucide-react';
 import { HAZARDS, type EvacuationPlan, type Hazard, type LatLng, type PublicSnapshot, type RouteResult, type SosSignal, type Brigade } from '@shared/types';
 import { useI18n } from '../i18n';
 import { api, ApiError, ensureCitizenToken } from '../lib/api';
@@ -10,6 +10,7 @@ import { isCitizenRole, setSession, tokenRole, useSession } from '../lib/session
 import { fmtDistance, fmtMinutes, HAZARD_COLOR, occColor, pct, timeAgo } from '../lib/format';
 import { BarriersLayer, BrigadesLayer, CityMap, ClosuresLayer, DestinationMarker, EntrancesLayer, MySosLayer, FitTo, MapClick, PointsLayer, RouteLayer, YouMarker } from '../components/CityMap';
 import { BrigadeTracker, brigadeFor } from '../components/BrigadeTracker';
+import { PulseMeter } from '../components/PulseMeter';
 import { ConnBadge, HazardIcon, LangSwitch, Logo, OccupancyBar, PointIcon } from '../components/ui';
 
 const DEFAULT_LOC: LatLng = { lat: 40.3889, lng: 49.8413 };
@@ -25,6 +26,7 @@ export default function Citizen() {
   const [sending, setSending] = useState<Hazard | null>(null);
   const [previous, setPrevious] = useState<RouteResult | null>(null);
   const [bannerDismissed, setBannerDismissed] = useState<number>(0);
+  const [pulseOpen, setPulseOpen] = useState(false);
   const lastPlan = useRef<EvacuationPlan | null>(null);
 
   const [params] = useSearchParams();
@@ -408,6 +410,13 @@ export default function Citizen() {
               {safe ? <AlertTriangle className="h-5 w-5" /> : <ShieldCheck className="h-5 w-5" />}
               {safe ? t.citizen.safeUndo : t.citizen.safe}
             </button>
+            <button
+              onClick={() => setPulseOpen(true)}
+              className="mt-2 hidden w-full items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 py-2.5 text-sm font-semibold text-red-700 transition hover:bg-red-100 lg:flex"
+            >
+              <HeartPulse className="h-4 w-4" /> {t.pulse.open}
+              <span className="text-[10px] font-normal text-red-500/80">({t.pulse.camera}, {t.pulse.estimate})</span>
+            </button>
 
             {mySos.length > 0 && (
               <div className="mt-4 border-t border-slate-100 pt-3">
@@ -448,6 +457,11 @@ export default function Citizen() {
                         <Clock className="h-3 w-3" />
                         {timeAgo(s.createdAt, t.common)}
                         {s.priority === 1 && <span className="text-violet-600">· {t.citizen.priority1}</span>}
+                        {s.vitals && (
+                          <span className={clsx('ml-1 inline-flex items-center gap-0.5 font-semibold', s.vitals.abnormal ? 'text-red-600' : 'text-rose-500')}>
+                            <HeartPulse className="h-3 w-3" />~{s.vitals.bpm} {t.pulse.bpm}
+                          </span>
+                        )}
                       </div>
                       <BrigadeTracker sos={s} brigade={brigadeFor(s, state.brigades)} token={token} onError={(text) => setToast({ kind: 'err', text })} />
                     </li>
@@ -546,6 +560,8 @@ export default function Citizen() {
         )}
       </div>
 
+      {pulseOpen && <PulseMeter token={token} onClose={() => setPulseOpen(false)} onSent={(bpm) => setToast({ kind: 'ok', text: `${t.pulse.sent}: ~${bpm} ${t.pulse.bpm}` })} />}
+
       {/* Mobile sticky emergency bar — SOS is always one thumb-tap away */}
       <div className="fixed inset-x-0 bottom-0 z-[1100] border-t border-red-100 bg-white/95 px-3 pb-[calc(env(safe-area-inset-bottom)+10px)] pt-2.5 shadow-[0_-10px_30px_rgba(15,23,42,0.12)] backdrop-blur lg:hidden">
         <div className="mb-2 flex items-center gap-2 px-0.5">
@@ -555,6 +571,9 @@ export default function Citizen() {
           </span>
           <span className="text-[11px] font-bold uppercase tracking-wider text-red-600">{t.citizen.sosTitle}</span>
           <span className={clsx('ml-auto truncate text-[10px]', care ? 'font-semibold text-violet-600' : 'text-slate-400')}>{care ? '♿ ' + t.citizen.priority1 : t.citizen.sosHintShort}</span>
+          <button onClick={() => setPulseOpen(true)} className="inline-flex shrink-0 items-center gap-1 rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[10px] font-semibold text-red-700" aria-label={t.pulse.open}>
+            <HeartPulse className="h-3 w-3" /> {t.pulse.bpm}
+          </button>
         </div>
         {trackedSos && (
           <div className="mb-2">

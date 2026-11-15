@@ -130,7 +130,7 @@ function Console({ token, user, onLogout }: { token: string; user: User; onLogou
             <HospitalsLayer hospitals={state.hospitals} />
             <ClosuresLayer closures={closures} />
             <PointsLayer points={points} labels={(p) => `${p.name} — ${pct(p).toFixed(0)}% (${t.pointStatus[p.status]})`} />
-            <SosLayer sos={sos.slice(0, 600)} label={(s) => `${t.hazard[s.hazard]} · ${t.sosStatus[s.status]}`} />
+            <SosLayer sos={sos.slice(0, 600)} label={(s) => `${t.hazard[s.hazard]} · ${t.sosStatus[s.status]}${s.vitals ? ` · ❤ ~${s.vitals.bpm} ${t.pulse.bpm} (${t.pulse.estimate})` : ''}`} />
             <BrigadesLayer brigades={brigades} label={(b) => `${b.name} — ${t.brigadeStatus[b.status]}${b.etaS ? ` · ${t.dispatch.eta} ${Math.ceil(b.etaS / 60)} ${t.common.minutes}` : ''}`} />
             {closureMode && (
               <MapClick

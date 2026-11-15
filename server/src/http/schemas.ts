@@ -91,6 +91,12 @@ export const outageSchema = z.object({
   down: z.boolean(),
 });
 
+export const vitalsSchema = z.object({
+  bpm: z.number().int().min(30).max(220),
+  quality: z.number().min(0).max(1),
+  method: z.literal('camera_ppg'),
+});
+
 export const faultSchema = z.object({
   provider: z.enum(['external', 'osrm', 'osrm-foot']),
   fault: z.enum(['none', 'http503', 'timeout']),
