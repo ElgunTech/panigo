@@ -51,6 +51,11 @@ export function SosFeed({ sos, brigades, zones, ops, onFocus }: { sos: SosSignal
               <div className="text-[10px] text-slate-500">
                 {timeAgo(s.createdAt, t.common)} · <span className={clsx(s.status === 'new' && 'text-red-400', s.status === 'assigned' && 'text-amber-400', s.status === 'resolved' && 'text-emerald-400')}>{t.sosStatus[s.status]}</span>
                 {s.brigadeId && ` · ${brigades.find((b) => b.id === s.brigadeId)?.name ?? ''}`}
+                {s.confirmedAt ? (
+                  <span className="ml-1 rounded bg-emerald-500/20 px-1 py-px font-semibold text-emerald-300">✓ {t.dispatch.confirmedBadge}</span>
+                ) : s.arrivedAt && s.status === 'assigned' ? (
+                  <span className="ml-1 rounded bg-violet-500/20 px-1 py-px font-semibold text-violet-300">{t.dispatch.arrivedBadge}</span>
+                ) : null}
               </div>
             </div>
             {s.status === 'new' && free.length > 0 && (

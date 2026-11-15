@@ -2,13 +2,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import clsx from 'clsx';
 import { Accessibility, DoorOpen, LogIn, LogOut, AlertTriangle, ArrowLeft, Check, CheckCircle2, Clock, Crosshair, Footprints, Car, Info, Loader2, MapPin, Navigation, RotateCcw, ShieldCheck, X } from 'lucide-react';
-import { HAZARDS, type EvacuationPlan, type Hazard, type LatLng, type PublicSnapshot, type RouteResult, type SosSignal } from '@shared/types';
+import { HAZARDS, type EvacuationPlan, type Hazard, type LatLng, type PublicSnapshot, type RouteResult, type SosSignal, type Brigade } from '@shared/types';
 import { useI18n } from '../i18n';
 import { api, ApiError, ensureCitizenToken } from '../lib/api';
 import { useLive } from '../lib/useLive';
 import { isCitizenRole, setSession, tokenRole, useSession } from '../lib/session';
 import { fmtDistance, fmtMinutes, HAZARD_COLOR, occColor, pct, timeAgo } from '../lib/format';
-import { BarriersLayer, CityMap, ClosuresLayer, EntrancesLayer, FitTo, MapClick, PointsLayer, RouteLayer, YouMarker } from '../components/CityMap';
+import { BarriersLayer, BrigadesLayer, CityMap, ClosuresLayer, EntrancesLayer, MySosLayer, FitTo, MapClick, PointsLayer, RouteLayer, YouMarker } from '../components/CityMap';
+import { BrigadeTracker } from '../components/BrigadeTracker';
 import { ConnBadge, HazardIcon, LangSwitch, Logo, OccupancyBar, PointIcon } from '../components/ui';
 
 const DEFAULT_LOC: LatLng = { lat: 40.3889, lng: 49.8413 };
@@ -51,9 +52,9 @@ export default function Citizen() {
   };
 
   const loadSnapshot = useCallback(async () => {
-    const [snap, me] = await Promise.all([api<PublicSnapshot>('/public/snapshot'), api<{ sos: SosSignal[]; status: { safe: boolean } | null }>('/citizen/me', { token })]);
+    const [snap, me] = await Promise.all([api<PublicSnapshot>('/public/snapshot'), api<{ sos: SosSignal[]; brigades: Brigade[]; status: { safe: boolean } | null }>('/citizen/me', { token })]);
     if (me.status) setSafe(me.status.safe);
-    return { ...snap, sos: me.sos };
+    return { ...snap, sos: me.sos, brigades: me.brigades };
   }, [token]);
   const { state, setState, conn } = useLive(token, loadSnapshot);
   const plan = state.plan;
@@ -147,6 +148,13 @@ export default function Citizen() {
   const points = useMemo(() => Object.values(state.points), [state.points]);
   const closures = useMemo(() => Object.values(state.closures), [state.closures]);
   const mySos = useMemo(() => Object.values(state.sos).sort((a, b) => b.createdAt - a.createdAt).slice(0, 5), [state.sos]);
+  /** Open signals (pin on the map) and the brigades currently serving them (live marker + route). */
+  const activeSos = useMemo(() => mySos.filter((s) => s.status === 'new' || s.status === 'assigned'), [mySos]);
+  const servingBrigades = useMemo(
+    () => activeSos.filter((s) => s.status === 'assigned' && s.brigadeId && state.brigades[s.brigadeId]).map((s) => state.brigades[s.brigadeId!]),
+    [activeSos, state.brigades],
+  );
+  const trackedSos = activeSos.find((s) => s.status === 'assigned' && s.brigadeId && state.brigades[s.brigadeId]);
   const dest = plan?.destination ? (state.points[plan.destination.id] ?? plan.destination) : null;
   const destPct = dest ? pct(dest) : 0;
   const showBanner = plan && plan.reason !== 'initial' && plan.reason !== 'manual' && bannerDismissed !== plan.createdAt;
@@ -171,7 +179,7 @@ export default function Citizen() {
           </div>
         </header>
 
-        <div className="scroll-thin min-h-0 flex-1 space-y-4 overflow-y-auto p-4 pb-52 lg:pb-4">
+        <div className={clsx('scroll-thin min-h-0 flex-1 space-y-4 overflow-y-auto p-4 lg:pb-4', trackedSos ? 'pb-80' : 'pb-52')}>
           {/* Location */}
           <section className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
             <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -373,7 +381,8 @@ export default function Citizen() {
                 <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">{t.citizen.mySos}</h4>
                 <ul className="space-y-1.5">
                   {mySos.map((s) => (
-                    <li key={s.id} className="flex items-center gap-2 rounded-lg bg-slate-50 px-2.5 py-2 text-sm">
+                    <li key={s.id} className="rounded-lg bg-slate-50 px-2.5 py-2 text-sm">
+                      <div className="flex items-center gap-2">
                       <HazardIcon hazard={s.hazard} className="h-4 w-4 shrink-0" />
                       <span className="font-medium">{t.hazard[s.hazard]}</span>
                       {s.priority === 1 && <span className="rounded bg-violet-600 px-1 py-px text-[9px] font-extrabold text-white">{t.citizen.priority1}</span>}
@@ -397,6 +406,8 @@ export default function Citizen() {
                         <Clock className="mr-0.5 inline h-3 w-3" />
                         {timeAgo(s.createdAt, t.common)}
                       </span>
+                      </div>
+                      <BrigadeTracker sos={s} brigade={s.brigadeId ? state.brigades[s.brigadeId] : undefined} token={token} onError={(text) => setToast({ kind: 'err', text })} />
                     </li>
                   ))}
                 </ul>
@@ -464,6 +475,8 @@ export default function Citizen() {
             onSelect={(p) => pct(p) < 90 && requestPlan(location, p.id)}
             labels={(p) => `${p.name} — ${pct(p).toFixed(0)}%${p.ridershipDaily ? ` · ${p.ridershipDaily.toLocaleString()} ${t.citizen.dailyRiders}` : ''}`}
           />
+          <BrigadesLayer brigades={[...new Map(servingBrigades.map((b) => [b.id, b])).values()]} label={(b) => `${b.name} — ${t.brigadeStatus[b.status]}`} />
+          <MySosLayer sos={activeSos} label={(s) => `${t.citizen.sosPoint}: ${t.hazard[s.hazard]} · ${t.sosStatus[s.status]}`} />
           {care && <BarriersLayer barriers={state.barriers} label={t.citizen.barrierTip} />}
           <YouMarker at={location} />
           <FitTo points={fitPoints} deps={plan?.createdAt} />
@@ -493,6 +506,11 @@ export default function Citizen() {
           <span className="text-[11px] font-bold uppercase tracking-wider text-red-600">{t.citizen.sosTitle}</span>
           <span className={clsx('ml-auto truncate text-[10px]', care ? 'font-semibold text-violet-600' : 'text-slate-400')}>{care ? '♿ ' + t.citizen.priority1 : t.citizen.sosHintShort}</span>
         </div>
+        {trackedSos && (
+          <div className="mb-2">
+            <BrigadeTracker compact sos={trackedSos} brigade={state.brigades[trackedSos.brigadeId!]} token={token} onError={(text) => setToast({ kind: 'err', text })} />
+          </div>
+        )}
         <div className="grid grid-cols-4 gap-1.5">
           {HAZARDS.map((h) => (
             <button

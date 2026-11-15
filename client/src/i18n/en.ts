@@ -92,6 +92,14 @@ export const en: Dict = {
   brigadeStatus: { available: 'Available', en_route: 'En route', on_scene: 'On scene', offline: 'Off duty' },
   provider: { 'osrm-foot': 'OSRM pedestrian network', osrm: 'OSRM road network', simulated: 'Internal road graph', straight: 'Approximate heading' },
   citizen: {
+    sosPoint: 'Your SOS location',
+    brigadeOnWay: 'Brigade on the way',
+    brigadeOnScene: 'Brigade on scene',
+    brigadeArrived: 'Brigade arrived',
+    brigadeArrivedHint: 'Becomes active when the brigade is within 100 m',
+    brigadeConfirmed: 'Arrival confirmed',
+    brigadeTooFar: 'The brigade is still more than 100 m away',
+    away: 'away',
     entrance: 'Entrance',
     walkRoute: 'Walking route — via pavements, park paths and pedestrian crossings',
     dailyRiders: 'daily riders',
@@ -147,6 +155,8 @@ export const en: Dict = {
     closures: 'active road closures',
   },
   dispatch: {
+    arrivedBadge: 'On scene',
+    confirmedBadge: 'Citizen confirmed',
     opendata: 'Official open data (opendata.az)',
     opendataDesc: 'Datasets of Baku Metro, State Statistics Committee, Ministry of Emergency Situations and Ministry of Youth and Sports are integrated.',
     collapseStats: 'Building collapse incidents (MES)',

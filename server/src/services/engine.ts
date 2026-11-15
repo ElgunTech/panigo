@@ -1,6 +1,8 @@
 import type { AssemblyPoint, Hazard, LatLng, RoadClosure, SosPriority, SosSignal, SystemStatus } from '@shared/types';
 import type { AppConfig } from '../config';
 import { BARRIERS, zoneOf } from '../data/seed';
+import { haversine } from '../domain/geo';
+import { ARRIVAL_RADIUS_M } from './dispatchService';
 import { RoadNetwork } from '../domain/roadNetwork';
 import { OsrmProvider } from '../routing/osrmProvider';
 import { RoutingService } from '../routing/routingService';
@@ -63,6 +65,29 @@ export class Engine {
     this.store.upsertCitizen({ ...(c ?? { citizenId }), citizenId, safe: false, location, updatedAt: now });
     this.crisis.evaluateSos(sos);
     return sos;
+  }
+
+  /**
+   * Citizen confirms "Briqada çatdı". Validated against the brigade's live position
+   * (≤ 100 m + small GPS/tick tolerance) — the client cannot confirm from afar.
+   */
+  confirmArrival(citizenId: string, sosId: string) {
+    const s = this.store.sos.get(sosId);
+    if (!s || s.citizenId !== citizenId) return { error: 'SOS_NOT_FOUND' as const };
+    const b = s.brigadeId ? this.store.brigades.get(s.brigadeId) : undefined;
+    if (!b || !b.targetSosIds.includes(s.id) || s.status !== 'assigned') return { error: 'BRIGADE_NOT_ASSIGNED' as const };
+    const distanceM = Math.round(haversine(b.location, s.location));
+    if (distanceM > ARRIVAL_RADIUS_M + 20) return { error: 'BRIGADE_TOO_FAR' as const, distanceM };
+    s.confirmedAt = Date.now();
+    s.arrivedAt ??= s.confirmedAt;
+    this.store.upsertSos(s);
+    this.store.log(citizenId, 'sos.arrival_confirmed', { sosId, brigadeId: b.id, distanceM });
+    return { sos: s, distanceM };
+  }
+
+  /** Brigades currently serving this citizen's signals (for the citizen map). */
+  brigadesFor(citizenId: string) {
+    return [...this.store.brigades.values()].filter((b) => b.targetSosIds.some((id) => this.store.sos.get(id)?.citizenId === citizenId));
   }
 
   cancelSos(citizenId: string, sosId: string) {

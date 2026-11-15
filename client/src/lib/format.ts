@@ -30,3 +30,13 @@ export const HAZARD_COLOR: Record<Hazard, string> = {
   flood: '#0ea5e9',
   medical: '#ef4444',
 };
+
+/** Great-circle distance in metres (client copy for live UI only — the server re-validates). */
+export function distanceM(a: { lat: number; lng: number }, b: { lat: number; lng: number }): number {
+  const R = 6371000;
+  const r = (d: number) => (d * Math.PI) / 180;
+  const h = Math.sin(r(b.lat - a.lat) / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(r(b.lng - a.lng) / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+export const ARRIVAL_RADIUS_M = 100;

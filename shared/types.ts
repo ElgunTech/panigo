@@ -103,6 +103,10 @@ export interface SosSignal {
   createdAt: number;
   updatedAt: number;
   brigadeId?: string;
+  /** server detected the brigade within 100 m of the SOS point */
+  arrivedAt?: number;
+  /** citizen pressed "Briqada çatdı" (validated server-side: brigade ≤ 100 m) */
+  confirmedAt?: number;
 }
 
 export type BrigadeType = 'fire' | 'medical' | 'rescue';

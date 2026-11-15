@@ -8,7 +8,7 @@ Zəlzələ, sel, sənaye qəzası və kütləvi tədbirlər zamanı **vətənda�
 
 | Modul | Nə edir |
 |---|---|
-| **1. Vətəndaş tətbiqi** (`/citizen`) | Rayon / GPS / xəritə üzrə yer seçimi · ən yaxın məntəqələr və onların canlı doluluğu · **piyada** təxliyə marşrutu (səki və piyada keçidləri, OSRM-foot), metro sığınacağının **ən yaxın real çıxışına** qədər · **bir kliklə SOS** (yanğın, dağıntı, su basması, tibbi yardım) · **"TƏHLÜKƏSİZƏM"** statusu · yol bağlananda və ya məntəqə **≥90%** dolanda **avtomatik alternativ marşrut** |
+| **1. Vətəndaş tətbiqi** (`/citizen`) | Rayon / GPS / xəritə üzrə yer seçimi · ən yaxın məntəqələr və onların canlı doluluğu · **piyada** təxliyə marşrutu (səki və piyada keçidləri, OSRM-foot), metro sığınacağının **ən yaxın real çıxışına** qədər · **bir kliklə SOS** (yanğın, dağıntı, su basması, tibbi yardım), siqnalın yeri xəritədə xüsusi nişanla, təyin olunan **briqada canlı** (məsafə, ETA), briqada **100 m**-ə çatanda **"Briqada çatdı"** düyməsi aktivləşir (server də yoxlayır) · **"TƏHLÜKƏSİZƏM"** statusu · yol bağlananda və ya məntəqə **≥90%** dolanda **avtomatik alternativ marşrut** |
 | **2. Dispetçer mərkəzi** (`/dispatch`) | Zonalar üzrə canlı SOS axını · məntəqələrin doluluğu · briqadaların statusu və hərəkəti · **Kritik böhran alqoritmi** (500 m və ya eyni zona, 5 dəq, ≥4 fərqli vətəndaş, **və ya** doluluq >95%) → **QIRMIZI HƏYƏCAN** → **1 kliklə təsdiq** (əlavə briqada göndərilir və yeni toplanış nöqtəsi açılır) |
 | **Xüsusi qayğı (Drop 1)** | Hərəkət məhdudiyyətli şəxs rolu: SOS avtomatik **Prioritet #1**, yalnız əlçatan (panduslu, pilləkənsiz) məntəqə və marşrut, real OSM pilləkənlərindən qaçınma |
 | **Giriş və rollar** (`/login`) | Vahid giriş və qeydiyyat · rollar: vətəndaş / hərəkət məhdudiyyətli / dispetçer / admin · admin istifadəçilərin rolunu dəyişir və onları bloklayır · təcili SOS üçün qeydiyyatsız **qonaq rejimi** |
@@ -83,7 +83,8 @@ Nəticə `server/src/data/baku-osm.json` faylına yazılır və repoya commit ol
 3. Başqa pəncərədə `/citizen` açın. Tövsiyə olunan məntəqəni dispetçer panelində sürüşdürücü ilə **92%**-ə qaldırın. Vətəndaş dərhal **"Məntəqə 92% doldu — alternativ məntəqəyə yönləndirildiniz"** banneri ilə yeni marşrut alır.
 4. **Yol bağla → Neftçilər prospekti**: marşrutu bu yoldan keçən vətəndaşlar avtomatik başqa marşruta keçirilir.
 5. **Davamlılıq → Xarici xəritə API kəsintisi** açarını yandırın. Sistem OSRM-dən daxili yol qrafına keçir və vətəndaş "daxili marşrut mühərriki" xəbərdarlığını görür.
-6. **İstifadəçilər** tabında yeni qeydiyyatdan keçən vətəndaşı **Dispetçer** roluna keçirin. Hüquq dərhal qüvvəyə minir, yenidən giriş lazım deyil.
+6. Vətəndaş SOS göndərsin, dispetçer SOS axınında **Təyin et** ilə briqada seçsin. Vətəndaşın xəritəsində SOS nişanı və yaxınlaşan briqada görünür, 100 m-də **"Briqada çatdı"** aktivləşir və dispetçerdə "Vətəndaş təsdiqlədi" nişanı çıxır.
+7. **İstifadəçilər** tabında yeni qeydiyyatdan keçən vətəndaşı **Dispetçer** roluna keçirin. Hüquq dərhal qüvvəyə minir, yenidən giriş lazım deyil.
 
 ---
 
@@ -99,4 +100,4 @@ Nəticə `server/src/data/baku-osm.json` faylına yazılır və repoya commit ol
 
 ## 4. Texnologiyalar
 
-React 18 + TypeScript + Vite + Tailwind + Leaflet · Node.js + Express + Socket.IO + Zod · SQLite (`node:sqlite`) · OSRM (xarici marşrut API) + daxili A* yol qrafı · JWT + scrypt + Helmet + rate limiting · Vitest + Supertest (73 test).
+React 18 + TypeScript + Vite + Tailwind + Leaflet · Node.js + Express + Socket.IO + Zod · SQLite (`node:sqlite`) · OSRM (xarici marşrut API) + daxili A* yol qrafı · JWT + scrypt + Helmet + rate limiting · Vitest + Supertest (79 test).

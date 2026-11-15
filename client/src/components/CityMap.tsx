@@ -192,3 +192,26 @@ export function EntrancesLayer({ entrances, active, label }: { entrances: { lat:
     </>
   );
 }
+
+const sosIcon = (color: string) =>
+  L.divIcon({
+    className: '',
+    iconSize: [30, 30],
+    iconAnchor: [15, 15],
+    html: `<div class="sos-pin"><span class="ring" style="background:${color}"></span><span class="core" style="background:${color}">SOS</span></div>`,
+  });
+
+/** The citizen's own active SOS signals — pulsing pin at the exact reported location. */
+export function MySosLayer({ sos, label }: { sos: SosSignal[]; label: (s: SosSignal) => string }) {
+  return (
+    <>
+      {sos.map((s) => (
+        <Marker key={s.id} position={[s.location.lat, s.location.lng]} icon={sosIcon(HAZARD_COLOR[s.hazard])} zIndexOffset={800}>
+          <Tooltip direction="top" offset={[0, -12]}>
+            {label(s)}
+          </Tooltip>
+        </Marker>
+      ))}
+    </>
+  );
+}

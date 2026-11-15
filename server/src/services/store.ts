@@ -91,6 +91,9 @@ export class Store extends EventEmitter {
     b.updatedAt = Date.now();
     this.brigades.set(b.id, b);
     this.publish({ type: 'brigade.upsert', data: b }, { kind: 'dispatch' });
+    // Citizens whose SOS this unit serves see it live on their map
+    const citizens = new Set(b.targetSosIds.map((id) => this.sos.get(id)?.citizenId).filter(Boolean) as string[]);
+    for (const citizenId of citizens) this.publish({ type: 'brigade.upsert', data: b }, { kind: 'citizen', citizenId });
   }
 
   upsertAlert(a: CrisisAlert) {

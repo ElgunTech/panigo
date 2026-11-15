@@ -123,6 +123,14 @@ export const az = {
     straight: 'Təxmini istiqamət',
   },
   citizen: {
+    sosPoint: 'SOS siqnalınızın yeri',
+    brigadeOnWay: 'Briqada yoldadır',
+    brigadeOnScene: 'Briqada hadisə yerindədir',
+    brigadeArrived: 'Briqada çatdı',
+    brigadeArrivedHint: 'Briqada 100 m-ə yaxınlaşanda aktivləşir',
+    brigadeConfirmed: 'Gəliş təsdiqləndi',
+    brigadeTooFar: 'Briqada hələ 100 m-dən uzaqdadır',
+    away: 'uzaqlıqda',
     entrance: 'Giriş',
     walkRoute: 'Piyada marşrutu — səki, park cığırı və piyada keçidləri ilə',
     dailyRiders: 'gündəlik sərnişin',
@@ -178,6 +186,8 @@ export const az = {
     closures: 'aktiv yol bağlanması',
   },
   dispatch: {
+    arrivedBadge: 'Yerində',
+    confirmedBadge: 'Vətəndaş təsdiqlədi',
     opendata: 'Rəsmi açıq data (opendata.az)',
     opendataDesc: 'Bakı Metropoliteni, DSK, FHN və Gənclər və İdman Nazirliyinin datasetləri sistemə inteqrasiya olunub.',
     collapseStats: 'Bina dağılması və uçması hadisələri (FHN)',

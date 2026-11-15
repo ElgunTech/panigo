@@ -94,3 +94,33 @@ input[type='range'].occ-range {
   color: #fff;
   transform: scale(1.2);
 }
+
+/* Citizen SOS location — pulsing pin */
+.sos-pin {
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+.sos-pin .core {
+  position: absolute;
+  inset: 5px;
+  border-radius: 9999px;
+  border: 3px solid #fff;
+  color: #fff;
+  font: 900 8px/14px Inter, sans-serif;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+.sos-pin .ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  animation: sosPulse 1.6s ease-out infinite;
+}
+@keyframes sosPulse {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sos-pin .ring { animation: none; opacity: 0.35; }
+}

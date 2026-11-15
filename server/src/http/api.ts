@@ -87,6 +87,7 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
       status: store.citizens.get(id) ?? null,
       plan: engine.evacuation.getPlan(id) ?? null,
       sos: [...store.sos.values()].filter((s) => s.citizenId === id).sort((a, b) => b.createdAt - a.createdAt).slice(0, 10),
+      brigades: engine.brigadesFor(id),
     });
   });
   r.post(
@@ -103,6 +104,11 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
     const s = engine.cancelSos(req.user!.sub, req.params.id);
     if (!s) throw new HttpError(404, 'SOS_NOT_FOUND');
     res.json(s);
+  });
+  r.post('/citizen/sos/:id/arrived', requirePermission('sos:cancel'), (req, res) => {
+    const r2 = engine.confirmArrival(req.user!.sub, req.params.id);
+    if ('error' in r2) throw new HttpError(r2.error === 'SOS_NOT_FOUND' ? 404 : 409, r2.error!, 'distanceM' in r2 ? { distanceM: r2.distanceM } : undefined);
+    res.json(r2);
   });
   r.post('/citizen/status', requirePermission('citizen:status'), validate(safeSchema), (req, res) => {
     res.json(engine.markSafe(req.user!.sub, req.body.safe, req.body.location));

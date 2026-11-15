@@ -141,7 +141,8 @@ export class CrisisService {
     const outcome: string[] = [];
     if (brigade) {
       const pending = alert.sosIds.filter((id) => this.store.sos.get(id)?.status === 'new');
-      await this.dispatch.assign(brigade.id, pending, actor, alert.center);
+      // Visit every pending SOS point; capacity alerts (no SOS) go to the point itself
+      await this.dispatch.assign(brigade.id, pending, actor, pending.length ? undefined : alert.center);
       outcome.push(`brigade:${brigade.id}`);
     } else outcome.push('brigade:none_available');
 
