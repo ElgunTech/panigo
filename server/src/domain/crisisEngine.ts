@@ -33,6 +33,7 @@ export function detectSosCluster(trigger: SosSignal, all: SosSignal[], now: numb
   const members = all.filter(
     (s) =>
       s.status === 'new' &&
+      !s.quarantined &&
       now - s.createdAt <= rules.sosWindowMs &&
       (s.zoneId === trigger.zoneId || haversine(s.location, trigger.location) <= rules.sosRadiusM),
   );

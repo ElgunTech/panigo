@@ -10,7 +10,8 @@
     "start": "npm run start -w server",
     "test": "npm run test -w server && npm run test -w client",
     "typecheck": "npm run typecheck -w server && npm run typecheck -w client",
-    "loadtest": "node scripts/loadtest.mjs"
+    "loadtest": "node scripts/loadtest.mjs",
+    "floodtest": "node scripts/flood-test.mjs"
   },
   "devDependencies": {
     "concurrently": "^9.1.0"

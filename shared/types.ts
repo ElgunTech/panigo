@@ -120,6 +120,9 @@ export interface SosSignal {
   confirmedAt?: number;
   /** latest self-measured pulse from the citizen's phone */
   vitals?: Vitals;
+  /** Drop 3: suspected bot/spam — hidden from the dispatcher feed and crisis alerts until released */
+  quarantined?: boolean;
+  spam?: { score: number; reasons: string[] };
 }
 
 export type BrigadeType = 'fire' | 'medical' | 'rescue';
@@ -253,7 +256,29 @@ export interface ProviderHealth {
   retryAt?: number;
 }
 
+/** Drop 3: SOS flood protection counters */
+export interface GuardStats {
+  accepted: number;
+  duplicates: number;
+  quarantined: number;
+  rateLimited: number;
+  released: number;
+  rejected: number;
+  perMinute: number;
+  underAttack: boolean;
+}
+
+/** Rolling API response-time statistics (last 60 s). */
+export interface LatencyStats {
+  count: number;
+  avgMs: number;
+  p95Ms: number;
+  maxMs: number;
+}
+
 export interface SystemStatus {
+  guard?: GuardStats;
+  latency?: LatencyStats;
   /** offline = every external routing API is unavailable → local backup in use */
   routingMode: 'online' | 'offline';
   /** routes in the local backup (SQLite archive + seed) */

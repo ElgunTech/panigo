@@ -82,3 +82,76 @@ Testlər əsl HTTP stub serverlə aparılır:
 - **Bərpa:** half-open yoxlamasından sonra breaker bağlanır.
 - **Lokal baza:** son keşlənmiş real marşrut vətəndaşın mövqeyinə calanır; SQLite arxivi restartdan sağ çıxır; statik matris canlı marşrut olmadan məsafə verir.
 - **End-to-end:** 503 zamanı `/citizen/plan` 200 qaytarır, `/health` → `routingMode: offline`, bərpadan sonra `online`.
+
+
+## Drop 3 — SOS Flood / Spam hücumu (500+ saxta SOS)
+
+**Tələb:** panika və ya bot hücumu ilə eyni anda 500-dən çox saxta SOS göndərilir.
+SOS endpointlərini rate limiting və dublikat filtrasiyası ilə qorumaq (dispetçer paneli bloklanmamalıdır), dispetçerin kritik əməliyyatlarını (briqadanın yönləndirilməsi) JWT/RBAC ilə qorumaq və kütləvi sorğular zamanı orta cavab müddətini 300 ms-dən aşağı saxlamaq.
+
+### Çoxqatlı müdafiə (sorğu bu ardıcıllıqla keçir)
+
+| # | Qat | Nə edir | Fayl |
+|---|---|---|---|
+| 1 | Qlobal IP limiti | Hər IP üçün bütün `/api`-yə 600 sorğu/dəq | `app.ts` |
+| 2 | Qonaq sessiya limiti | Bir IP dəqiqədə ən çox **20** anonim token ala bilər (`GUEST_PER_IP_PER_MIN`). Bot sonsuz sayda "fərqli vətəndaş" yarada bilmir | `api.ts` |
+| 3 | SOS / IP limiti | Kimlik dəyişsə də, bir IP-dən dəqiqədə ən çox **30** SOS (`SOS_PER_IP_PER_MIN`) → `429 TOO_MANY_SOS` + `retryAfterSec` | `middleware.ts` (`keyedLimiter`) |
+| 4 | SOS / vətəndaş limiti | Bir hesabdan dəqiqədə ən çox **6** SOS | `middleware.ts` |
+| 5 | Dublikat filtri | Eyni vətəndaş, eyni təhlükə növü, **2 dəq** və **150 m** daxilində → yeni SOS yaranmır, mövcud SOS `200` + `duplicateOf` ilə qaytarılır. `Idempotency-Key` başlığı şəbəkə təkrarını və iki dəfə toxunmanı həll edir | `sosGuard.ts` |
+| 6 | Bot skorlaması → karantin | Zəif siqnalların cəmi ≥ 3 olarsa SOS **karantinə** düşür (aşağıdakı cədvəl) | `sosGuard.ts` |
+| 7 | Panelin qorunması | Karantindəki SOS dispetçer lentinə (WebSocket), `/dispatch/snapshot`-a, metrikalara və **böhran alqoritminə düşmür**. Saxta "≥4 fərqli vətəndaş" klasteri qırmızı həyəcan yarada bilmir. SOS silinmir, sadəcə gözləyir | `store.ts`, `crisisEngine.ts`, `engine.ts` |
+
+**Bot skoru** (bir panik içində olan real vətəndaş ən çox 1 bal toplayır və heç vaxt karantinə düşmür):
+
+| Siqnal | Bal |
+|---|---|
+| Yeni anonim sessiya (token < 20 s əvvəl verilib) | +1 |
+| IP partlayışı (60 s-də eyni IP-dən > 5 SOS) | +2 |
+| Koordinat barmaq izi (60 s-də ≥ 3 fərqli "vətəndaş" eyni koordinatı 1e-5° dəqiqliyi ilə göndərir; real telefonlar heç vaxt üst-üstə düşmür) | +2 |
+| Kütləvi axın (> 200 SOS/dəq) və yeni anonim sessiya | +1 |
+| Qeydiyyatlı hesab | −2 |
+
+Göndərənə karantin barədə məlumat verilmir (`201` qaytarılır, bot heç nə öyrənmir). Dispetçer **İdarəetmə → Spam qoruması** kartında karantin siyahısını görür (səbəblər və bal ilə): **"Həqiqidir"** düyməsi SOS-u lentə və böhran alqoritminə buraxır, **"Hamısını rədd et"** spamı ləğv edir. Hər iki əməliyyat audit jurnalına yazılır. Yeni icazə: `sos:moderate` (dispetçer və admin).
+
+### Kritik əməliyyatlar: JWT + RBAC
+
+| Mexanizm | Detal |
+|---|---|
+| JWT hardening | Yalnız **HS256** (`algorithms: ['HS256']`): `alg: none` və alqoritm dəyişdirmə hücumları rədd edilir. `issuer` (`panigo`) və `audience` (`panigo-api`) yoxlanılır. Bitmiş, başqa açarla imzalanmış və ya payload-u dəyişdirilmiş token → `401` |
+| Rol hər sorğuda | Qeydiyyatlı istifadəçinin rolu tokendən yox, hər sorğuda bazadan oxunur. Admin rolu dəyişəndə və ya hesabı bloklayanda dərhal qüvvəyə minir |
+| RBAC | `brigade:dispatch` (briqada göndərmə, ən yaxına göndərmə), `alert:decide` (həyəcanın təsdiqi), `closure:manage`, `sos:moderate`. Vətəndaş və hərəkət məhdudiyyətli şəxs rolları → `403` |
+| Operator limiti | Hər operator dəqiqədə ən çox **60** kritik əməliyyat (`OPS_PER_OPERATOR_PER_MIN`). Oğurlanmış token ilə briqadaları kütləvi yönləndirmək olmur → `429 TOO_MANY_OPERATIONS` |
+| Proksi etibarı | `TRUST_PROXY=loopback`: `X-Forwarded-For` yalnız lokal proksidən (Vite, tunel) qəbul edilir. Vite proksi `xfwd: true` ilə real ünvanı əlavə edir, ona görə saxta XFF ilə IP limitini keçmək olmur |
+
+### Latency < 300 ms
+
+- Hər `/api` cavabı `process.hrtime` ilə ölçülür (`LatencyTracker`). Son 60 s üzrə **orta** və **p95** dispetçer panelində canlı göstərilir və `/api/health`-də verilir.
+- Hücum zamanı da sürətli qalmasının səbəbləri: rədd edilən sorğular (429, dublikat) heç bir iş görmədən qaytarılır; karantin SOS-u WebSocket yayımına və böhran hesablamasına düşmür; guard O(1) sürüşən pəncərələrlə işləyir və yaddaşı məhduddur (hər 256 çağırışda təmizlik).
+
+### Ölçülmüş nəticə — `scripts/flood-test.mjs`
+
+Default qoruma parametrləri ilə (limitlər artırılmadan), lokal noutbuk, bütün axınlar **eyni anda**:
+
+| Ssenari | Saxta SOS | Orta latency (klient) | Server daxili orta | Real vətəndaşlar | Dispetçer paneli | Botdan yaranan həyəcan |
+|---|---|---|---|---|---|---|
+| Bot A (1 IP, 300) + Bot B (300 paylanmış IP, eyni koordinat) + Bot C (100 təkrar) + 40 real + dispetçer | **700** | **24 ms** (p95 72 ms) | 1,3 ms | 40/40 qəbul, 0 karantin | 29 sorğu, 0 xəta, 5 briqada göndərildi | **0** |
+| 500 + 2000 + 200 saxta, 100 real | **2 700** | **24 ms** (p95 42 ms) | 0,5 ms | 100/100 qəbul, 0 karantin | 66 sorğu, 0 xəta | **0** |
+
+Guard nəticəsi (2 700 saxta ilə ssenari): 2 025 karantin, 664 sorğu 429 ilə kəsildi, real 100 SOS-un hamısı dispetçer lentində.
+
+```bash
+DB_FILE=off npm start
+node scripts/flood-test.mjs --url http://localhost:4000
+```
+
+Skript real vətəndaşların itmədiyini, karantinə düşmədiyini, panelin xətasız işlədiyini, botların həyəcan yaratmadığını və orta gecikmənin < 300 ms olduğunu yoxlayır. Şərtlərdən biri pozulsa, exit kodu 1 olur.
+
+### Sübut (avtomatik testlər): `server/test/drop3.test.ts` (13 test)
+- Qonaq tokeni və SOS üçün IP limitləri; başqa IP-dən real vətəndaş bloklanmır.
+- Dublikat (eyni yer və növ) və `Idempotency-Key`.
+- 40 paylanmış bot → ≥ 38 karantin, **0 klaster həyəcanı**, lentdə ≤ 2 SOS.
+- Karantindən buraxma və "hamısını rədd et"; vətəndaş moderasiya edə bilmir (`403`).
+- Ortaq IP-dəki qeydiyyatlı hesab karantinə düşmür.
+- `assign`: token yoxdur → `401`, vətəndaş və hərəkət məhdudiyyətli şəxs → `403`, dispetçer → `200`.
+- Saxta tokenlər → `401`: `alg: none`, səhv açar, bitmiş, `audience` yoxdur, HS512, payload-da rolun dəyişdirilməsi.
+- Operator limiti (`429`), `/health`-də guard və latency statistikası.

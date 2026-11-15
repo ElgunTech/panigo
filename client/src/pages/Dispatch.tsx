@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import clsx from 'clsx';
 import { ArrowLeft, LogOut, MapPinOff, Server } from 'lucide-react';
-import type { DispatchSnapshot, LatLng } from '@shared/types';
+import type { DispatchSnapshot, LatLng, SosSignal } from '@shared/types';
 import { useI18n } from '../i18n';
 import { api, ApiError } from '../lib/api';
 import { isStaff, setSession, useSession, type SessionUser } from '../lib/session';
@@ -56,6 +56,9 @@ function makeOps(token: string, onAuthError: () => void) {
     outage: (provider: string, down: boolean) => call('/sim/outage', { provider, down }),
     fault: (provider: 'external' | 'osrm' | 'osrm-foot', fault: 'none' | 'http503' | 'timeout') => call('/sim/fault', { provider, fault }),
     reset: () => call('/sim/reset', {}),
+    quarantine: () => call<{ total: number; items: SosSignal[] }>('/dispatch/quarantine'),
+    release: (id: string) => call<SosSignal>(`/dispatch/quarantine/${id}/release`, undefined, 'POST'),
+    rejectSpam: (ids?: string[]) => call<{ rejected: number }>('/dispatch/quarantine/reject-all', ids ? { ids } : {}),
     users: () => call<AdminUser[]>('/admin/users'),
     updateUser: (username: string, patch: { role?: string; disabled?: boolean }) => call<AdminUser>(`/admin/users/${username}`, patch, 'PATCH'),
     audit: () => call<{ at: number; actor: string; action: string; details?: Record<string, unknown> }[]>('/dispatch/audit'),

@@ -137,7 +137,7 @@ Sistem 4 gözlənilən dəyişiklik növü üçün əvvəlcədən elastik layih�
 | **Yeni dil** | Asılılıqsız i18n (`client/src/i18n`). `Dict` tipi bütün açarların tərcüməsini TypeScript səviyyəsində məcburi edir. | `ru.ts` faylı + `LANGS`-a bir sətir. Tərcümə çatışmırsa, build uğursuz olur |
 | **Xarici API kəsintisi** ✅ *Drop 2-də tətbiq edildi: bax [CHALLENGE_DROPS.md](CHALLENGE_DROPS.md)* | Provider chain + circuit breaker + fallback qraf + düz xətt degradasiyası + keş. Chaos açarı: `POST /api/sim/outage`. Tile URL `VITE_TILE_URL` ilə dəyişdirilə bilər. Real data JSON kimi repodadır. | Yeni provider = `RoutingProvider` interfeysi ilə bir sinif + `ROUTING_PROVIDERS` env |
 | **Yüksək yük** | WebSocket batch və coalescing (250 ms) · SOS window scan · LRU marşrut keşi · SQLite yazılarının batch edilməsi · klientdə SOS sayına limit (2000) · rate limiting · `scripts/loadtest.mjs` | Üfüqi miqyas: `Store` → Redis, Socket.IO Redis adapter. Fasad dəyişmir |
-| **Təhlükəsizlik tələbi** | JWT (issuer yoxlanışı) · scrypt + salt + constant-time müqayisə · RBAC · Zod validasiya + `<>` sanitizasiyası · Helmet · CORS whitelist · 32 KB body limiti · auth üçün ayrıca rate limit (20/dəq) · SOS spam limiti · bloklanmış hesabın dərhal kəsilməsi · audit jurnalı · productionda `JWT_SECRET` məcburidir | — |
+| **Təhlükəsizlik tələbi** ✅ *Drop 3-də tətbiq edildi: SOS flood qoruması, bax [CHALLENGE_DROPS.md](CHALLENGE_DROPS.md)* | `SosGuard` (dublikat filtri, bot skoru, karantin) · qonaq / IP / vətəndaş / operator limitləri · JWT (HS256 pin, issuer + audience) · scrypt + salt + constant-time müqayisə · RBAC · Zod validasiya + `<>` sanitizasiyası · Helmet · CORS whitelist · 32 KB body limiti · auth üçün ayrıca rate limit (20/dəq) · SOS spam limiti · bloklanmış hesabın dərhal kəsilməsi · audit jurnalı · productionda `JWT_SECRET` məcburidir | — |
 
 ### Ölçülmüş yük göstəriciləri
 Tək Node prosesi, lokal noutbuk, `DB_FILE=off`, simulyasiya söndürülüb, 200 paralel bağlantı:
@@ -146,6 +146,8 @@ Tək Node prosesi, lokal noutbuk, `DB_FILE=off`, simulyasiya söndürülüb, 200
 |---|---|
 | 2000 SOS (soyuq start) | 0 xəta · 1671 sorğu/s · p50 116 ms · p95 132 ms |
 | Əlavə 2000 SOS (pəncərədə 4000 aktiv SOS) | 0 xəta · 1229 sorğu/s · p50 154 ms · p95 203 ms |
+| **SOS flood (Drop 3)**, default qoruma: 700 saxta + 40 real + dispetçer | orta **24 ms** · p95 72 ms · real SOS itkisi 0 · botdan həyəcan 0 |
+| SOS flood: 2 700 saxta + 100 real | orta **24 ms** · p95 42 ms · 616 sorğu/s · 2 025 karantin |
 
 ## 5. Data modeli (SQLite)
 - `users(username PK, name, role, phone, disabled, created_at, last_login_at, salt, hash)`

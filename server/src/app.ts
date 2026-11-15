@@ -12,12 +12,14 @@ import { UserRepository } from './security/userRepository';
 export function createApp(engine: Engine, config: AppConfig, users: UserRepository = new UserRepository(null)) {
   const app = express();
   app.disable('x-powered-by');
-  app.set('trust proxy', 1);
+  app.set('trust proxy', config.trustProxy);
   app.use(helmet());
   app.use(cors({ origin: config.corsOrigins, credentials: false }));
   // larger body only for the dev PPG recording endpoint (~600 frames × 4 numbers)
   app.use('/api/citizen/ppg-debug', express.json({ limit: '256kb' }));
   app.use(express.json({ limit: '32kb' }));
+  // Drop 3: measure every API response (shown live on the dispatcher panel)
+  app.use('/api', engine.latency.middleware());
   app.use(
     '/api',
     rateLimit({

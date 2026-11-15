@@ -83,7 +83,8 @@ export class Store extends EventEmitter {
   upsertSos(s: SosSignal) {
     s.updatedAt = Date.now();
     this.sos.set(s.id, s);
-    this.publish({ type: 'sos.upsert', data: s }, { kind: 'dispatch' });
+    // Drop 3: quarantined (suspected bot) signals are not pushed to the dispatcher feed
+    if (!s.quarantined) this.publish({ type: 'sos.upsert', data: s }, { kind: 'dispatch' });
     this.publish({ type: 'sos.upsert', data: s }, { kind: 'citizen', citizenId: s.citizenId });
   }
 

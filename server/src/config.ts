@@ -15,6 +15,14 @@ export interface AppConfig {
   rateLimitPerMin: number;
   authRateLimitPerMin: number;
   sosPerCitizenPerMin: number;
+  /** Drop 3: anonymous guest sessions per source IP per minute (stops identity farming) */
+  guestPerIpPerMin: number;
+  /** Drop 3: SOS per source IP per minute (bots rotating guest identities) */
+  sosPerIpPerMin: number;
+  /** Drop 3: critical dispatcher operations per operator per minute */
+  opsPerOperatorPerMin: number;
+  /** Express "trust proxy" — which hops may set X-Forwarded-For (default: loopback = Vite dev proxy / local tunnel) */
+  trustProxy: string | number | boolean;
   broadcastIntervalMs: number;
   simulation: boolean;
   timeScale: number;
@@ -38,6 +46,10 @@ export function loadConfig(overrides: Partial<AppConfig> = {}): AppConfig {
     rateLimitPerMin: num(e.RATE_LIMIT_PER_MIN, 600),
     authRateLimitPerMin: num(e.AUTH_RATE_LIMIT_PER_MIN, 20),
     sosPerCitizenPerMin: num(e.SOS_PER_CITIZEN_PER_MIN, 6),
+    guestPerIpPerMin: num(e.GUEST_PER_IP_PER_MIN, 20),
+    sosPerIpPerMin: num(e.SOS_PER_IP_PER_MIN, 30),
+    opsPerOperatorPerMin: num(e.OPS_PER_OPERATOR_PER_MIN, 60),
+    trustProxy: e.TRUST_PROXY === undefined ? 'loopback' : /^\d+$/.test(e.TRUST_PROXY) ? Number(e.TRUST_PROXY) : e.TRUST_PROXY === 'false' ? false : e.TRUST_PROXY,
     broadcastIntervalMs: num(e.BROADCAST_INTERVAL_MS, 250),
     simulation: (e.SIMULATION ?? 'on') !== 'off',
     timeScale: num(e.TIME_SCALE, 4),

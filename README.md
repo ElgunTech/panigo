@@ -61,7 +61,13 @@ npm run typecheck
 node scripts/loadtest.mjs --url http://localhost:4000 --citizens 2000 --concurrency 200
 ```
 
-Yük testindən əvvəl serveri `RATE_LIMIT_PER_MIN=1000000 AUTH_RATE_LIMIT_PER_MIN=1000000` ilə işə salın, əks halda rate limiter sorğuları kəsəcək.
+Yük testindən əvvəl serveri `RATE_LIMIT_PER_MIN=1000000 AUTH_RATE_LIMIT_PER_MIN=1000000 GUEST_PER_IP_PER_MIN=1000000 SOS_PER_IP_PER_MIN=1000000` ilə işə salın, əks halda rate limiter sorğuları kəsəcək.
+
+SOS flood hücumu (Drop 3) isə **default** qoruma ilə yoxlanılır: 700 saxta SOS + real vətəndaşlar + dispetçer eyni anda göndərilir, orta latency < 300 ms tələb olunur:
+
+```bash
+node scripts/flood-test.mjs --url http://localhost:4000
+```
 
 ### Real datanın yenilənməsi (OpenStreetMap + Wikidata)
 
@@ -93,7 +99,7 @@ Nəticə `server/src/data/baku-osm.json` faylına yazılır və repoya commit ol
 
 | Sənəd | Məzmun |
 |---|---|
-| [docs/CHALLENGE_DROPS.md](docs/CHALLENGE_DROPS.md) | **Drop 1:** hərəkət məhdudiyyətli şəxs, Prioritet #1 SOS, əlçatan marşrut, tam i18n · **Drop 2:** xarici API kəsintisi (503 / >5 s) → circuit breaker, lokal ehtiyat baza (keşlənmiş marşrutlar + statik matris), "Oflayn/Ehtiyat rejim" |
+| [docs/CHALLENGE_DROPS.md](docs/CHALLENGE_DROPS.md) | **Drop 1:** hərəkət məhdudiyyətli şəxs, Prioritet #1 SOS, əlçatan marşrut, tam i18n · **Drop 2:** xarici API kəsintisi (503 / >5 s) → circuit breaker, lokal ehtiyat baza (keşlənmiş marşrutlar + statik matris), "Oflayn/Ehtiyat rejim" · **Drop 3:** SOS flood hücumu → çoxqatlı rate limiting, dublikat filtri, bot karantini, JWT (HS256 + audience) və RBAC, operator limiti, canlı latency (700 saxta SOS-da orta 24 ms) |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Arxitektura sxemi (frontend → backend → DB/API axını), modullar, alqoritmlər, challenge drop-lara uyğunlaşma |
 | [docs/DATA.md](docs/DATA.md) | Real data mənbələri, lisenziya, tutum evristikaları |
 | [docs/AI_DECLARATION.md](docs/AI_DECLARATION.md) | Süni intellekt alətlərindən istifadə haqqında bəyannamə |

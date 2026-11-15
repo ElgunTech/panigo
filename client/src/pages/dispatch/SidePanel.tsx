@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { Activity, Ambulance, Ban, Building, Database, MapPinOff, Play, Power, RefreshCcw, ScrollText, SlidersHorizontal, Trash2, Users, Zap } from 'lucide-react';
-import type { AssemblyPoint, LatLng } from '@shared/types';
+import { Activity, Ambulance, ShieldAlert, ShieldCheck, Ban, Building, Database, MapPinOff, Play, Power, RefreshCcw, ScrollText, SlidersHorizontal, Trash2, Users, Zap } from 'lucide-react';
+import type { AssemblyPoint, LatLng, SosSignal } from '@shared/types';
 import { useI18n } from '../../i18n';
 import type { LiveState } from '../../lib/liveState';
 import { api } from '../../lib/api';
@@ -199,6 +199,8 @@ function ControlTab({ state, ops, role, onClosureMode }: { state: LiveState; ops
         )}
       </Card>
 
+      <GuardCard state={state} ops={ops} />
+
       <ResilienceCard state={state} ops={ops} />
 
       {opendata && <OpendataCard data={opendata} />}
@@ -379,6 +381,85 @@ type FaultChoice = 'none' | 'http503' | 'timeout' | 'down';
  * Challenge Drop 2 control: inject a REAL failure into the external routing API and
  * watch the circuit breakers, the routing mode and the local backup take over.
  */
+/** Challenge Drop 3 — SOS flood protection: live counters, latency and the quarantine queue. */
+function GuardCard({ state, ops }: { state: LiveState; ops: Ops }) {
+  const { t } = useI18n();
+  const g = state.system?.guard;
+  const lat = state.system?.latency;
+  const [q, setQ] = useState<{ total: number; items: SosSignal[] }>({ total: 0, items: [] });
+  const [busy, setBusy] = useState(false);
+  const refresh = () => ops.quarantine().then(setQ).catch(() => undefined);
+  useEffect(() => {
+    refresh();
+    const id = setInterval(refresh, 5000);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const act = async (fn: () => Promise<unknown>) => {
+    setBusy(true);
+    await fn().catch(() => undefined);
+    await refresh();
+    setBusy(false);
+  };
+  const stat = (label: string, value: number | string, tone = 'text-slate-200') => (
+    <div className="rounded-md bg-white/5 px-2 py-1.5">
+      <div className={clsx('font-mono text-sm font-bold tabular-nums', tone)}>{value}</div>
+      <div className="truncate text-[9.5px] uppercase tracking-wide text-slate-500">{label}</div>
+    </div>
+  );
+  const latTone = (ms?: number) => (ms === undefined ? 'text-slate-200' : ms < 100 ? 'text-emerald-300' : ms < 300 ? 'text-amber-300' : 'text-red-300');
+  return (
+    <Card title={t.dispatch.guardTitle} icon={<ShieldCheck className="h-3.5 w-3.5 text-sky-400" />}>
+      <div className={clsx('flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-xs font-bold', g?.underAttack ? 'bg-red-500/20 text-red-200' : 'bg-emerald-500/10 text-emerald-300')}>
+        {g?.underAttack ? <ShieldAlert className="h-3.5 w-3.5 animate-pulse" /> : <ShieldCheck className="h-3.5 w-3.5" />}
+        <span className="flex-1">{g?.underAttack ? t.dispatch.guardUnderAttack : t.dispatch.guardNormal}</span>
+        <span className="font-mono text-[11px]">{g?.perMinute ?? 0}/{t.dispatch.perMin}</span>
+      </div>
+      <div className="mt-2 grid grid-cols-3 gap-1">
+        {stat(t.dispatch.guardAccepted, g?.accepted ?? 0, 'text-emerald-300')}
+        {stat(t.dispatch.guardDuplicates, g?.duplicates ?? 0)}
+        {stat(t.dispatch.guardRateLimited, g?.rateLimited ?? 0, 'text-amber-300')}
+        {stat(t.dispatch.guardQuarantined, g?.quarantined ?? 0, 'text-red-300')}
+        {stat(t.dispatch.latencyAvg, lat ? `${lat.avgMs} ms` : '—', latTone(lat?.avgMs))}
+        {stat(t.dispatch.latencyP95, lat ? `${lat.p95Ms} ms` : '—', latTone(lat?.p95Ms))}
+      </div>
+      <p className="mt-1 text-[10px] text-slate-500">{t.dispatch.guardHint}</p>
+
+      <div className="mt-2.5 flex items-center justify-between border-t border-white/5 pt-2">
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+          {t.dispatch.quarantine} · {q.total}
+        </span>
+        {q.total > 0 && (
+          <button disabled={busy} onClick={() => confirm(`${t.dispatch.rejectAll} (${q.total})?`) && act(() => ops.rejectSpam())} className="rounded-md bg-red-500/15 px-2 py-1 text-[10.5px] font-semibold text-red-200 hover:bg-red-500/25 disabled:opacity-50">
+            {t.dispatch.rejectAll}
+          </button>
+        )}
+      </div>
+      {q.total === 0 ? (
+        <p className="mt-1.5 text-[11px] text-slate-500">{t.dispatch.quarantineEmpty}</p>
+      ) : (
+        <ul className="mt-1.5 max-h-48 space-y-1 overflow-y-auto pr-0.5">
+          {q.items.slice(0, 30).map((s) => (
+            <li key={s.id} className="flex items-center gap-2 rounded-md bg-white/5 px-2 py-1.5 text-[11px]">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-semibold text-slate-200">{t.hazard[s.hazard]}</span>
+                  <span className="text-slate-500">· {timeAgo(s.createdAt, t.common)}</span>
+                  <span className="ml-auto rounded bg-red-500/15 px-1 font-mono text-[9.5px] text-red-300">{s.spam?.score ?? 0}</span>
+                </div>
+                <div className="truncate text-[10px] text-slate-500">{(s.spam?.reasons ?? []).map((r) => t.dispatch.spamReason[r as keyof typeof t.dispatch.spamReason] ?? r).join(' · ')}</div>
+              </div>
+              <button disabled={busy} onClick={() => act(() => ops.release(s.id))} className="shrink-0 rounded-md bg-emerald-500/15 px-2 py-1 text-[10.5px] font-semibold text-emerald-200 hover:bg-emerald-500/25 disabled:opacity-50">
+                {t.dispatch.release}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Card>
+  );
+}
+
 function ResilienceCard({ state, ops }: { state: LiveState; ops: Ops }) {
   const { t } = useI18n();
   const [busy, setBusy] = useState(false);

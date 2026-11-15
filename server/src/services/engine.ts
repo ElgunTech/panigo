@@ -8,6 +8,8 @@ import { OsrmProvider } from '../routing/osrmProvider';
 import { RoutingService } from '../routing/routingService';
 import { loadOfflineRouting, RouteArchive, type OfflineRoutingData } from '../routing/routeArchive';
 import { CachedRouteProvider, MatrixProvider } from '../routing/offlineProviders';
+import { SosGuard } from '../security/sosGuard';
+import { LatencyTracker } from '../http/latency';
 import { SimulatedProvider } from '../routing/simulatedProvider';
 import type { RoutingProvider } from '../routing/types';
 import { CrisisService } from './crisisService';
@@ -24,6 +26,10 @@ export class Engine {
   readonly store = new Store();
   readonly routing: RoutingService;
   readonly routeArchive: RouteArchive;
+  /** Drop 3: SOS flood / spam protection */
+  readonly guard = new SosGuard();
+  /** Drop 3: rolling API latency */
+  readonly latency = new LatencyTracker();
   readonly evacuation: EvacuationService;
   readonly dispatch: DispatchService;
   readonly crisis: CrisisService;
@@ -54,7 +60,7 @@ export class Engine {
    * @param specialNeeds sender has reduced mobility (role mobility_impaired) →
    *   SOS is auto-escalated to Priority #1 (Kritik Prioritet) and raises an immediate alert.
    */
-  createSos(citizenId: string, hazard: Hazard, location: LatLng, note?: string, specialNeeds = false): SosSignal {
+  createSos(citizenId: string, hazard: Hazard, location: LatLng, note?: string, specialNeeds = false, guard?: { quarantined: boolean; score: number; reasons: string[] }): SosSignal {
     const now = Date.now();
     // a pulse measured shortly before the SOS (≤ 10 min) travels with it
     const recent = this.store.citizens.get(citizenId)?.vitals;
@@ -71,10 +77,16 @@ export class Engine {
       priority,
       specialNeeds,
       vitals: carriedVitals,
+      quarantined: guard?.quarantined || undefined,
+      spam: guard && guard.score > 0 ? { score: guard.score, reasons: guard.reasons } : undefined,
       createdAt: now,
       updatedAt: now,
     };
     this.store.upsertSos(sos);
+    if (sos.quarantined) {
+      this.store.log('guard', 'sos.quarantined', { sosId: sos.id, score: guard!.score, reasons: guard!.reasons });
+      return sos; // no alert, no citizen-status update until an operator releases it
+    }
     if (priority === 1) this.crisis.raisePriority(sos);
     const c = this.store.citizens.get(citizenId);
     this.store.upsertCitizen({ ...(c ?? { citizenId }), citizenId, safe: false, location, updatedAt: now });
@@ -119,6 +131,41 @@ export class Engine {
     }
     this.store.log(citizenId, 'vitals.recorded', { bpm: vitals.bpm, quality: Math.round(vitals.quality * 100) / 100, abnormal: vitals.abnormal, sosIds: attached });
     return { vitals, attachedSosIds: attached };
+  }
+
+  // ---------- Drop 3: quarantine moderation ----------
+  listQuarantine(limit = 100) {
+    const q = [...this.store.sos.values()].filter((s) => s.quarantined && s.status === 'new').sort((a, b) => b.createdAt - a.createdAt);
+    return { total: q.length, items: q.slice(0, limit) };
+  }
+
+  /** Operator confirms a quarantined SOS is real → it enters the feed and the crisis algorithm. */
+  releaseQuarantined(id: string, actor: string) {
+    const s = this.store.sos.get(id);
+    if (!s || !s.quarantined) return null;
+    s.quarantined = false;
+    this.store.upsertSos(s);
+    this.guard.stats.released++;
+    this.store.log(actor, 'sos.released', { sosId: id });
+    const c = this.store.citizens.get(s.citizenId);
+    this.store.upsertCitizen({ ...(c ?? { citizenId: s.citizenId }), citizenId: s.citizenId, safe: false, location: s.location, updatedAt: Date.now() });
+    if (s.priority === 1) this.crisis.raisePriority(s);
+    this.crisis.evaluateSos(s);
+    return s;
+  }
+
+  /** Bulk-reject quarantined spam (ids, or every quarantined SOS). */
+  rejectQuarantined(ids: string[] | 'all', actor: string) {
+    let n = 0;
+    for (const s of this.store.sos.values()) {
+      if (!s.quarantined || s.status !== 'new' || (ids !== 'all' && !ids.includes(s.id))) continue;
+      s.status = 'cancelled';
+      s.updatedAt = Date.now();
+      n++;
+    }
+    this.guard.stats.rejected += n;
+    this.store.log(actor, 'sos.rejected_spam', { count: n });
+    return n;
   }
 
   /** Brigades currently serving this citizen's signals (for the citizen map). */
@@ -200,6 +247,8 @@ export class Engine {
 
   systemStatus(): SystemStatus {
     return {
+      guard: this.guard.snapshot(),
+      latency: this.latency.stats(),
       routingMode: this.routing.mode(),
       routeCacheSize: this.routeArchive.size,
       providers: this.routing.health(),
@@ -209,9 +258,11 @@ export class Engine {
   }
 
   metrics() {
-    const sos = [...this.store.sos.values()];
+    const all = [...this.store.sos.values()];
+    const sos = all.filter((s) => !s.quarantined);
     return {
       sosTotal: sos.length,
+      sosQuarantined: all.filter((s) => s.quarantined && s.status === 'new').length,
       sosOpen: sos.filter((s) => s.status === 'new' || s.status === 'assigned').length,
       alertsOpen: [...this.store.alerts.values()].filter((a) => a.status === 'open').length,
       activeEvacuations: this.evacuation.activeSessions(),
@@ -268,6 +319,7 @@ export class Engine {
 
   reset(actor: string) {
     this.store.reset();
+    this.guard.reset();
     this.evacuation.reset();
     this.routing.invalidate();
     this.store.log(actor, 'system.reset');

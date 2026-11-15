@@ -16,6 +16,12 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
   const { store, config } = engine;
   // Brute-force protection on credential endpoints (stricter than the global limiter)
   const authLimiter = rateLimit({ windowMs: 60_000, limit: config.authRateLimitPerMin, standardHeaders: 'draft-7', legacyHeaders: false, message: { error: 'RATE_LIMITED' } });
+  // Drop 3 — anonymous identities are cheap; cap how many one source can mint
+  const guestLimiter = rateLimit({ windowMs: 60_000, limit: config.guestPerIpPerMin, standardHeaders: 'draft-7', legacyHeaders: false, message: { error: 'GUEST_RATE_LIMITED' } });
+  const sosIpLimiter = keyedLimiter(config.sosPerIpPerMin, (req) => req.ip, 'TOO_MANY_SOS', () => engine.guard.noteRateLimited());
+  const sosCitizenLimiter = keyedLimiter(config.sosPerCitizenPerMin, (req) => req.user?.sub, 'TOO_MANY_SOS', () => engine.guard.noteRateLimited());
+  // Critical dispatcher operations: throttled per operator (a stolen token cannot mass-redirect brigades)
+  const opsLimiter = keyedLimiter(config.opsPerOperatorPerMin, (req) => req.user?.sub, 'TOO_MANY_OPERATIONS');
   const session = (p: { sub: string; role: string; name: string; guest?: boolean }) => ({ token: issueToken(p as never, config.jwtSecret, config.jwtTtl), user: p });
 
   // ---------- System ----------
@@ -45,11 +51,11 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
     res.status(201).json(session({ sub: u.username, role: u.role, name: u.name }));
   });
   /** Guest session (no account) — one-tap SOS must never be blocked by sign-up. */
-  r.post('/auth/guest', (req, res) => {
+  r.post('/auth/guest', guestLimiter, (req, res) => {
     const { token, principal } = issueGuestToken(config.jwtSecret, req.body?.mobilityImpaired === true);
     res.json({ token, user: principal });
   });
-  r.post('/auth/citizen', (_req, res) => {
+  r.post('/auth/citizen', guestLimiter, (_req, res) => {
     const { token, principal } = issueGuestToken(config.jwtSecret); // backwards-compatible alias
     res.json({ token, user: principal });
   });
@@ -95,11 +101,25 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
   r.post(
     '/citizen/sos',
     requirePermission('sos:create'),
-    keyedLimiter(config.sosPerCitizenPerMin, (req) => req.user?.sub),
+    sosIpLimiter,
+    sosCitizenLimiter,
     validate(sosSchema),
     (req, res) => {
+      const u = req.user!;
+      const rawKey = req.get('Idempotency-Key');
+      const idempotencyKey = rawKey && /^[\w-]{8,64}$/.test(rawKey) ? rawKey : undefined;
+      const open = [...store.sos.values()].filter((s) => s.citizenId === u.sub && (s.status === 'new' || s.status === 'assigned'));
+      const v = engine.guard.inspect({ citizenId: u.sub, guest: !!u.guest, issuedAt: u.issuedAt, ip: req.ip ?? 'unknown', hazard: req.body.hazard, location: req.body.location, idempotencyKey }, open);
+      if (v.duplicateOf) {
+        const existing = store.sos.get(v.duplicateOf);
+        if (existing) return res.status(200).json({ ...existing, duplicateOf: existing.id });
+      }
       // Priority is derived from the authenticated role, never from the request body
-      res.status(201).json(engine.createSos(req.user!.sub, req.body.hazard, req.body.location, req.body.note, can(req.user!.role, 'sos:priority')));
+      const sos = engine.createSos(u.sub, req.body.hazard, req.body.location, req.body.note, can(u.role, 'sos:priority'), { quarantined: v.quarantine, score: v.score, reasons: v.reasons });
+      engine.guard.remember(u.sub, idempotencyKey, sos.id);
+      // the sender is not told about quarantine (a bot learns nothing); an operator reviews it
+      const { quarantined: _q, spam: _s, ...visible } = sos;
+      res.status(201).json(visible);
     },
   );
   r.post('/citizen/sos/:id/cancel', requirePermission('sos:cancel'), (req, res) => {
@@ -142,7 +162,7 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
       dataSource: DATASET?.source,
       points: [...store.points.values()],
       closures: store.openClosures(),
-      sos: [...store.sos.values()].sort((a, b) => b.createdAt - a.createdAt).slice(0, 1000),
+      sos: [...store.sos.values()].filter((s) => !s.quarantined).sort((a, b) => b.createdAt - a.createdAt).slice(0, 1000),
       brigades: [...store.brigades.values()],
       alerts: [...store.alerts.values()].sort((a, b) => b.createdAt - a.createdAt).slice(0, 200),
       citizens: [...store.citizens.values()].slice(-2000),
@@ -153,23 +173,40 @@ export function apiRouter(engine: Engine, users: UserRepository): Router {
   r.get('/dispatch/metrics', requirePermission('dashboard:read'), (_req, res) => res.json(engine.metrics()));
   r.get('/dispatch/audit', requirePermission('dashboard:read'), (_req, res) => res.json(store.audit.slice(-100).reverse()));
 
-  r.post('/dispatch/alerts/:id/execute', requirePermission('alert:decide'), ah(async (req, res) => res.json(await engine.crisis.execute(req.params.id, req.user!.sub))));
-  r.post('/dispatch/alerts/:id/dismiss', requirePermission('alert:decide'), (req, res) => res.json(engine.crisis.dismiss(req.params.id, req.user!.sub)));
+  // ---------- Drop 3: SOS quarantine (suspected bot traffic) ----------
+  r.get('/dispatch/quarantine', requirePermission('sos:moderate'), (_req, res) => res.json(engine.listQuarantine()));
+  r.post('/dispatch/quarantine/:id/release', requirePermission('sos:moderate'), opsLimiter, (req, res) => {
+    const s = engine.releaseQuarantined(req.params.id, req.user!.sub);
+    if (!s) throw new HttpError(404, 'SOS_NOT_FOUND');
+    engine.publishStatus();
+    res.json(s);
+  });
+  r.post('/dispatch/quarantine/reject-all', requirePermission('sos:moderate'), opsLimiter, (req, res) => {
+    const ids = Array.isArray(req.body?.ids) ? req.body.ids.filter((x: unknown) => typeof x === 'string').slice(0, 5000) : 'all';
+    const rejected = engine.rejectQuarantined(ids, req.user!.sub);
+    engine.publishStatus();
+    res.json({ rejected });
+  });
+
+  r.post('/dispatch/alerts/:id/execute', requirePermission('alert:decide'), opsLimiter, ah(async (req, res) => res.json(await engine.crisis.execute(req.params.id, req.user!.sub))));
+  r.post('/dispatch/alerts/:id/dismiss', requirePermission('alert:decide'), opsLimiter, (req, res) => res.json(engine.crisis.dismiss(req.params.id, req.user!.sub)));
 
   r.post(
     '/dispatch/assign',
     requirePermission('brigade:dispatch'),
+    opsLimiter,
     validate(dispatchSchema),
     ah(async (req, res) => res.json(await engine.dispatch.assign(req.body.brigadeId, req.body.sosIds, req.user!.sub))),
   );
 
   // Nearest SUITABLE brigade (by hazard type, real road ETA) — preview and one-click assign
   r.get('/dispatch/sos/:id/recommendation', requirePermission('brigade:dispatch'), ah(async (req, res) => res.json(await engine.dispatch.recommend(req.params.id))));
-  r.post('/dispatch/sos/:id/assign-nearest', requirePermission('brigade:dispatch'), ah(async (req, res) => res.json(await engine.dispatch.assignNearest(req.params.id, req.user!.sub))));
+  r.post('/dispatch/sos/:id/assign-nearest', requirePermission('brigade:dispatch'), opsLimiter, ah(async (req, res) => res.json(await engine.dispatch.assignNearest(req.params.id, req.user!.sub))));
 
   r.post(
     '/dispatch/closures',
     requirePermission('closure:manage'),
+    opsLimiter,
     validate(closureSchema),
     ah(async (req, res) => res.status(201).json(await engine.addClosure(req.body, req.user!.sub))),
   );

@@ -71,7 +71,8 @@ export const ah =
     Promise.resolve(fn(req, res)).catch(next);
 
 /** Per-key sliding counter (used for per-citizen SOS throttling — independent of IP). */
-export function keyedLimiter(maxPerMin: number, key: (req: Request) => string | undefined): RequestHandler {
+/** Per-key sliding counter (per citizen, per IP, per operator — independent of the global IP limiter). */
+export function keyedLimiter(maxPerMin: number, key: (req: Request) => string | undefined, code = 'TOO_MANY_SOS', onLimit?: () => void): RequestHandler {
   const hits = new Map<string, number[]>();
   setInterval(() => {
     const cutoff = Date.now() - 60_000;
@@ -86,7 +87,11 @@ export function keyedLimiter(maxPerMin: number, key: (req: Request) => string | 
     if (!k) return next();
     const now = Date.now();
     const arr = (hits.get(k) ?? []).filter((t) => t > now - 60_000);
-    if (arr.length >= maxPerMin) return next(new HttpError(429, 'TOO_MANY_SOS'));
+    if (arr.length >= maxPerMin) {
+      onLimit?.();
+      hits.set(k, arr);
+      return next(new HttpError(429, code, { retryAfterSec: Math.max(1, Math.ceil((arr[0] + 60_000 - now) / 1000)) }));
+    }
     arr.push(now);
     hits.set(k, arr);
     next();

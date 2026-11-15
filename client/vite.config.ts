@@ -11,8 +11,9 @@ export default defineConfig({
     // Allow HTTPS tunnels for phone testing (camera needs a secure context): cloudflared quick tunnels
     allowedHosts: ['.trycloudflare.com'],
     proxy: {
-      '/api': 'http://localhost:4000',
-      '/socket.io': { target: 'http://localhost:4000', ws: true },
+      // xfwd: append the real client address to X-Forwarded-For (server trusts only the loopback hop → spoofed XFF is ignored)
+      '/api': { target: 'http://localhost:4000', xfwd: true },
+      '/socket.io': { target: 'http://localhost:4000', ws: true, xfwd: true },
     },
   },
   test: { environment: 'node', include: ['src/**/*.test.ts'] },

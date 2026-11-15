@@ -49,7 +49,8 @@ describe('security', () => {
     const t = await citizen();
     const codes = [];
     for (let i = 0; i < 4; i++) codes.push((await request(app).post('/api/citizen/sos').set(auth(t)).send({ hazard: 'fire', location: NASIMI })).status);
-    expect(codes).toEqual([201, 201, 201, 429]);
+    // repeats are de-duplicated (200 + same SOS), the 4th is rate-limited
+    expect(codes).toEqual([201, 200, 200, 429]);
   });
   it('sets security headers', async () => {
     const r = await request(app).get('/api/health');

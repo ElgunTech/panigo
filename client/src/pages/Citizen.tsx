@@ -101,9 +101,11 @@ export default function Citizen() {
     if (!token || sending) return;
     setSending(hazard);
     try {
-      await api<SosSignal>('/citizen/sos', { body: { hazard, location }, token });
+      // Idempotency-Key: a network retry / double tap can never create a second SOS (Drop 3)
+      const key = typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      const res = await api<SosSignal & { duplicateOf?: string }>('/citizen/sos', { body: { hazard, location }, token, headers: { 'Idempotency-Key': key } });
       setSafe(false);
-      setToast({ kind: 'ok', text: `${t.citizen.sosSent}: ${t.hazard[hazard]}` });
+      setToast({ kind: 'ok', text: res.duplicateOf ? t.citizen.sosDuplicate : `${t.citizen.sosSent}: ${t.hazard[hazard]}` });
     } catch (e) {
       setToast({ kind: 'err', text: e instanceof ApiError && e.status === 429 ? t.citizen.sosLimit : t.common.offline });
     } finally {
