@@ -1,4 +1,4 @@
-# Arxitektura qeydi — PaniGo
+# PaniGo — Arxitektura qeydi
 
 ## 1. Ümumi sxem
 

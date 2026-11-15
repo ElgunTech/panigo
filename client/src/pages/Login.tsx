@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import clsx from 'clsx';
-import { ArrowLeft, Building2, Eye, EyeOff, HeartPulse, Loader2, LogIn, ShieldCheck, Siren, UserPlus } from 'lucide-react';
+import { ArrowLeft, Building2, ChevronRight, Eye, EyeOff, HeartPulse, Loader2, LogIn, Siren, UserPlus } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { api, ApiError } from '../lib/api';
 import { homeFor, isStaff, setSession, useSession, type Session } from '../lib/session';
@@ -111,6 +111,26 @@ export default function Login() {
 
         <div className="relative flex flex-1 items-center justify-center px-4 pb-10 sm:px-8">
           <div className="w-full max-w-[420px] rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/60 sm:p-8">
+            {/* Emergency first: no account needed to send SOS */}
+            <Link
+              to="/citizen"
+              className="group flex w-full items-center gap-3 rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 px-4 py-3.5 text-white shadow-lg shadow-red-500/30 transition hover:brightness-110 active:scale-[0.99]"
+            >
+              <span className="relative grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/15">
+                <span className="absolute inset-0 animate-ping rounded-xl bg-white/20" />
+                <Siren className="relative h-5 w-5" />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-sm font-extrabold leading-tight">{t.auth.guest}</span>
+                <span className="mt-0.5 block text-[11px] text-white/80">{t.auth.guestDesc}</span>
+              </span>
+              <ChevronRight className="h-5 w-5 shrink-0 transition group-hover:translate-x-0.5" />
+            </Link>
+
+            <div className="my-6 flex items-center gap-3 text-[11px] uppercase tracking-wider text-slate-400">
+              <span className="h-px flex-1 bg-slate-200" /> {t.auth.or} <span className="h-px flex-1 bg-slate-200" />
+            </div>
+
             <h2 className="text-2xl font-bold tracking-tight">{mode === 'login' ? t.auth.welcome : t.auth.createAccount}</h2>
             <p className="mt-1.5 text-sm text-slate-500">{mode === 'login' ? t.auth.signInDesc : t.auth.signUpDesc}</p>
 
@@ -182,21 +202,6 @@ export default function Login() {
                 {mode === 'login' ? t.auth.signIn : t.auth.createAccount}
               </button>
             </form>
-
-            <div className="my-6 flex items-center gap-3 text-[11px] uppercase tracking-wider text-slate-400">
-              <span className="h-px flex-1 bg-slate-200" /> {t.auth.or} <span className="h-px flex-1 bg-slate-200" />
-            </div>
-
-            <Link
-              to="/citizen"
-              className="flex w-full items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 transition hover:bg-emerald-100"
-            >
-              <ShieldCheck className="h-5 w-5 shrink-0 text-emerald-600" />
-              <span>
-                <span className="block text-sm font-semibold text-emerald-800">{t.auth.guest}</span>
-                <span className="block text-[11px] text-emerald-700/70">{t.auth.guestDesc}</span>
-              </span>
-            </Link>
 
             <p className="mt-6 text-center text-[11px] text-slate-400">{t.dispatch.demoHint}</p>
           </div>

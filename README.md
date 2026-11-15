@@ -1,3 +1,5 @@
+<p align="center"><img src="client/public/logo-wordmark.svg" alt="PaniGo" width="320"></p>
+
 # PaniGo — Urban Crisis & Crowd Evacuation Engine
 
 Zəlzələ, sel, sənaye qəzası və kütləvi tədbirlər zamanı **vətəndaşları ən yaxın təhlükəsiz toplanış məntəqəsinə yönləndirən**, **SOS siqnallarını toplayan** və **FHN dispetçerlərinə böhran ocaqlarını avtomatik göstərən** real-time mikro-sistem.
