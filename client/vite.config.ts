@@ -8,6 +8,8 @@ export default defineConfig({
   server: {
     port: 5173,
     fs: { allow: ['..'] },
+    // Allow HTTPS tunnels for phone testing (camera needs a secure context): cloudflared quick tunnels
+    allowedHosts: ['.trycloudflare.com'],
     proxy: {
       '/api': 'http://localhost:4000',
       '/socket.io': { target: 'http://localhost:4000', ws: true },
