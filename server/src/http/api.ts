@@ -1,35 +1,71 @@
 import { Router } from 'express';
 import type { DispatchSnapshot, PublicSnapshot } from '@shared/types';
 import type { Engine } from '../services/engine';
-import { CLOSURE_PRESETS } from '../data/seed';
-import { issueCitizenToken, issueToken, PERMISSIONS, verifyCredentials } from '../security/auth';
+import { CLOSURE_PRESETS, DATASET } from '../data/seed';
+import rateLimit from 'express-rate-limit';
+import { issueGuestToken, issueToken, PERMISSIONS } from '../security/auth';
+import { UserRepository } from '../security/userRepository';
 import { ah, HttpError, keyedLimiter, requirePermission, validate } from './middleware';
-import { closureSchema, dispatchSchema, loginSchema, outageSchema, planSchema, pointPatchSchema, safeSchema, scenarioSchema, sosSchema } from './schemas';
+import { registerSchema, userPatchSchema, closureSchema, dispatchSchema, loginSchema, outageSchema, planSchema, pointPatchSchema, safeSchema, scenarioSchema, sosSchema } from './schemas';
 
-export function apiRouter(engine: Engine): Router {
+export function apiRouter(engine: Engine, users: UserRepository): Router {
   const r = Router();
   const { store, config } = engine;
+  // Brute-force protection on credential endpoints (stricter than the global limiter)
+  const authLimiter = rateLimit({ windowMs: 60_000, limit: config.authRateLimitPerMin, standardHeaders: 'draft-7', legacyHeaders: false, message: { error: 'RATE_LIMITED' } });
+  const session = (p: { sub: string; role: string; name: string; guest?: boolean }) => ({ token: issueToken(p as never, config.jwtSecret, config.jwtTtl), user: p });
 
   // ---------- System ----------
   r.get('/health', (_req, res) => res.json({ ok: true, ...engine.systemStatus() }));
-  r.get('/meta', (_req, res) => res.json({ roles: PERMISSIONS, closurePresets: CLOSURE_PRESETS }));
+  r.get('/meta', (_req, res) =>
+    res.json({
+      roles: PERMISSIONS,
+      closurePresets: CLOSURE_PRESETS,
+      dataset: DATASET ? { source: DATASET.source, fetchedAt: DATASET.fetchedAt, points: DATASET.points.length, brigades: DATASET.brigades.length, hospitals: DATASET.hospitals.length } : null,
+    }),
+  );
 
   // ---------- Auth ----------
-  r.post('/auth/login', validate(loginSchema), (req, res) => {
-    const p = verifyCredentials(req.body.username, req.body.password);
-    if (!p) throw new HttpError(401, 'INVALID_CREDENTIALS');
+  r.post('/auth/login', authLimiter, validate(loginSchema), (req, res) => {
+    const p = users.verify(req.body.username, req.body.password);
+    if (!p) {
+      store.log(String(req.body.username).slice(0, 64), 'auth.login_failed');
+      throw new HttpError(401, 'INVALID_CREDENTIALS');
+    }
     store.log(p.sub, 'auth.login');
-    res.json({ token: issueToken(p, config.jwtSecret, config.jwtTtl), user: p });
+    res.json(session(p));
   });
-  r.post('/auth/citizen', (_req, res) => {
-    const { token, principal } = issueCitizenToken(config.jwtSecret);
+  r.post('/auth/register', authLimiter, validate(registerSchema), (req, res) => {
+    const u = users.register(req.body);
+    store.log(u.username, 'auth.register');
+    res.status(201).json(session({ sub: u.username, role: u.role, name: u.name }));
+  });
+  /** Guest session (no account) — one-tap SOS must never be blocked by sign-up. */
+  r.post('/auth/guest', (_req, res) => {
+    const { token, principal } = issueGuestToken(config.jwtSecret);
     res.json({ token, user: principal });
   });
-  r.get('/auth/me', requirePermission('dashboard:read'), (req, res) => res.json({ user: req.user }));
+  r.post('/auth/citizen', (_req, res) => {
+    const { token, principal } = issueGuestToken(config.jwtSecret); // backwards-compatible alias
+    res.json({ token, user: principal });
+  });
+  r.get('/auth/me', (req, res) => {
+    if (!req.user) throw new HttpError(401, 'UNAUTHENTICATED');
+    const u = req.user.guest ? null : users.get(req.user.sub);
+    res.json({ user: req.user, profile: u ? { username: u.username, name: u.name, phone: u.phone, createdAt: u.createdAt } : null });
+  });
+
+  // ---------- Admin: user management ----------
+  r.get('/admin/users', requirePermission('users:manage'), (_req, res) => res.json(users.list()));
+  r.patch('/admin/users/:username', requirePermission('users:manage'), validate(userPatchSchema), (req, res) => {
+    const u = users.update(req.params.username, req.body, req.user!.sub);
+    store.log(req.user!.sub, 'user.update', { username: u.username, ...req.body });
+    res.json(u);
+  });
 
   // ---------- Public read model ----------
   r.get('/public/snapshot', (_req, res) => {
-    const snap: PublicSnapshot = { zones: store.zones, points: [...store.points.values()], closures: store.openClosures() };
+    const snap: PublicSnapshot = { zones: store.zones, points: [...store.points.values()], closures: store.openClosures(), dataSource: DATASET?.source };
     res.json(snap);
   });
 
@@ -72,6 +108,8 @@ export function apiRouter(engine: Engine): Router {
   r.get('/dispatch/snapshot', requirePermission('dashboard:read'), (_req, res) => {
     const snap: DispatchSnapshot = {
       zones: store.zones,
+      hospitals: DATASET?.hospitals ?? [],
+      dataSource: DATASET?.source,
       points: [...store.points.values()],
       closures: store.openClosures(),
       sos: [...store.sos.values()].sort((a, b) => b.createdAt - a.createdAt).slice(0, 1000),

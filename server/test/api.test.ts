@@ -135,13 +135,13 @@ describe('Module 2 — critical crisis algorithm end-to-end', () => {
   });
 
   it('raises a capacity alert above 95%', async () => {
-    await request(app).patch('/api/dispatch/points/p-boulevard').set(auth(op)).send({ occupancyPct: 96 }).expect(200);
+    await request(app).patch('/api/dispatch/points/k-denizkenari-milli-park').set(auth(op)).send({ occupancyPct: 96 }).expect(200);
     const a = [...engine.store.alerts.values()].find((x) => x.kind === 'capacity');
-    expect(a?.pointId).toBe('p-boulevard');
+    expect(a?.pointId).toBe('k-denizkenari-milli-park');
   });
 
   it('records operator decisions in the audit log', async () => {
-    await request(app).patch('/api/dispatch/points/p-boulevard').set(auth(op)).send({ occupancyPct: 50 });
+    await request(app).patch('/api/dispatch/points/k-denizkenari-milli-park').set(auth(op)).send({ occupancyPct: 50 });
     const audit = (await request(app).get('/api/dispatch/audit').set(auth(op))).body;
     expect(audit[0]).toMatchObject({ actor: 'dispatcher', action: 'point.update' });
   });

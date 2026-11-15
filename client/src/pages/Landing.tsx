@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, Radio, Smartphone } from 'lucide-react';
+import { ArrowRight, CheckCircle2, LogIn, Radio, Smartphone } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { LangSwitch, Logo } from '../components/ui';
 
@@ -10,7 +10,15 @@ export default function Landing() {
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_at_top,rgba(239,68,68,0.18),transparent_55%)]" />
       <header className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6">
         <Logo dark />
-        <LangSwitch dark />
+        <div className="flex items-center gap-2">
+          <LangSwitch dark />
+          <Link to="/login" className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-xs font-semibold text-white hover:bg-white/5">
+            <LogIn className="h-3.5 w-3.5" /> {t.auth.signIn}
+          </Link>
+          <Link to="/login?mode=register" className="hidden rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-ink-950 hover:bg-slate-200 sm:inline-block">
+            {t.auth.signUp}
+          </Link>
+        </div>
       </header>
       <main className="relative mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6 sm:pt-16">
         <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-red-300">
@@ -21,7 +29,7 @@ export default function Landing() {
 
         <div className="mt-10 grid gap-5 md:grid-cols-2">
           <Card to="/citizen" icon={<Smartphone className="h-6 w-6" />} title={t.landing.citizenTitle} desc={t.landing.citizenDesc} cta={t.landing.citizenCta} accent="from-blue-500 to-indigo-600" />
-          <Card to="/dispatch" icon={<Radio className="h-6 w-6" />} title={t.landing.dispatchTitle} desc={t.landing.dispatchDesc} cta={t.landing.dispatchCta} accent="from-red-500 to-rose-700" />
+          <Card to="/login?next=/dispatch" icon={<Radio className="h-6 w-6" />} title={t.landing.dispatchTitle} desc={t.landing.dispatchDesc} cta={t.landing.dispatchCta} accent="from-red-500 to-rose-700" />
         </div>
 
         <ul className="mt-10 grid gap-3 text-sm text-slate-300 sm:grid-cols-2 lg:grid-cols-4">

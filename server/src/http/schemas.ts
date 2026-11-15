@@ -20,6 +20,34 @@ export const loginSchema = z.object({
   password: z.string().min(1).max(128),
 });
 
+export const registerSchema = z.object({
+  username: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .regex(/^[a-z0-9._-]{3,32}$/, 'username: 3-32 chars, a-z 0-9 . _ -'),
+  password: z
+    .string()
+    .min(8)
+    .max(128)
+    .regex(/[A-Za-z]/, 'password needs a letter')
+    .regex(/[0-9]/, 'password needs a digit'),
+  name: text(64).pipe(z.string().min(2)),
+  phone: z
+    .string()
+    .trim()
+    .regex(/^\+?[0-9 ()-]{7,20}$/)
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
+});
+
+export const userPatchSchema = z
+  .object({
+    role: z.enum(['citizen', 'dispatcher', 'admin']).optional(),
+    disabled: z.boolean().optional(),
+  })
+  .refine((v) => v.role !== undefined || v.disabled !== undefined, 'empty patch');
+
 export const planSchema = z.object({
   location: latLng,
   pointId: z.string().max(64).optional(),

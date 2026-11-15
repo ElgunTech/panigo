@@ -2,6 +2,7 @@ import type { NextFunction, Request, RequestHandler, Response } from 'express';
 import { ZodError, type ZodSchema } from 'zod';
 import { can, verifyToken, type Permission, type Principal } from '../security/auth';
 import { CrisisError } from '../services/crisisService';
+import { UserError, type UserRepository } from '../security/userRepository';
 import { DispatchError } from '../services/dispatchService';
 
 declare global {
@@ -23,12 +24,23 @@ export class HttpError extends Error {
   }
 }
 
+/**
+ * Resolves the bearer token. For registered accounts the role is re-read from
+ * the user store on every request, so a promotion/demotion or account block by
+ * an admin takes effect immediately (no stale privileges inside a valid JWT).
+ */
 export const authenticate =
-  (secret: string): RequestHandler =>
+  (secret: string, users?: UserRepository): RequestHandler =>
   (req, _res, next) => {
     const h = req.headers.authorization;
     if (h?.startsWith('Bearer ')) {
       const p = verifyToken(h.slice(7), secret);
+      if (p && !p.guest && users) {
+        const u = users.get(p.sub);
+        if (!u || u.disabled) return next();
+        p.role = u.role;
+        p.name = u.name;
+      }
       if (p) req.user = p;
     }
     next();
@@ -84,6 +96,7 @@ export function keyedLimiter(maxPerMin: number, key: (req: Request) => string | 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function errorHandler(err: unknown, _req: Request, res: Response, _next: NextFunction) {
   if (err instanceof HttpError) return res.status(err.status).json({ error: err.code, details: err.details });
+  if (err instanceof UserError) return res.status(err.status).json({ error: err.code });
   if (err instanceof CrisisError) return res.status(err.status).json({ error: err.code });
   if (err instanceof DispatchError) return res.status(409).json({ error: err.code });
   if (err instanceof ZodError) return res.status(400).json({ error: 'VALIDATION_ERROR', details: err.flatten() });

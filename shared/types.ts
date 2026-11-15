@@ -18,6 +18,15 @@ export interface Zone {
   name: string;
   center: LatLng;
   radiusM: number;
+  /** residents (Wikidata P1082) — used to size the response per zone */
+  population?: number;
+  populationYear?: string;
+}
+
+/** Static reference facility (hospital) from the real-world dataset */
+export interface Facility {
+  name: string;
+  location: LatLng;
 }
 
 export type AssemblyPointType = 'shelter' | 'park' | 'stadium';
@@ -163,6 +172,8 @@ export interface SystemStatus {
 /** Public snapshot (citizen) */
 export interface PublicSnapshot {
   zones: Zone[];
+  hospitals?: Facility[];
+  dataSource?: string;
   points: AssemblyPoint[];
   closures: RoadClosure[];
 }

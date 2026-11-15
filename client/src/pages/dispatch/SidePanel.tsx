@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { Activity, Ambulance, Building, MapPinOff, Play, Power, RefreshCcw, ScrollText, SlidersHorizontal, Trash2, Zap } from 'lucide-react';
+import { Activity, Ambulance, Ban, Building, MapPinOff, Play, Power, RefreshCcw, ScrollText, SlidersHorizontal, Trash2, Users, Zap } from 'lucide-react';
 import type { AssemblyPoint, LatLng } from '@shared/types';
 import { useI18n } from '../../i18n';
 import type { LiveState } from '../../lib/liveState';
 import { api } from '../../lib/api';
 import { occColor, pct, timeAgo } from '../../lib/format';
 import { OccupancyBar, PointIcon } from '../../components/ui';
-import type { Ops } from '../Dispatch';
+import type { AdminUser, Ops } from '../Dispatch';
 
-type Tab = 'points' | 'brigades' | 'control' | 'audit';
+type Tab = 'points' | 'brigades' | 'control' | 'audit' | 'users';
 
-export function SidePanel({ state, ops, role, onClosureMode, onFocus }: { state: LiveState; ops: Ops; role: string; onClosureMode: () => void; onFocus: (p: LatLng) => void }) {
+export function SidePanel({ state, ops, role, me, onClosureMode, onFocus }: { state: LiveState; ops: Ops; role: string; me: string; onClosureMode: () => void; onFocus: (p: LatLng) => void }) {
   const { t } = useI18n();
   const [tab, setTab] = useState<Tab>('points');
   const tabs: { id: Tab; label: string; icon: typeof Building }[] = [
@@ -19,20 +19,21 @@ export function SidePanel({ state, ops, role, onClosureMode, onFocus }: { state:
     { id: 'brigades', label: t.dispatch.brigades, icon: Ambulance },
     { id: 'control', label: t.dispatch.control, icon: SlidersHorizontal },
     { id: 'audit', label: t.dispatch.audit, icon: ScrollText },
+    ...(role === 'admin' ? [{ id: 'users' as Tab, label: t.admin.users, icon: Users }] : []),
   ];
   return (
     <>
-      <nav className="grid grid-cols-4 border-b border-white/5 bg-ink-900" role="tablist">
+      <nav className={clsx('grid border-b border-white/5 bg-ink-900', tabs.length === 5 ? 'grid-cols-5' : 'grid-cols-4')} role="tablist">
         {tabs.map(({ id, label, icon: I }) => (
           <button
             key={id}
             role="tab"
             aria-selected={tab === id}
             onClick={() => setTab(id)}
-            className={clsx('flex flex-col items-center gap-1 border-b-2 py-2 text-[10px] font-semibold uppercase tracking-wider transition', tab === id ? 'border-red-500 text-white' : 'border-transparent text-slate-500 hover:text-slate-300')}
+            className={clsx('flex min-w-0 flex-col items-center gap-1 border-b-2 py-2 text-[9.5px] font-semibold uppercase tracking-wide transition', tab === id ? 'border-red-500 text-white' : 'border-transparent text-slate-500 hover:text-slate-300')}
           >
             <I className="h-4 w-4" />
-            {label}
+            <span className="w-full truncate px-0.5 text-center">{label}</span>
           </button>
         ))}
       </nav>
@@ -41,6 +42,7 @@ export function SidePanel({ state, ops, role, onClosureMode, onFocus }: { state:
         {tab === 'brigades' && <BrigadesTab state={state} onFocus={onFocus} />}
         {tab === 'control' && <ControlTab state={state} ops={ops} role={role} onClosureMode={onClosureMode} />}
         {tab === 'audit' && <AuditTab ops={ops} />}
+        {tab === 'users' && role === 'admin' && <UsersTab ops={ops} me={me} />}
       </div>
     </>
   );
@@ -265,5 +267,86 @@ function Card({ title, icon, children }: { title: string; icon: React.ReactNode;
       </h3>
       {children}
     </section>
+  );
+}
+
+function UsersTab({ ops, me }: { ops: Ops; me: string }) {
+  const { t } = useI18n();
+  const [users, setUsers] = useState<AdminUser[]>([]);
+  const [q, setQ] = useState('');
+  const [err, setErr] = useState('');
+  const load = () =>
+    ops
+      .users()
+      .then(setUsers)
+      .catch(() => undefined);
+  useEffect(() => {
+    load();
+    const id = setInterval(load, 8000);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ops]);
+  const update = async (u: AdminUser, patch: { role?: string; disabled?: boolean }) => {
+    setErr('');
+    try {
+      const nu = await ops.updateUser(u.username, patch);
+      setUsers((list) => list.map((x) => (x.username === nu.username ? nu : x)));
+    } catch (e) {
+      setErr((e as Error).message);
+    }
+  };
+  const list = users.filter((u) => !q || (u.username + ' ' + u.name).toLowerCase().includes(q.toLowerCase()));
+  const roleTone = { admin: 'text-red-300', dispatcher: 'text-amber-300', citizen: 'text-slate-300' };
+  return (
+    <div>
+      <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t.admin.search} className="mb-2.5 w-full rounded-lg border border-white/10 bg-ink-900 px-3 py-2 text-xs text-white outline-none focus:border-red-500/50" />
+      {err && <p className="mb-2 text-[11px] text-red-300">{err}</p>}
+      <ul className="space-y-2">
+        {list.map((u) => {
+          const self = u.username === me;
+          return (
+            <li key={u.username} className={clsx('rounded-xl border p-2.5', u.disabled ? 'border-red-500/20 bg-red-950/20' : 'border-white/5 bg-ink-850')}>
+              <div className="flex items-center gap-2.5">
+                <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/10 text-xs font-bold uppercase text-white">{u.name.slice(0, 2)}</div>
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-xs font-semibold text-white">
+                    {u.name} {self && <span className="text-[10px] font-normal text-slate-500">({t.admin.you})</span>}
+                  </div>
+                  <div className="truncate font-mono text-[10px] text-slate-500">
+                    @{u.username} · {t.admin.lastLogin}: {u.lastLoginAt ? timeAgo(u.lastLoginAt, t.common) : t.admin.never}
+                  </div>
+                </div>
+                {u.disabled && <span className="rounded bg-red-500/20 px-1.5 py-0.5 text-[9px] font-bold uppercase text-red-300">{t.admin.blocked}</span>}
+              </div>
+              <div className="mt-2 flex items-center gap-2">
+                <select
+                  value={u.role}
+                  disabled={self}
+                  onChange={(e) => update(u, { role: e.target.value })}
+                  aria-label={t.admin.role}
+                  className={clsx('flex-1 rounded-md border border-white/10 bg-ink-900 px-2 py-1 text-[11px] font-semibold disabled:opacity-50', roleTone[u.role])}
+                >
+                  {(['citizen', 'dispatcher', 'admin'] as const).map((r) => (
+                    <option key={r} value={r}>
+                      {t.admin.roles[r]}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  disabled={self}
+                  onClick={() => update(u, { disabled: !u.disabled })}
+                  className={clsx(
+                    'flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-semibold disabled:opacity-40',
+                    u.disabled ? 'bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25' : 'bg-white/5 text-slate-400 hover:bg-red-500/15 hover:text-red-300',
+                  )}
+                >
+                  <Ban className="h-3 w-3" /> {u.disabled ? t.admin.unblock : t.admin.block}
+                </button>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }

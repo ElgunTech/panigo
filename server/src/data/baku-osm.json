@@ -1,0 +1,2005 @@
+{
+  "source": "OpenStreetMap contributors (ODbL) via Overpass API",
+  "fetchedAt": "2026-11-15T07:42:04.853Z",
+  "bbox": "40.345,49.770,40.460,49.990",
+  "counts": {
+    "metro": 31,
+    "parks": 35,
+    "stadiums": 7,
+    "fireStations": 21,
+    "hospitals": 105,
+    "districts": 12
+  },
+  "points": [
+    {
+      "id": "m-sah-ismayil-xetai",
+      "name": "Şah İsmayıl Xətai m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.38326,
+        "lng": 49.87214
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-nizami",
+      "name": "Nizami m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.37932,
+        "lng": 49.83002
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-metro-elmler",
+      "name": "Metro elmlər m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.37515,
+        "lng": 49.81548
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-insaatcilar",
+      "name": "İnşaatçılar m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.38909,
+        "lng": 49.80236
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-nesimi",
+      "name": "Nəsimi m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.42465,
+        "lng": 49.82628
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-bakmil",
+      "name": "Bakmil m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.41414,
+        "lng": 49.8788
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-koroglu",
+      "name": "Koroğlu m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.42086,
+        "lng": 49.91809
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-qara-qarayev",
+      "name": "Qara Qarayev m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.41761,
+        "lng": 49.93396
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-neftciler",
+      "name": "Neftçilər m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.41116,
+        "lng": 49.94257
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-xalqlar-dostlugu",
+      "name": "Xalqlar Dostluğu m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.39689,
+        "lng": 49.95299
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-ehmedli",
+      "name": "Əhmədli m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.38556,
+        "lng": 49.95395
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-hezi-aslanov",
+      "name": "Həzi Aslanov m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.37304,
+        "lng": 49.95357
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-azadliq-prospekti",
+      "name": "Azadlıq prospekti m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.42596,
+        "lng": 49.84293
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-dernegul",
+      "name": "Dərnəgül m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.4254,
+        "lng": 49.86179
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-20-yanvar-st",
+      "name": "20 Yanvar st. m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.40414,
+        "lng": 49.8077
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-cefer-cabbarli",
+      "name": "Cəfər Cabbarlı m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.37965,
+        "lng": 49.84895
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-ulduz",
+      "name": "Ulduz m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.41496,
+        "lng": 49.89143
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-memar-ecemi",
+      "name": "Memar Əcəmi m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.41068,
+        "lng": 49.81394
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-avtovagzal",
+      "name": "Avtovağzal m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.42151,
+        "lng": 49.79522
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-28-may-2-ci-cixis",
+      "name": "28 May 2-ci çıxış m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.38279,
+        "lng": 49.84674
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-y15",
+      "name": "Y15 m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.37727,
+        "lng": 49.91047
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-y14",
+      "name": "Y14 m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.37887,
+        "lng": 49.88999
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-20-sentyabr",
+      "name": "20 Sentyabr m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.39373,
+        "lng": 49.82823
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-8-noyabr",
+      "name": "8 Noyabr m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.40187,
+        "lng": 49.82051
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-y16",
+      "name": "Y16 m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.37142,
+        "lng": 49.93726
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-neriman-nerimanov",
+      "name": "Nəriman Nərimanov m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.40282,
+        "lng": 49.87064
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-genclik",
+      "name": "Gənclik m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.39988,
+        "lng": 49.85096
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-sahil",
+      "name": "Sahil m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.37173,
+        "lng": 49.84457
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-iceriseher",
+      "name": "İçərişəhər m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.36596,
+        "lng": 49.83165
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-dernegul-deposu",
+      "name": "Dərnəgül deposu m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.43351,
+        "lng": 49.85748
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "m-xocesen",
+      "name": "Xocəsən m/st sığınacağı",
+      "type": "shelter",
+      "location": {
+        "lat": 40.42119,
+        "lng": 49.77897
+      },
+      "capacity": 1500,
+      "source": "osm:station=subway",
+      "status": "open"
+    },
+    {
+      "id": "k-denizkenari-milli-park",
+      "name": "Dənizkənarı Milli Park",
+      "type": "park",
+      "location": {
+        "lat": 40.36627,
+        "lng": 49.84538
+      },
+      "capacity": 20000,
+      "areaM2": 1981076,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-zeytun-bagi",
+      "name": "Zeytun bağı",
+      "type": "park",
+      "location": {
+        "lat": 40.42642,
+        "lng": 49.82428
+      },
+      "capacity": 20000,
+      "areaM2": 894173,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-ag-seher-bulvari-baki",
+      "name": "Ağ Şəhər Bulvarı Bakı",
+      "type": "park",
+      "location": {
+        "lat": 40.37314,
+        "lng": 49.87569
+      },
+      "capacity": 20000,
+      "areaM2": 829922,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-nebabet-bagi-botanika-bagi",
+      "name": "Nəbabət Bağı / Botanika Bağı",
+      "type": "park",
+      "location": {
+        "lat": 40.35767,
+        "lng": 49.81742
+      },
+      "capacity": 20000,
+      "areaM2": 648537,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-genclik-parki-zig-sossesi",
+      "name": "Gənclik Parkı / Zığ şossesi",
+      "type": "park",
+      "location": {
+        "lat": 40.35897,
+        "lng": 49.95126
+      },
+      "capacity": 20000,
+      "areaM2": 319545,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-heyder-eliyev-parki-8-ci-km",
+      "name": "Heydər Əliyev Parkı \\ 8-ci km",
+      "type": "park",
+      "location": {
+        "lat": 40.40246,
+        "lng": 49.94275
+      },
+      "capacity": 20000,
+      "areaM2": 198711,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-merkezi-park",
+      "name": "Mərkəzi Park",
+      "type": "park",
+      "location": {
+        "lat": 40.37198,
+        "lng": 49.82762
+      },
+      "capacity": 20000,
+      "areaM2": 158423,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-qis-parki",
+      "name": "Qış Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.37645,
+        "lng": 49.83603
+      },
+      "capacity": 20000,
+      "areaM2": 154702,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-ataturk-parki",
+      "name": "Atatürk Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.4044,
+        "lng": 49.84969
+      },
+      "capacity": 20000,
+      "areaM2": 115613,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-nizami-gencevi-parki",
+      "name": "Nizami Gəncəvi Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.38004,
+        "lng": 49.89472
+      },
+      "capacity": 20000,
+      "areaM2": 101824,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-demiryolcular-parki",
+      "name": "Dəmiryolçular Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.43011,
+        "lng": 49.80771
+      },
+      "capacity": 20000,
+      "areaM2": 95023,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-heyder-eliyev-parki",
+      "name": "Heydər Əliyev Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.3789,
+        "lng": 49.95654
+      },
+      "capacity": 19000,
+      "areaM2": 76159,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-zefer-parki",
+      "name": "Zəfər Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.37631,
+        "lng": 49.86875
+      },
+      "capacity": 18600,
+      "areaM2": 74549,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-zerife-eliyeva-parki",
+      "name": "Zərifə Əliyeva parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.42253,
+        "lng": 49.82068
+      },
+      "capacity": 17400,
+      "areaM2": 69434,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-qelebe-parki",
+      "name": "Qələbə Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.40843,
+        "lng": 49.85794
+      },
+      "capacity": 17100,
+      "areaM2": 68524,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-dede-qorqud-parki",
+      "name": "Dədə Qorqud parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.39286,
+        "lng": 49.84713
+      },
+      "capacity": 17000,
+      "areaM2": 67912,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-ramiz-aboyev-adina-medeniyyet-ve-istirah",
+      "name": "Ramiz Aboyev adına mədəniyyət və istirahət parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.43642,
+        "lng": 49.84029
+      },
+      "capacity": 16300,
+      "areaM2": 65136,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-sehriyar-bagi",
+      "name": "Şəhriyar Bağı",
+      "type": "park",
+      "location": {
+        "lat": 40.39226,
+        "lng": 49.85531
+      },
+      "capacity": 15700,
+      "areaM2": 62739,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-samir-xasiyev-parki",
+      "name": "Samir Xasıyev Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.39133,
+        "lng": 49.87444
+      },
+      "capacity": 15300,
+      "areaM2": 61026,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-bayil-parki",
+      "name": "Bayil Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.35262,
+        "lng": 49.83271
+      },
+      "capacity": 14400,
+      "areaM2": 57461,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-merkezi-park-yuxari-sovetski",
+      "name": "Mərkəzi Park Yuxarı \\ Sovetski",
+      "type": "park",
+      "location": {
+        "lat": 40.37461,
+        "lng": 49.82474
+      },
+      "capacity": 13900,
+      "areaM2": 55483,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-yasamal-parki",
+      "name": "Yasamal parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.38731,
+        "lng": 49.81266
+      },
+      "capacity": 13800,
+      "areaM2": 55220,
+      "source": "osm:leisure=park",
+      "status": "open"
+    },
+    {
+      "id": "k-dagustu-park",
+      "name": "Dağüstü Park",
+      "type": "park",
+      "location": {
+        "lat": 40.3575,
+        "lng": 49.82913
+      },
+      "capacity": 13500,
+      "areaM2": 53877,
+      "source": "osm:leisure=park",
+      "status": "reserve"
+    },
+    {
+      "id": "k-sevgi-parki",
+      "name": "Sevgi parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.38691,
+        "lng": 49.86494
+      },
+      "capacity": 12900,
+      "areaM2": 51471,
+      "source": "osm:leisure=park",
+      "status": "reserve"
+    },
+    {
+      "id": "k-nerimanov-parki",
+      "name": "Nərimanov parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.40183,
+        "lng": 49.87163
+      },
+      "capacity": 10900,
+      "areaM2": 43472,
+      "source": "osm:leisure=park",
+      "status": "reserve"
+    },
+    {
+      "id": "k-mese-parki-samaxinka",
+      "name": "Meşə Parkı \\ Şamaxinka",
+      "type": "park",
+      "location": {
+        "lat": 40.40929,
+        "lng": 49.80256
+      },
+      "capacity": 10700,
+      "areaM2": 42997,
+      "source": "osm:leisure=park",
+      "status": "reserve"
+    },
+    {
+      "id": "k-port-baku-parki",
+      "name": "Port Baku Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.37502,
+        "lng": 49.86368
+      },
+      "capacity": 9400,
+      "areaM2": 37639,
+      "source": "osm:leisure=park",
+      "status": "reserve"
+    },
+    {
+      "id": "k-alov-parki",
+      "name": "Alov Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.4225,
+        "lng": 49.9167
+      },
+      "capacity": 9000,
+      "areaM2": 35871,
+      "source": "osm:leisure=park",
+      "status": "reserve"
+    },
+    {
+      "id": "k-ataturk-parki",
+      "name": "Atatürk parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.41116,
+        "lng": 49.84708
+      },
+      "capacity": 9000,
+      "areaM2": 35802,
+      "source": "osm:leisure=park",
+      "status": "reserve"
+    },
+    {
+      "id": "k-neftciler-parki",
+      "name": "Neftçilər Parkı",
+      "type": "park",
+      "location": {
+        "lat": 40.39409,
+        "lng": 49.97422
+      },
+      "capacity": 8200,
+      "areaM2": 32948,
+      "source": "osm:leisure=park",
+      "status": "reserve"
+    },
+    {
+      "id": "s-tofiq-behramov-adina-respublika-stadionu",
+      "name": "Tofiq Bəhramov adına Respublika Stadionu",
+      "type": "stadium",
+      "location": {
+        "lat": 40.39756,
+        "lng": 49.8524
+      },
+      "seats": 31200,
+      "capacity": 30000,
+      "source": "osm:leisure=stadium; capacity=wikidata:Q1138958#P1083",
+      "status": "open"
+    },
+    {
+      "id": "s-neftci-idman-bazasi",
+      "name": "Neftçi İdman Bazası",
+      "type": "stadium",
+      "location": {
+        "lat": 40.40291,
+        "lng": 49.83847
+      },
+      "capacity": 3000,
+      "source": "osm:leisure=stadium; capacity=default",
+      "status": "reserve"
+    },
+    {
+      "id": "s-spartak-stadionu",
+      "name": "Spartak Stadionu",
+      "type": "stadium",
+      "location": {
+        "lat": 40.38916,
+        "lng": 49.82805
+      },
+      "capacity": 3000,
+      "source": "osm:leisure=stadium; capacity=default",
+      "status": "reserve"
+    },
+    {
+      "id": "s-ismet-qayibov-stadionu",
+      "name": "İsmət Qayıbov Stadionu",
+      "type": "stadium",
+      "location": {
+        "lat": 40.4371,
+        "lng": 49.9551
+      },
+      "capacity": 3000,
+      "source": "osm:leisure=stadium; capacity=default",
+      "status": "reserve"
+    },
+    {
+      "id": "s-baki-olimpiya-stadionu",
+      "name": "Bakı Olimpiya Stadionu",
+      "type": "stadium",
+      "location": {
+        "lat": 40.42998,
+        "lng": 49.91953
+      },
+      "seats": 69870,
+      "capacity": 30000,
+      "source": "osm:leisure=stadium; capacity=wikidata:Q2612138#P1083",
+      "status": "open"
+    },
+    {
+      "id": "s-palms-sports-arena",
+      "name": "Palms Sports Arena",
+      "type": "stadium",
+      "location": {
+        "lat": 40.40017,
+        "lng": 49.94393
+      },
+      "seats": 15000,
+      "capacity": 15000,
+      "source": "osm:leisure=stadium; capacity=wikidata:Q4032454#P1083",
+      "status": "open"
+    },
+    {
+      "id": "s-30-nomreli-mekteb-stadionu",
+      "name": "30 nömrəli məktəb stadionu",
+      "type": "stadium",
+      "location": {
+        "lat": 40.42206,
+        "lng": 49.82708
+      },
+      "capacity": 3000,
+      "source": "osm:leisure=stadium; capacity=default",
+      "status": "reserve"
+    }
+  ],
+  "brigades": [
+    {
+      "id": "b-fire-1",
+      "name": "Yanğın-1 · Nəsimi Rayon Yanğınsöndürmә…",
+      "type": "fire",
+      "location": {
+        "lat": 40.38217,
+        "lng": 49.84056
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-fire-2",
+      "name": "Yanğın-2 · FHN yanğınsöndürmə hissəsi …",
+      "type": "fire",
+      "location": {
+        "lat": 40.36879,
+        "lng": 49.82143
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-fire-3",
+      "name": "Yanğın-3 · Yanğından Mühafizə Cəmiyyəti",
+      "type": "fire",
+      "location": {
+        "lat": 40.384,
+        "lng": 49.87719
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-fire-4",
+      "name": "Yanğın-4 · Yasamal Yanğından Mühafizə …",
+      "type": "fire",
+      "location": {
+        "lat": 40.40296,
+        "lng": 49.80207
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-fire-5",
+      "name": "Yanğın-5 · FHN Yangindan Muhafize Xidm…",
+      "type": "fire",
+      "location": {
+        "lat": 40.3845,
+        "lng": 49.80893
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-fire-6",
+      "name": "Yanğın-6 · Yanğınsöndürmə FHN 28 saylı…",
+      "type": "fire",
+      "location": {
+        "lat": 40.37947,
+        "lng": 49.97889
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-fire-7",
+      "name": "Yanğın-7 · Yanğından Mühafizə Cəmiyyət…",
+      "type": "fire",
+      "location": {
+        "lat": 40.41596,
+        "lng": 49.85756
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-fire-8",
+      "name": "Yanğın-8 · Yanğınsöndürmə İdarəsi 18 /…",
+      "type": "fire",
+      "location": {
+        "lat": 40.39707,
+        "lng": 49.91813
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-fire-9",
+      "name": "Yanğın-9 · Qaraçuxur Yanğınsöndürmə İd…",
+      "type": "fire",
+      "location": {
+        "lat": 40.40713,
+        "lng": 49.97036
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-fire-10",
+      "name": "Yanğın-10 · Səbail Rayonu Yanğınsöndürm…",
+      "type": "fire",
+      "location": {
+        "lat": 40.35343,
+        "lng": 49.83328
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-res-1",
+      "name": "Xilasetmə-1 · Nəsimi Rayon Yanğınsöndürmә…",
+      "type": "rescue",
+      "location": {
+        "lat": 40.38277,
+        "lng": 49.84116
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-res-2",
+      "name": "Xilasetmə-2 · FHN yanğınsöndürmə hissəsi …",
+      "type": "rescue",
+      "location": {
+        "lat": 40.36939,
+        "lng": 49.82203
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-res-3",
+      "name": "Xilasetmə-3 · Yanğından Mühafizə Cəmiyyəti",
+      "type": "rescue",
+      "location": {
+        "lat": 40.3846,
+        "lng": 49.87779
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-res-4",
+      "name": "Xilasetmə-4 · Yasamal Yanğından Mühafizə …",
+      "type": "rescue",
+      "location": {
+        "lat": 40.40356,
+        "lng": 49.80267
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-res-5",
+      "name": "Xilasetmə-5 · FHN Yangindan Muhafize Xidm…",
+      "type": "rescue",
+      "location": {
+        "lat": 40.3851,
+        "lng": 49.80953
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-res-6",
+      "name": "Xilasetmə-6 · Yanğınsöndürmə FHN 28 saylı…",
+      "type": "rescue",
+      "location": {
+        "lat": 40.38007,
+        "lng": 49.97949
+      },
+      "source": "osm:amenity=fire_station"
+    },
+    {
+      "id": "b-med-1",
+      "name": "Təcili Tibbi-1 · 17 Saylı Təcili Yardım Stan…",
+      "type": "medical",
+      "location": {
+        "lat": 40.42279,
+        "lng": 49.79885
+      },
+      "source": "osm:amenity=hospital"
+    },
+    {
+      "id": "b-med-2",
+      "name": "Təcili Tibbi-2 · Medical Plaza",
+      "type": "medical",
+      "location": {
+        "lat": 40.39357,
+        "lng": 49.84123
+      },
+      "source": "osm:amenity=hospital"
+    },
+    {
+      "id": "b-med-3",
+      "name": "Təcili Tibbi-3 · MediClub \\ Bakı",
+      "type": "medical",
+      "location": {
+        "lat": 40.37341,
+        "lng": 49.83463
+      },
+      "source": "osm:amenity=hospital"
+    },
+    {
+      "id": "b-med-4",
+      "name": "Təcili Tibbi-4 · 20 saylı Xəstəxana",
+      "type": "medical",
+      "location": {
+        "lat": 40.39801,
+        "lng": 49.97482
+      },
+      "source": "osm:amenity=hospital"
+    },
+    {
+      "id": "b-med-5",
+      "name": "Təcili Tibbi-5 · Zərifə Əliyeva adına Milli …",
+      "type": "medical",
+      "location": {
+        "lat": 40.4203,
+        "lng": 49.8201
+      },
+      "source": "osm:amenity=hospital"
+    },
+    {
+      "id": "b-med-6",
+      "name": "Təcili Tibbi-6 · 20 saylı poliklinika",
+      "type": "medical",
+      "location": {
+        "lat": 40.40836,
+        "lng": 49.81492
+      },
+      "source": "osm:amenity=hospital"
+    },
+    {
+      "id": "b-med-7",
+      "name": "Təcili Tibbi-7 · Lider Klinikası",
+      "type": "medical",
+      "location": {
+        "lat": 40.39297,
+        "lng": 49.79193
+      },
+      "source": "osm:amenity=hospital"
+    },
+    {
+      "id": "b-med-8",
+      "name": "Təcili Tibbi-8 · 34 saylı Dəri Zöhrəvi Xəstə…",
+      "type": "medical",
+      "location": {
+        "lat": 40.4446,
+        "lng": 49.98117
+      },
+      "source": "osm:amenity=hospital"
+    },
+    {
+      "id": "b-med-9",
+      "name": "Təcili Tibbi-9 · Təbriz Mehr Medical Center",
+      "type": "medical",
+      "location": {
+        "lat": 40.39775,
+        "lng": 49.83934
+      },
+      "source": "osm:amenity=hospital"
+    },
+    {
+      "id": "b-med-10",
+      "name": "Təcili Tibbi-10 · AMT-klinika",
+      "type": "medical",
+      "location": {
+        "lat": 40.38351,
+        "lng": 49.83524
+      },
+      "source": "osm:amenity=hospital"
+    }
+  ],
+  "districts": [
+    {
+      "name": "Binəqədi rayonu",
+      "center": {
+        "lat": 40.43315,
+        "lng": 49.73976
+      },
+      "population": 304300,
+      "populationYear": "2019",
+      "populationSource": "wikidata:Q864153#P1082",
+      "adminLevel": "8",
+      "wikidata": "Q864153"
+    },
+    {
+      "name": "Qaradağ rayonu",
+      "center": {
+        "lat": 40.0073,
+        "lng": 49.59572
+      },
+      "population": 112700,
+      "populationYear": "2019",
+      "populationSource": "wikidata:Q4818249#P1082",
+      "adminLevel": "6",
+      "wikidata": "Q4818249"
+    },
+    {
+      "name": "Yasamal rayonu",
+      "center": {
+        "lat": 40.38449,
+        "lng": 49.811
+      },
+      "population": 191500,
+      "populationYear": "2019",
+      "populationSource": "wikidata:Q4539151#P1082",
+      "adminLevel": "7",
+      "wikidata": "Q4539151"
+    },
+    {
+      "name": "Səbail rayonu",
+      "center": {
+        "lat": 40.21658,
+        "lng": 49.86518
+      },
+      "population": 100800,
+      "populationYear": "2019",
+      "populationSource": "wikidata:Q2028793#P1082",
+      "adminLevel": "8",
+      "wikidata": "Q2028793"
+    },
+    {
+      "name": "Nəsimi rayonu",
+      "center": {
+        "lat": 40.37747,
+        "lng": 49.83937
+      },
+      "population": 217400,
+      "populationYear": "2019",
+      "populationSource": "wikidata:Q4313899#P1082",
+      "adminLevel": "8",
+      "wikidata": "Q4313899"
+    },
+    {
+      "name": "Nərimanov rayonu",
+      "center": {
+        "lat": 40.41049,
+        "lng": 49.87094
+      },
+      "adminLevel": "8"
+    },
+    {
+      "name": "Nizami rayonu",
+      "center": {
+        "lat": 40.40793,
+        "lng": 49.92561
+      },
+      "population": 182900,
+      "populationYear": "2019",
+      "populationSource": "wikidata:Q3912215#P1082",
+      "adminLevel": "8",
+      "wikidata": "Q3912215"
+    },
+    {
+      "name": "Xətai rayonu",
+      "center": {
+        "lat": 40.22498,
+        "lng": 49.98034
+      },
+      "population": 271000,
+      "populationYear": "2019",
+      "populationSource": "wikidata:Q2076557#P1082",
+      "adminLevel": "8",
+      "wikidata": "Q2076557"
+    },
+    {
+      "name": "Sabunçu rayonu",
+      "center": {
+        "lat": 40.60029,
+        "lng": 49.98974
+      },
+      "population": 345400,
+      "populationYear": "2019",
+      "populationSource": "wikidata:Q2210210#P1082",
+      "adminLevel": "8",
+      "wikidata": "Q2210210"
+    },
+    {
+      "name": "Suraxanı rayonu",
+      "center": {
+        "lat": 40.26432,
+        "lng": 50.04545
+      },
+      "population": 204800,
+      "populationYear": "2019",
+      "populationSource": "wikidata:Q4446443#P1082",
+      "adminLevel": "8",
+      "wikidata": "Q4446443"
+    },
+    {
+      "name": "Xəzər rayonu",
+      "center": {
+        "lat": 40.39279,
+        "lng": 50.18486
+      },
+      "population": 202500,
+      "populationYear": "2019",
+      "populationSource": "wikidata:Q526313#P1082",
+      "adminLevel": "8",
+      "wikidata": "Q526313"
+    },
+    {
+      "name": "Pirallahı rayonu",
+      "center": {
+        "lat": 40.37757,
+        "lng": 50.71334
+      },
+      "population": 18500,
+      "populationYear": "2019",
+      "populationSource": "wikidata:Q12843909#P1082",
+      "adminLevel": "8",
+      "wikidata": "Q12843909"
+    }
+  ],
+  "hospitals": [
+    {
+      "name": "17 Saylı Təcili Yardım Stansiyası",
+      "location": {
+        "lat": 40.42279,
+        "lng": 49.79885
+      }
+    },
+    {
+      "name": "Medical Plaza",
+      "location": {
+        "lat": 40.39357,
+        "lng": 49.84123
+      }
+    },
+    {
+      "name": "MediClub \\ Bakı",
+      "location": {
+        "lat": 40.37341,
+        "lng": 49.83463
+      }
+    },
+    {
+      "name": "20 saylı Xəstəxana",
+      "location": {
+        "lat": 40.39801,
+        "lng": 49.97482
+      }
+    },
+    {
+      "name": "Zərifə Əliyeva adına Milli Oftalmologiya Mərkəzi",
+      "location": {
+        "lat": 40.4203,
+        "lng": 49.8201
+      }
+    },
+    {
+      "name": "20 saylı poliklinika",
+      "location": {
+        "lat": 40.40836,
+        "lng": 49.81492
+      }
+    },
+    {
+      "name": "Lider Klinikası",
+      "location": {
+        "lat": 40.39297,
+        "lng": 49.79193
+      }
+    },
+    {
+      "name": "34 saylı Dəri Zöhrəvi Xəstəxana",
+      "location": {
+        "lat": 40.4446,
+        "lng": 49.98117
+      }
+    },
+    {
+      "name": "Təbriz Mehr Medical Center",
+      "location": {
+        "lat": 40.39775,
+        "lng": 49.83934
+      }
+    },
+    {
+      "name": "AMT-klinika",
+      "location": {
+        "lat": 40.38351,
+        "lng": 49.83524
+      }
+    },
+    {
+      "name": "Məhkəmə Tibbi Ekspertizası",
+      "location": {
+        "lat": 40.44298,
+        "lng": 49.94146
+      }
+    },
+    {
+      "name": "4 saylı Vərəm Dispanseri",
+      "location": {
+        "lat": 40.4209,
+        "lng": 49.94573
+      }
+    },
+    {
+      "name": "1 saylı Uşaq İnfeksion Xəstəxanası",
+      "location": {
+        "lat": 40.41963,
+        "lng": 49.94042
+      }
+    },
+    {
+      "name": "Milli Onkologiya Mərkəzi",
+      "location": {
+        "lat": 40.39993,
+        "lng": 49.80523
+      }
+    },
+    {
+      "name": "Topçubaşov adına Klinika",
+      "location": {
+        "lat": 40.39568,
+        "lng": 49.80448
+      }
+    },
+    {
+      "name": "4 saylı Şəhər Poliklinikası",
+      "location": {
+        "lat": 40.39038,
+        "lng": 49.85478
+      }
+    },
+    {
+      "name": "MediClub Polyclinic",
+      "location": {
+        "lat": 40.37611,
+        "lng": 49.85616
+      }
+    },
+    {
+      "name": "7 saylı Doğum Evi",
+      "location": {
+        "lat": 40.41426,
+        "lng": 49.93047
+      }
+    },
+    {
+      "name": "ATU-nun terapiya korpusu",
+      "location": {
+        "lat": 40.39677,
+        "lng": 49.83179
+      }
+    },
+    {
+      "name": "Premium clinic",
+      "location": {
+        "lat": 40.4081,
+        "lng": 49.81009
+      }
+    },
+    {
+      "name": "İran İslam Respublikası Qızıl Aypara Cəmiyyətinin Klinikası",
+      "location": {
+        "lat": 40.38505,
+        "lng": 49.80385
+      }
+    },
+    {
+      "name": "Respublika Diaqnostika Mərkəzi",
+      "location": {
+        "lat": 40.39983,
+        "lng": 49.81054
+      }
+    },
+    {
+      "name": "Qadın məsləhətxanası",
+      "location": {
+        "lat": 40.42499,
+        "lng": 49.95321
+      }
+    },
+    {
+      "name": "Azərsutikinti xəstəxanası,",
+      "location": {
+        "lat": 40.39883,
+        "lng": 49.96715
+      }
+    },
+    {
+      "name": "Real Hospital",
+      "location": {
+        "lat": 40.38091,
+        "lng": 49.81091
+      }
+    },
+    {
+      "name": "20 saylı Uşaq Poliklinikası \\ Rəsulzadə",
+      "location": {
+        "lat": 40.4227,
+        "lng": 49.83602
+      }
+    },
+    {
+      "name": "Uniklinika",
+      "location": {
+        "lat": 40.37674,
+        "lng": 49.81841
+      }
+    },
+    {
+      "name": "Vital Klinika, Yeni Yasmal",
+      "location": {
+        "lat": 40.38869,
+        "lng": 49.79289
+      }
+    },
+    {
+      "name": "Psixiatrik Dispanser \\ Montin",
+      "location": {
+        "lat": 40.39114,
+        "lng": 49.87883
+      }
+    },
+    {
+      "name": "WorldMed Elmlər",
+      "location": {
+        "lat": 40.38024,
+        "lng": 49.81703
+      }
+    },
+    {
+      "name": "Tibbi profilaktika institutu",
+      "location": {
+        "lat": 40.38354,
+        "lng": 49.82838
+      }
+    },
+    {
+      "name": "Optimed Klinikası",
+      "location": {
+        "lat": 40.3995,
+        "lng": 49.8734
+      }
+    },
+    {
+      "name": "Medi Style",
+      "location": {
+        "lat": 40.40561,
+        "lng": 49.86211
+      }
+    },
+    {
+      "name": "Daxili Qoşunlar Hospitalı",
+      "location": {
+        "lat": 40.4151,
+        "lng": 49.86858
+      }
+    },
+    {
+      "name": "Narkoloju Dispanser / Zığ",
+      "location": {
+        "lat": 40.34698,
+        "lng": 49.95916
+      }
+    },
+    {
+      "name": "8 saylı Uşaq Xəstəxanası",
+      "location": {
+        "lat": 40.42808,
+        "lng": 49.98667
+      }
+    },
+    {
+      "name": "20 saylı şəhər xəstəxanası",
+      "location": {
+        "lat": 40.36314,
+        "lng": 49.94196
+      }
+    },
+    {
+      "name": "Respublika Uşaq Stomatoloji Mərkəzi",
+      "location": {
+        "lat": 40.40171,
+        "lng": 49.86936
+      }
+    },
+    {
+      "name": "Respublika Neyrocərrahiyyə Xəstəxanası",
+      "location": {
+        "lat": 40.37246,
+        "lng": 49.94122
+      }
+    },
+    {
+      "name": "Star Lab Tibb Mәrkәzi",
+      "location": {
+        "lat": 40.41275,
+        "lng": 49.80987
+      }
+    },
+    {
+      "name": "Nur Stomatoloji Kabineti",
+      "location": {
+        "lat": 40.37135,
+        "lng": 49.81918
+      }
+    },
+    {
+      "name": "Mədinə Tibb Mərkəzi",
+      "location": {
+        "lat": 40.45834,
+        "lng": 49.8424
+      }
+    },
+    {
+      "name": "Baku Medical Plaza Medilux filial",
+      "location": {
+        "lat": 40.40907,
+        "lng": 49.84649
+      }
+    },
+    {
+      "name": "Med Servis Tibb Mərkəzi",
+      "location": {
+        "lat": 40.379,
+        "lng": 49.83325
+      }
+    },
+    {
+      "name": "Kristal Dent Stomatoloji Klinikası",
+      "location": {
+        "lat": 40.38432,
+        "lng": 49.86284
+      }
+    },
+    {
+      "name": "Family Dent Stomatoloji Kabineti",
+      "location": {
+        "lat": 40.41558,
+        "lng": 49.84808
+      }
+    },
+    {
+      "name": "Eurolab Tibb Merkezi",
+      "location": {
+        "lat": 40.38785,
+        "lng": 49.83931
+      }
+    },
+    {
+      "name": "Dentstom Stomatoloji",
+      "location": {
+        "lat": 40.41997,
+        "lng": 49.8116
+      }
+    },
+    {
+      "name": "Respublika Klinik Uroloji Xəstəxanası",
+      "location": {
+        "lat": 40.36947,
+        "lng": 49.83287
+      }
+    },
+    {
+      "name": "Dental World Stomatoloji \\ Qələbə dairəsi",
+      "location": {
+        "lat": 40.39086,
+        "lng": 49.80869
+      }
+    },
+    {
+      "name": "Qaçqınlar üçün Göz Xəstəxanası",
+      "location": {
+        "lat": 40.364,
+        "lng": 49.95581
+      }
+    },
+    {
+      "name": "Prestij tibb mərkəzi",
+      "location": {
+        "lat": 40.42476,
+        "lng": 49.8442
+      }
+    },
+    {
+      "name": "Təcili Tibbi Yardım Servis Xidmətləri",
+      "location": {
+        "lat": 40.37505,
+        "lng": 49.84432
+      }
+    },
+    {
+      "name": "1 saylı Təcili Yardım Bölməsi",
+      "location": {
+        "lat": 40.40103,
+        "lng": 49.88019
+      }
+    },
+    {
+      "name": "Doğum Evi 6-cı Xəstəxana",
+      "location": {
+        "lat": 40.43739,
+        "lng": 49.8437
+      }
+    },
+    {
+      "name": "Biomed Spektr Tibb Mәrkәzi",
+      "location": {
+        "lat": 40.38754,
+        "lng": 49.82871
+      }
+    },
+    {
+      "name": "Mayomed Medical",
+      "location": {
+        "lat": 40.41303,
+        "lng": 49.8604
+      }
+    },
+    {
+      "name": "2 Saylı Təcili Yardım Stansiyası",
+      "location": {
+        "lat": 40.38063,
+        "lng": 49.86593
+      }
+    },
+    {
+      "name": "Healt Baku Medical Center",
+      "location": {
+        "lat": 40.3982,
+        "lng": 49.86079
+      }
+    },
+    {
+      "name": "7 saylı Uşaq Xəstəxanası",
+      "location": {
+        "lat": 40.39219,
+        "lng": 49.86008
+      }
+    },
+    {
+      "name": "5 saylı Uşaq İnfeksion Xəstəxanası",
+      "location": {
+        "lat": 40.42619,
+        "lng": 49.96225
+      }
+    },
+    {
+      "name": "Protez Ortopedik Bәrpa Mərkəzi",
+      "location": {
+        "lat": 40.39315,
+        "lng": 49.96342
+      }
+    },
+    {
+      "name": "DaVinçi Hospital Klinikası",
+      "location": {
+        "lat": 40.39731,
+        "lng": 49.7913
+      }
+    },
+    {
+      "name": "Medera Hospital",
+      "location": {
+        "lat": 40.41648,
+        "lng": 49.84135
+      }
+    },
+    {
+      "name": "Məlhəm Beynəlxalq Hospital",
+      "location": {
+        "lat": 40.40768,
+        "lng": 49.95487
+      }
+    },
+    {
+      "name": "Hərbi Hospital Qəbul Şöbəsi",
+      "location": {
+        "lat": 40.40054,
+        "lng": 49.82262
+      }
+    },
+    {
+      "name": "3 saylı Vərəm Dispanseri",
+      "location": {
+        "lat": 40.34721,
+        "lng": 49.83669
+      }
+    },
+    {
+      "name": "2 saylı Dəri Zöhrəvi Dispanser",
+      "location": {
+        "lat": 40.41535,
+        "lng": 49.92415
+      }
+    },
+    {
+      "name": "14 saylı Tibbi Sanitariya Hissəsi",
+      "location": {
+        "lat": 40.41084,
+        "lng": 49.93291
+      }
+    },
+    {
+      "name": "Stimul Hospital",
+      "location": {
+        "lat": 40.43367,
+        "lng": 49.95649
+      }
+    },
+    {
+      "name": "5 saylı Uşaq Xəstəxanası",
+      "location": {
+        "lat": 40.42113,
+        "lng": 49.96733
+      }
+    },
+    {
+      "name": "15 saylı Xəstəxan",
+      "location": {
+        "lat": 40.3916,
+        "lng": 49.9728
+      }
+    },
+    {
+      "name": "5 saylı Tibbi Sanitar Hissə",
+      "location": {
+        "lat": 40.44055,
+        "lng": 49.97655
+      }
+    },
+    {
+      "name": "21 saylı Xəstəxana",
+      "location": {
+        "lat": 40.45696,
+        "lng": 49.98833
+      }
+    },
+    {
+      "name": "7 saylı Nevroloji Uşaq Sanatoriyası",
+      "location": {
+        "lat": 40.4595,
+        "lng": 49.98266
+      }
+    },
+    {
+      "name": "Elmi Tədqiqat Tibbi Bərpa İnstitutu",
+      "location": {
+        "lat": 40.38414,
+        "lng": 49.85228
+      }
+    },
+    {
+      "name": "11 saylı Uşaq Poliklinikası",
+      "location": {
+        "lat": 40.43789,
+        "lng": 49.80604
+      }
+    },
+    {
+      "name": "24 saylı Xəstəxana",
+      "location": {
+        "lat": 40.37264,
+        "lng": 49.97548
+      }
+    },
+    {
+      "name": "Biovista",
+      "location": {
+        "lat": 40.34922,
+        "lng": 49.81092
+      }
+    },
+    {
+      "name": "City Hospital",
+      "location": {
+        "lat": 40.40191,
+        "lng": 49.83373
+      }
+    },
+    {
+      "name": "Lux İnternational Hospital",
+      "location": {
+        "lat": 40.40566,
+        "lng": 49.87283
+      }
+    },
+    {
+      "name": "Dental Revolution",
+      "location": {
+        "lat": 40.4229,
+        "lng": 49.82919
+      }
+    },
+    {
+      "name": "Medicus Tibb Mərkəzi \\ Yeni Yasamal",
+      "location": {
+        "lat": 40.3826,
+        "lng": 49.79363
+      }
+    },
+    {
+      "name": "SwissDent Klinikası",
+      "location": {
+        "lat": 40.3745,
+        "lng": 49.80546
+      }
+    },
+    {
+      "name": "Təcili Yardim Xəstəxanasi Musa Nağiyev adina",
+      "location": {
+        "lat": 40.39162,
+        "lng": 49.8324
+      }
+    },
+    {
+      "name": "Mərkəzi Dəmiryol Xəstəxanası",
+      "location": {
+        "lat": 40.42256,
+        "lng": 49.80458
+      }
+    },
+    {
+      "name": "1 saylı Vərəm deispanseri \\ Bakı",
+      "location": {
+        "lat": 40.40657,
+        "lng": 49.80093
+      }
+    },
+    {
+      "name": "Dental Studio \\ Ukrayna dairəsi",
+      "location": {
+        "lat": 40.37835,
+        "lng": 49.94932
+      }
+    },
+    {
+      "name": "Mərkəzi klinik xəstəxana",
+      "location": {
+        "lat": 40.36153,
+        "lng": 49.82453
+      }
+    },
+    {
+      "name": "Dəmiryol Xəstəxanası",
+      "location": {
+        "lat": 40.3801,
+        "lng": 49.85229
+      }
+    },
+    {
+      "name": "9 Saylı Təcili Yardım Stansiyası",
+      "location": {
+        "lat": 40.42948,
+        "lng": 49.8231
+      }
+    },
+    {
+      "name": "Xüsusi Müalicə Saglamliq Kompleksi (XMSK)",
+      "location": {
+        "lat": 40.35307,
+        "lng": 49.80926
+      }
+    },
+    {
+      "name": "2 Saylı Kliniki Psixiatriya Xəstəxanası",
+      "location": {
+        "lat": 40.38524,
+        "lng": 49.84355
+      }
+    },
+    {
+      "name": "Sağlam Ailə",
+      "location": {
+        "lat": 40.40943,
+        "lng": 49.86186
+      }
+    },
+    {
+      "name": "Universal Hospital",
+      "location": {
+        "lat": 40.41874,
+        "lng": 49.84572
+      }
+    },
+    {
+      "name": "Milli Sağlamlıq Mərkəzi",
+      "location": {
+        "lat": 40.41124,
+        "lng": 49.9
+      }
+    },
+    {
+      "name": "Bərpa Tibb Mərkəzi \\ Nobel \\ 8 Noyabr pr.",
+      "location": {
+        "lat": 40.36856,
+        "lng": 49.9347
+      }
+    },
+    {
+      "name": "32 saylı Xəstəxana / Keşlə",
+      "location": {
+        "lat": 40.39647,
+        "lng": 49.8946
+      }
+    },
+    {
+      "name": "18 Saylı Birləşmiş Şəhər Xəstəxanası",
+      "location": {
+        "lat": 40.41281,
+        "lng": 49.93722
+      }
+    },
+    {
+      "name": "Tibb Məntəqəsi",
+      "location": {
+        "lat": 40.45183,
+        "lng": 49.94268
+      }
+    },
+    {
+      "name": "6 saylı Vərəm Dispanseri",
+      "location": {
+        "lat": 40.37096,
+        "lng": 49.99063
+      }
+    },
+    {
+      "name": "6 saylı Uşaq Uroloji Sanatoriyası",
+      "location": {
+        "lat": 40.37688,
+        "lng": 49.96407
+      }
+    },
+    {
+      "name": "4 saylı Uşaq Vərəm Sanatoriyası",
+      "location": {
+        "lat": 40.37403,
+        "lng": 49.9554
+      }
+    },
+    {
+      "name": "Tuberkuloz Dispanseri \\ UPD Keşlə",
+      "location": {
+        "lat": 40.38534,
+        "lng": 49.90404
+      }
+    },
+    {
+      "name": "Sulutəpə Tibb Məntəqəsi",
+      "location": {
+        "lat": 40.43292,
+        "lng": 49.77322
+      }
+    }
+  ]
+}

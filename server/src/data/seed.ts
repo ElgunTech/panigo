@@ -1,4 +1,31 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import type { AssemblyPoint, AssemblyPointType, Brigade, BrigadeType, LatLng, Zone } from '@shared/types';
+
+/**
+ * Real-world dataset imported from OpenStreetMap + Wikidata by
+ * scripts/fetch-osm-data.mjs (see docs/DATA.md). If the file is missing or
+ * DATASET=curated, the hand-curated fallback below is used — the system never
+ * depends on the network at start-up.
+ */
+interface OsmDataset {
+  source: string;
+  fetchedAt: string;
+  points: { id: string; name: string; type: AssemblyPointType; location: LatLng; capacity: number; status: 'open' | 'reserve'; source: string }[];
+  brigades: { id: string; name: string; type: BrigadeType; location: LatLng; source: string }[];
+  districts: { name: string; population?: number; populationYear?: string; populationSource?: string }[];
+  hospitals: { name: string; location: LatLng }[];
+}
+
+function loadDataset(): OsmDataset | null {
+  if (process.env.DATASET === 'curated') return null;
+  try {
+    return JSON.parse(fs.readFileSync(path.join(import.meta.dirname, 'baku-osm.json'), 'utf8')) as OsmDataset;
+  } catch {
+    return null;
+  }
+}
+export const DATASET = loadDataset();
 
 /** Bakı şəhəri — rayon zonaları (təxmini mərkəzlər). */
 export const ZONES: Zone[] = [
@@ -10,7 +37,10 @@ export const ZONES: Zone[] = [
   { id: 'nizami', name: 'Nizami', center: { lat: 40.4035, lng: 49.9365 }, radiusM: 2200 },
   { id: 'binagadi', name: 'Binəqədi', center: { lat: 40.4300, lng: 49.8300 }, radiusM: 2500 },
   { id: 'sabunchu', name: 'Sabunçu', center: { lat: 40.4280, lng: 49.9300 }, radiusM: 2500 },
-];
+].map((z) => {
+  const d = DATASET?.districts.find((x) => x.name.startsWith(z.name));
+  return d?.population ? { ...z, population: d.population, populationYear: d.populationYear } : z;
+});
 
 type PointSeed = [id: string, name: string, type: AssemblyPointType, lat: number, lng: number, capacity: number, occPct: number, reserve?: boolean];
 
@@ -61,7 +91,34 @@ export const CLOSURE_PRESETS: { name: string; location: LatLng; radiusM: number 
   { name: 'Babək prospekti', location: { lat: 40.3890, lng: 49.8880 }, radiusM: 280 },
 ];
 
+/** Deterministic pseudo-random initial load (20–75%) so every demo run starts identically. */
+function initialLoadPct(id: string): number {
+  let h = 2166136261;
+  for (const ch of id) h = Math.imul(h ^ ch.charCodeAt(0), 16777619);
+  return 20 + (Math.abs(h) % 56);
+}
+
+/** Demo hot-spots: realistic pressure on well-known central points at t=0. */
+const INITIAL_HOTSPOTS: Record<string, number> = { 'Dənizkənarı Milli Park': 86, 'Sahil m/st sığınacağı': 82, '28 May m/st sığınacağı': 71 };
+
 export function seedPoints(now = Date.now()): AssemblyPoint[] {
+  if (DATASET) {
+    return DATASET.points.map((p) => {
+      const occPct = p.status === 'reserve' ? 0 : (INITIAL_HOTSPOTS[p.name] ?? initialLoadPct(p.id));
+      return {
+        id: p.id,
+        name: p.name,
+        type: p.type,
+        location: p.location,
+        zoneId: zoneOf(p.location).id,
+        capacity: p.capacity,
+        occupancy: Math.round((p.capacity * occPct) / 100),
+        incoming: 0,
+        status: p.status,
+        updatedAt: now,
+      };
+    });
+  }
   return POINT_SEEDS.map(([id, name, type, lat, lng, capacity, occPct, reserve]) => ({
     id,
     name,
@@ -77,6 +134,18 @@ export function seedPoints(now = Date.now()): AssemblyPoint[] {
 }
 
 export function seedBrigades(now = Date.now()): Brigade[] {
+  if (DATASET) {
+    return DATASET.brigades.map((b) => ({
+      id: b.id,
+      name: b.name,
+      type: b.type,
+      location: b.location,
+      base: b.location,
+      status: 'available',
+      targetSosIds: [],
+      updatedAt: now,
+    }));
+  }
   return BRIGADE_SEEDS.map(([id, name, type, lat, lng]) => ({
     id,
     name,

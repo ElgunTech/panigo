@@ -113,14 +113,27 @@ describe('RoutingService (provider chain + circuit breaker)', () => {
   });
 });
 
+describe('real-world dataset (OpenStreetMap + Wikidata)', () => {
+  it('loads real Baku assembly points and brigades', () => {
+    const pts = seedPoints();
+    expect(pts.filter((p) => p.type === 'shelter').length).toBeGreaterThan(20); // metro stations
+    expect(pts.some((p) => p.name.includes('Olimpiya'))).toBe(true);
+    expect(pts.some((p) => p.status === 'reserve')).toBe(true);
+    expect(pts.every((p) => p.capacity > 0 && p.occupancy <= p.capacity)).toBe(true);
+  });
+  it('excludes restricted sites from assembly points', () => {
+    expect(seedPoints().some((p) => /residence|xiyaban|zoo/i.test(p.name))).toBe(false);
+  });
+});
+
 describe('rankPoints', () => {
   it('never recommends ≥90% points ahead of available ones and excludes reserve points', () => {
     const pts = seedPoints();
-    const near = pts.find((p) => p.id === 'p-28may')!;
+    const near = pts.find((p) => p.status === 'open' && p.type === 'shelter')!;
     near.occupancy = near.capacity * 0.95;
     const ranked = rankPoints(near.location, pts);
-    expect(ranked[0].point.id).not.toBe('p-28may');
-    expect(ranked.find((o) => o.point.id === 'p-28may')!.full).toBe(true);
+    expect(ranked[0].point.id).not.toBe(near.id);
+    expect(ranked.find((o) => o.point.id === near.id)!.full).toBe(true);
     expect(ranked.some((o) => o.point.status === 'reserve')).toBe(false);
   });
 });

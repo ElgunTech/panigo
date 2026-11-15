@@ -1,4 +1,4 @@
-import type { AssemblyPoint, Brigade, CitizenStatus, CrisisAlert, DispatchSnapshot, EvacuationPlan, LiveEvent, RoadClosure, SosSignal, SystemStatus, Zone } from '@shared/types';
+import type { Facility, AssemblyPoint, Brigade, CitizenStatus, CrisisAlert, DispatchSnapshot, EvacuationPlan, LiveEvent, RoadClosure, SosSignal, SystemStatus, Zone } from '@shared/types';
 
 /**
  * Normalised client-side read model. Pure reducer → trivially unit-testable
@@ -6,6 +6,7 @@ import type { AssemblyPoint, Brigade, CitizenStatus, CrisisAlert, DispatchSnapsh
  */
 export interface LiveState {
   zones: Zone[];
+  hospitals: Facility[];
   points: Record<string, AssemblyPoint>;
   closures: Record<string, RoadClosure>;
   sos: Record<string, SosSignal>;
@@ -18,6 +19,7 @@ export interface LiveState {
 
 export const emptyState: LiveState = {
   zones: [],
+  hospitals: [],
   points: {},
   closures: {},
   sos: {},
@@ -34,6 +36,7 @@ export function fromSnapshot(s: Partial<DispatchSnapshot>, prev: LiveState = emp
   return {
     ...prev,
     zones: s.zones ?? prev.zones,
+    hospitals: s.hospitals ?? prev.hospitals,
     points: s.points ? byId(s.points) : prev.points,
     closures: s.closures ? byId(s.closures) : prev.closures,
     sos: s.sos ? byId(s.sos) : prev.sos,

@@ -1,3 +1,4 @@
+import { getSession } from './session';
 /** Thin typed fetch wrapper. Token is per-app ("citizen" | "operator") and kept in localStorage. */
 export type TokenKind = 'citizen' | 'operator';
 
@@ -45,8 +46,13 @@ export async function api<T>(path: string, opts: { method?: string; body?: unkno
   return data as T;
 }
 
-/** Ensures an anonymous citizen token exists (one-click SOS needs zero sign-up). */
+/**
+ * Token for the citizen app: the signed-in account if there is one, otherwise
+ * an anonymous guest session (one-click SOS must never require sign-up).
+ */
 export async function ensureCitizenToken(): Promise<string> {
+  const s = getSession();
+  if (s && s.user.role === 'citizen') return s.token;
   const existing = getToken('citizen');
   if (existing) {
     try {
@@ -56,7 +62,7 @@ export async function ensureCitizenToken(): Promise<string> {
       /* expired/invalid → issue a new one */
     }
   }
-  const { token } = await api<{ token: string }>('/auth/citizen', { method: 'POST' });
+  const { token } = await api<{ token: string }>('/auth/guest', { method: 'POST' });
   setToken('citizen', token);
   return token;
 }

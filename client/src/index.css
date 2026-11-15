@@ -65,3 +65,15 @@ body {
 input[type='range'].occ-range {
   accent-color: #ef4444;
 }
+
+.hospital-pin {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: #f8fafc;
+  color: #dc2626;
+  font: 900 13px/16px Inter, sans-serif;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  opacity: 0.85;
+}

@@ -8,11 +8,13 @@ import { loadConfig } from './config';
 import { EventLog } from './persistence/eventLog';
 import { Broadcaster } from './realtime/broadcaster';
 import { Engine } from './services/engine';
+import { UserRepository } from './security/userRepository';
 
 async function main() {
   const config = loadConfig();
   const engine = new Engine(config);
-  const app = createApp(engine, config);
+  const users = new UserRepository(config.dbFile);
+  const app = createApp(engine, config, users);
 
   // Serve the built SPA in production (single-process deploy)
   const dist = path.resolve(import.meta.dirname, '../../client/dist');
@@ -37,6 +39,7 @@ async function main() {
     engine.stop();
     broadcaster.stop();
     eventLog?.close();
+    users.close();
     io.close();
     server.close(() => process.exit(0));
     setTimeout(() => process.exit(0), 3000).unref();

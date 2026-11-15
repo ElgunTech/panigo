@@ -12,6 +12,7 @@ export interface AppConfig {
   osrmTimeoutMs: number;
   dbFile: string | null;
   rateLimitPerMin: number;
+  authRateLimitPerMin: number;
   sosPerCitizenPerMin: number;
   broadcastIntervalMs: number;
   simulation: boolean;
@@ -32,6 +33,7 @@ export function loadConfig(overrides: Partial<AppConfig> = {}): AppConfig {
     osrmTimeoutMs: num(e.OSRM_TIMEOUT_MS, 2500),
     dbFile: e.DB_FILE === 'off' ? null : (e.DB_FILE ?? 'uce-events.db'),
     rateLimitPerMin: num(e.RATE_LIMIT_PER_MIN, 600),
+    authRateLimitPerMin: num(e.AUTH_RATE_LIMIT_PER_MIN, 20),
     sosPerCitizenPerMin: num(e.SOS_PER_CITIZEN_PER_MIN, 6),
     broadcastIntervalMs: num(e.BROADCAST_INTERVAL_MS, 250),
     simulation: (e.SIMULATION ?? 'on') !== 'off',

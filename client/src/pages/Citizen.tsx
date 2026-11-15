@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
-import { AlertTriangle, ArrowLeft, Check, CheckCircle2, Clock, Crosshair, Footprints, Car, Info, Loader2, MapPin, Navigation, RotateCcw, ShieldCheck, X } from 'lucide-react';
+import { LogIn, LogOut, AlertTriangle, ArrowLeft, Check, CheckCircle2, Clock, Crosshair, Footprints, Car, Info, Loader2, MapPin, Navigation, RotateCcw, ShieldCheck, X } from 'lucide-react';
 import { HAZARDS, type EvacuationPlan, type Hazard, type LatLng, type PublicSnapshot, type RouteResult, type SosSignal } from '@shared/types';
 import { useI18n } from '../i18n';
 import { api, ApiError, ensureCitizenToken } from '../lib/api';
 import { useLive } from '../lib/useLive';
+import { setSession, useSession } from '../lib/session';
 import { fmtDistance, fmtMinutes, HAZARD_COLOR, occColor, pct, timeAgo } from '../lib/format';
 import { CityMap, ClosuresLayer, FitTo, MapClick, PointsLayer, RouteLayer, YouMarker } from '../components/CityMap';
 import { ConnBadge, HazardIcon, LangSwitch, Logo, OccupancyBar, PointIcon } from '../components/ui';
@@ -149,6 +150,7 @@ export default function Citizen() {
           <div className="flex items-center gap-2">
             <ConnBadge conn={conn} />
             <LangSwitch />
+            <AccountButton />
           </div>
         </header>
 
@@ -416,5 +418,31 @@ function Stat({ icon, value, label }: { icon: React.ReactNode; value: string; la
       <div className="mt-1 text-sm font-bold">{value}</div>
       {label && <div className="text-[10px] text-slate-500">{label}</div>}
     </div>
+  );
+}
+
+/** Signed-in citizen → avatar + sign out; guest → "Sign in" link to the unified login page. */
+function AccountButton() {
+  const { t } = useI18n();
+  const session = useSession();
+  const user = session && !session.user.guest && session.user.role === 'citizen' ? session.user : null;
+  if (!user)
+    return (
+      <Link to="/login?next=/citizen" className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-slate-700">
+        <LogIn className="h-3.5 w-3.5" /> <span className="hidden sm:inline">{t.auth.signIn}</span>
+      </Link>
+    );
+  return (
+    <button
+      onClick={() => {
+        setSession(null);
+        window.location.reload();
+      }}
+      title={`${user.name} — ${t.auth.signOut}`}
+      className="group grid h-8 w-8 place-items-center rounded-full bg-blue-600 text-[11px] font-bold uppercase text-white hover:bg-red-600"
+    >
+      <span className="group-hover:hidden">{user.name.slice(0, 2)}</span>
+      <LogOut className="hidden h-3.5 w-3.5 group-hover:block" />
+    </button>
   );
 }

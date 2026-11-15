@@ -1,7 +1,7 @@
 import { useEffect, type ReactNode } from 'react';
 import L from 'leaflet';
 import { Circle, CircleMarker, MapContainer, Marker, Polyline, TileLayer, Tooltip, useMap, useMapEvents } from 'react-leaflet';
-import type { AssemblyPoint, Brigade, LatLng, RoadClosure, RouteResult, SosSignal } from '@shared/types';
+import type { Facility, AssemblyPoint, Brigade, LatLng, RoadClosure, RouteResult, SosSignal } from '@shared/types';
 import { HAZARD_COLOR, occColor, pct } from '../lib/format';
 
 export const BAKU_CENTER: LatLng = { lat: 40.395, lng: 49.865 };
@@ -145,4 +145,19 @@ const youIcon = L.divIcon({ className: '', iconSize: [22, 22], iconAnchor: [11, 
 
 export function YouMarker({ at }: { at: LatLng }) {
   return <Marker position={[at.lat, at.lng]} icon={youIcon} />;
+}
+
+const hospitalIcon = L.divIcon({ className: '', iconSize: [16, 16], iconAnchor: [8, 8], html: '<div class="hospital-pin">+</div>' });
+
+/** Real hospitals (OpenStreetMap) — reference layer for medical dispatch. */
+export function HospitalsLayer({ hospitals }: { hospitals: Facility[] }) {
+  return (
+    <>
+      {hospitals.map((h, i) => (
+        <Marker key={i} position={[h.location.lat, h.location.lng]} icon={hospitalIcon} zIndexOffset={-500}>
+          <Tooltip>🏥 {h.name}</Tooltip>
+        </Marker>
+      ))}
+    </>
+  );
 }

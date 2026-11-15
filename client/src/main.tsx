@@ -6,6 +6,7 @@ import { I18nProvider } from './i18n';
 import Landing from './pages/Landing';
 import Citizen from './pages/Citizen';
 import Dispatch from './pages/Dispatch';
+import Login from './pages/Login';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/" element={<Landing />} />
           <Route path="/citizen" element={<Citizen />} />
           <Route path="/dispatch" element={<Dispatch />} />
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
