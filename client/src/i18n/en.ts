@@ -112,6 +112,7 @@ export const en: Dict = {
     frontLight: 'Finger on the front camera — the screen is the light source',
     pressHint: 'Do not press hard — a light touch works best',
     diag: 'Diagnostics',
+    coverHint: 'The small preview is not red — your finger is not covering the active lens. On multi-lens phones put the finger on the lens closest to the torch, or cover all lenses together.',
     desktopHint: 'This feature is meant for phones. Computer webcams have no torch, so the pulse is often not detected — at least choose "Front camera (screen light)".',
   },
   hazard: { fire: 'Fire', collapse: 'Collapse', flood: 'Flooding', medical: 'Medical help' },

@@ -82,6 +82,8 @@ export function PulseMeter({ token, onClose, onSent }: { token: string | null; o
   // phones: rear camera + torch; computers have no torch → default to the screen light
   const [facing, setFacing] = useState<Facing>(isMobile ? 'environment' : 'user');
   const [finger, setFinger] = useState(false);
+  /** finger missing for > 2 s → explain which lens to cover */
+  const [needCover, setNeedCover] = useState(false);
   const [progress, setProgress] = useState(0);
   const [live, setLive] = useState<number | null>(null);
   const [result, setResult] = useState<PulseEstimate | null>(null);
@@ -206,6 +208,7 @@ export function PulseMeter({ token, onClose, onSent }: { token: string | null; o
         const ok = fingerDetected(s);
         lost = ok ? 0 : lost + 1;
         setFinger(ok || lost < LOST_FRAMES);
+        setNeedCover(lost > 60);
 
         if (lost >= LOST_FRAMES) {
           // finger really lifted → restart the window
@@ -352,6 +355,7 @@ export function PulseMeter({ token, onClose, onSent }: { token: string | null; o
             <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
               <div className="h-full rounded-full bg-red-500 transition-[width] duration-300" style={{ width: `${progress * 100}%` }} />
             </div>
+            {needCover && <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-[11px] leading-snug text-amber-800">{t.pulse.coverHint}</p>}
             {facing === 'environment' && !torch && <p className="mt-2 text-[11px] text-slate-500">{t.pulse.torchHint}</p>}
             {diag && (
               <p className="mt-2 font-mono text-[10px] text-slate-400">

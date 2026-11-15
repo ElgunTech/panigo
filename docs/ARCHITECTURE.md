@@ -102,6 +102,14 @@ Qayda B: open məntəqədə occupancy / capacity > 95%
 - **Cihazda emal:** `getUserMedia` (arxa kamera) + fənər (`torch`, Android Chrome). Kadrın mərkəzindən orta qırmızı dəyər götürülür. Barmaq lensi örtmürsə (qırmızı dominantlığı yoxdursa), pəncərə sıfırlanır. Videonun özü heç yerə göndərilmir.
 - **Alqoritm** (`client/src/lib/ppg.ts`): 30 Hz-ə bərabər yenidən seçmə → ~1 s baza xəttinin çıxılması və hamarlama (≈0,7–4 Hz) → 40–180 bpm aralığında avtokorrelyasiya → parabolik dəqiqləşdirmə. Keyfiyyət = normallaşdırılmış avtokorrelyasiya zirvəsi; 0,45-dən aşağı olduqda nəticə rədd edilir.
 - **Server:** `POST /citizen/vitals {bpm, quality, method:'camera_ppg'}` (Zod: 30–220). Nəbz vətəndaşın açıq SOS-larına bağlanır; son 10 dəqiqədə ölçülübsə, yeni SOS-a da keçir. `abnormal` (<50 və ya >120) yalnız işarələnir, **prioritet avtomatik dəyişmir**, qərarı insan verir. Audit jurnalına yazılır.
+- **Real cihazda QA (Məlikova Fatimə):** Android 10 telefon (Chrome) və Windows noutbuk ilə Cloudflare HTTPS tuneli üzərindən sınaq aparıldı. Dev rejimində yalnız kadrların orta R/G/B dəyərləri yazıldı (şəkil yox) və alqoritm bu real datanın əsasında tənzimləndi:
+  - ilk ~3 s avto-ekspozisiya sıçrayışıdır və atılır;
+  - bütün pəncərə əvəzinə sürüşən pəncərələrdən ən təmizi seçilir. Telefonda köhnə metodun keyfiyyəti 0,05 idi, yeni metodla 62 bpm, keyfiyyət 0,57 alındı;
+  - işıqsız veb-kamera saxta rəqəm vermir, rədd edilir (keyfiyyət həddi 0,5);
+  - çox linzalı telefonlarda fənəri olan linza avtomatik axtarılır;
+  - barmaq səhv linzadadırsa, istifadəçiyə ipucu göstərilir.
+
+  Real yazılar `client/src/lib/__fixtures__` qovluğunda reqressiya testi kimi saxlanılır (`ppg.real.test.ts`). Yekun sınaqda komanda telefonda funksiyanın **işlədiyini təsdiqlədi**.
 - **Məhdudiyyət:** iPhone Safari-də fənəri API ilə yandırmaq mümkün deyil (işıqlı yerdə ölçmək lazımdır). Kamera yalnız HTTPS və ya localhost üzərində işləyir.
 
 ### 3.4 Davamlı marşrutlaşdırma (`routingService.ts`)
