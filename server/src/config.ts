@@ -31,7 +31,7 @@ export function loadConfig(overrides: Partial<AppConfig> = {}): AppConfig {
     routingProviders: (e.ROUTING_PROVIDERS ?? 'osrm,simulated').split(',').map((s) => s.trim()),
     osrmUrl: e.OSRM_URL ?? 'https://router.project-osrm.org',
     osrmTimeoutMs: num(e.OSRM_TIMEOUT_MS, 2500),
-    dbFile: e.DB_FILE === 'off' ? null : (e.DB_FILE ?? 'uce-events.db'),
+    dbFile: e.DB_FILE === 'off' ? null : (e.DB_FILE ?? 'panigo-events.db'),
     rateLimitPerMin: num(e.RATE_LIMIT_PER_MIN, 600),
     authRateLimitPerMin: num(e.AUTH_RATE_LIMIT_PER_MIN, 20),
     sosPerCitizenPerMin: num(e.SOS_PER_CITIZEN_PER_MIN, 6),

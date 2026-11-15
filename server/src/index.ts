@@ -31,11 +31,11 @@ async function main() {
   if (config.simulation) engine.start();
 
   server.listen(config.port, () => {
-    console.log(`[uce] API + realtime on http://localhost:${config.port}  (routing: ${config.routingProviders.join(' → ')}, db: ${eventLog ? config.dbFile : 'off'})`);
+    console.log(`[panigo] API + realtime on http://localhost:${config.port}  (routing: ${config.routingProviders.join(' → ')}, db: ${eventLog ? config.dbFile : 'off'})`);
   });
 
   const shutdown = () => {
-    console.log('[uce] shutting down…');
+    console.log('[panigo] shutting down…');
     engine.stop();
     broadcaster.stop();
     eventLog?.close();

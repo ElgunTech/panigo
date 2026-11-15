@@ -45,7 +45,7 @@ async function overpass() {
       console.log(`→ ${url}`);
       const res = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'uce-prototype/1.0 (educational)' },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'panigo-prototype/1.0 (educational)' },
         body: 'data=' + encodeURIComponent(QUERY),
         signal: AbortSignal.timeout(120_000),
       });
@@ -164,7 +164,7 @@ async function wikidata(ids) {
   for (let i = 0; i < list.length; i += 40) {
     const url = `https://www.wikidata.org/w/api.php?action=wbgetentities&props=claims&format=json&ids=${list.slice(i, i + 40).join('|')}`;
     try {
-      const r = await fetch(url, { headers: { 'User-Agent': 'uce-prototype/1.0 (educational)' }, signal: AbortSignal.timeout(60_000) });
+      const r = await fetch(url, { headers: { 'User-Agent': 'panigo-prototype/1.0 (educational)' }, signal: AbortSignal.timeout(60_000) });
       const j = await r.json();
       for (const [id, ent] of Object.entries(j.entities ?? {})) {
         const latest = (p) => {

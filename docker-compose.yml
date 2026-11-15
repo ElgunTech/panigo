@@ -1,5 +1,5 @@
 services:
-  uce:
+  panigo:
     build: .
     ports:
       - "4000:4000"
@@ -10,7 +10,7 @@ services:
       CORS_ORIGINS: http://localhost:4000
       ROUTING_PROVIDERS: osrm,simulated
     volumes:
-      - uce-data:/data
+      - panigo-data:/data
     restart: unless-stopped
 volumes:
-  uce-data:
+  panigo-data:

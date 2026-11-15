@@ -24,7 +24,7 @@ const I18nContext = createContext<Ctx | null>(null);
 
 function initialLang(): Lang {
   try {
-    const saved = localStorage.getItem('uce.lang');
+    const saved = localStorage.getItem('panigo.lang');
     if (saved && saved in LANGS) return saved as Lang;
   } catch {
     /* storage unavailable */
@@ -39,7 +39,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     setLangState(l);
     document.documentElement.lang = l;
     try {
-      localStorage.setItem('uce.lang', l);
+      localStorage.setItem('panigo.lang', l);
     } catch {
       /* ignore */
     }

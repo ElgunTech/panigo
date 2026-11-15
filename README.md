@@ -1,4 +1,4 @@
-# UCE — Urban Crisis & Crowd Evacuation Engine
+# PaniGo — Urban Crisis & Crowd Evacuation Engine
 
 Zəlzələ, sel, sənaye qəzası və kütləvi tədbirlər zamanı **vətəndaşları ən yaxın təhlükəsiz toplanış məntəqəsinə yönləndirən**, **SOS siqnallarını toplayan** və **FHN dispetçerlərinə böhran ocaqlarını avtomatik göstərən** real-time mikro-sistem.
 
@@ -41,7 +41,7 @@ npm run dev
 docker compose up --build
 ```
 
-Sonra <http://localhost:4000> ünvanını açın. SPA, API və WebSocket eyni portdan verilir, SQLite faylı `uce-data` volume-da saxlanılır.
+Sonra <http://localhost:4000> ünvanını açın. SPA, API və WebSocket eyni portdan verilir, SQLite faylı `panigo-data` volume-da saxlanılır.
 
 ### Testlər və keyfiyyət yoxlaması
 

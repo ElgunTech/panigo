@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, LogIn, Radio, Smartphone } from 'lucide-react';
 import { useI18n } from '../i18n';
-import { LangSwitch, Logo } from '../components/ui';
+import { LangSwitch, Logo, LogoMark } from '../components/ui';
 
 export default function Landing() {
   const { t } = useI18n();
@@ -21,11 +21,17 @@ export default function Landing() {
         </div>
       </header>
       <main className="relative mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6 sm:pt-16">
-        <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-red-300">
+        <p lang="en" className="mb-4 inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-red-300">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-400" /> Digital Challenge Cup · Final
         </p>
-        <h1 className="max-w-3xl text-3xl font-extrabold tracking-tight sm:text-5xl">{t.app.title}</h1>
-        <p className="mt-4 max-w-2xl text-base text-slate-400 sm:text-lg">{t.app.tagline}</p>
+        <div className="flex items-center gap-4 sm:gap-5">
+          <LogoMark className="h-16 w-16 shrink-0 drop-shadow-[0_10px_30px_rgba(220,38,38,0.45)] sm:h-20 sm:w-20" />
+          <h1 className="text-5xl font-extrabold tracking-tight sm:text-7xl">
+            Pani<span className="bg-gradient-to-r from-red-500 to-rose-400 bg-clip-text text-transparent">Go</span>
+          </h1>
+        </div>
+        <p className="mt-5 max-w-3xl text-xl font-semibold text-slate-200 sm:text-2xl">{t.app.title}</p>
+        <p className="mt-3 max-w-2xl text-base text-slate-400 sm:text-lg">{t.app.tagline}</p>
 
         <div className="mt-10 grid gap-5 md:grid-cols-2">
           <Card to="/citizen" icon={<Smartphone className="h-6 w-6" />} title={t.landing.citizenTitle} desc={t.landing.citizenDesc} cta={t.landing.citizenCta} accent="from-blue-500 to-indigo-600" />

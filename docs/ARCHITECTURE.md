@@ -1,4 +1,4 @@
-# Arxitektura qeydi — UCE
+# Arxitektura qeydi — PaniGo
 
 ## 1. Ümumi sxem
 

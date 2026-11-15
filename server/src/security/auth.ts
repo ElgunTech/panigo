@@ -26,7 +26,7 @@ export interface Principal {
 }
 
 export function issueToken(p: Principal, secret: string, ttl: string): string {
-  return jwt.sign({ role: p.role, name: p.name, guest: p.guest ?? false }, secret, { subject: p.sub, expiresIn: ttl as jwt.SignOptions['expiresIn'], issuer: 'uce' });
+  return jwt.sign({ role: p.role, name: p.name, guest: p.guest ?? false }, secret, { subject: p.sub, expiresIn: ttl as jwt.SignOptions['expiresIn'], issuer: 'panigo' });
 }
 
 /** Anonymous guest citizen — in an emergency nobody should be forced to sign up before sending SOS. */
@@ -37,7 +37,7 @@ export function issueGuestToken(secret: string): { token: string; principal: Pri
 
 export function verifyToken(token: string, secret: string): Principal | null {
   try {
-    const d = jwt.verify(token, secret, { issuer: 'uce' }) as jwt.JwtPayload;
+    const d = jwt.verify(token, secret, { issuer: 'panigo' }) as jwt.JwtPayload;
     if (!d.sub || !d.role || !(d.role in PERMISSIONS)) return null;
     return { sub: d.sub, role: d.role as Role, name: String(d.name ?? ''), guest: !!d.guest };
   } catch {

@@ -2,7 +2,7 @@ import type { Dict } from './az';
 
 export const en: Dict = {
   app: {
-    name: 'UCE',
+    name: 'PaniGo',
     title: 'Urban Crisis & Crowd Evacuation Engine',
     tagline: 'Mass evacuation and rescue coordination for urban crises',
   },

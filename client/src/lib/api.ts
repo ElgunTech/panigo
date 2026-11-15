@@ -2,7 +2,7 @@ import { getSession } from './session';
 /** Thin typed fetch wrapper. Token is per-app ("citizen" | "operator") and kept in localStorage. */
 export type TokenKind = 'citizen' | 'operator';
 
-const KEY = (k: TokenKind) => `uce.token.${k}`;
+const KEY = (k: TokenKind) => `panigo.token.${k}`;
 
 export function getToken(kind: TokenKind): string | null {
   try {

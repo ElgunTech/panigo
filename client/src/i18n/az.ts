@@ -1,7 +1,7 @@
 /** Azərbaycan dili — əsas lüğət. Yeni dil = bu faylın surəti + i18n/index.tsx-də bir sətir. */
 export const az = {
   app: {
-    name: 'UCE',
+    name: 'PaniGo',
     title: 'Urban Crisis & Crowd Evacuation Engine',
     tagline: 'Şəhər böhranlarında kütləvi təxliyə və xilasetmə koordinasiyası',
   },

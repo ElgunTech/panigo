@@ -36,7 +36,7 @@ async function pool(items, limit, fn) {
 
 const pct = (arr, p) => arr[Math.min(arr.length - 1, Math.floor((p / 100) * arr.length))];
 
-console.log(`UCE load test → ${URL_}  citizens=${N} concurrency=${C}`);
+console.log(`PaniGo load test → ${URL_}  citizens=${N} concurrency=${C}`);
 const tokens = await pool(Array.from({ length: N }), C, async () => {
   const r = await fetch(`${URL_}/api/auth/guest`, { method: 'POST' });
   return (await r.json()).token;

@@ -5,7 +5,7 @@ import { ArrowLeft, Building2, Eye, EyeOff, HeartPulse, Loader2, LogIn, ShieldCh
 import { useI18n } from '../i18n';
 import { api, ApiError } from '../lib/api';
 import { homeFor, isStaff, setSession, useSession, type Session } from '../lib/session';
-import { LangSwitch, Logo } from '../components/ui';
+import { LangSwitch, Logo, LogoMark } from '../components/ui';
 
 type Mode = 'login' | 'register';
 
@@ -72,7 +72,13 @@ export default function Login() {
             <Logo dark />
           </Link>
           <div>
-            <h1 className="max-w-md text-4xl font-extrabold leading-tight tracking-tight">{t.app.title}</h1>
+            <div className="flex items-center gap-4">
+              <LogoMark className="h-16 w-16 shrink-0 drop-shadow-[0_10px_30px_rgba(0,0,0,0.35)]" />
+              <h1 className="text-6xl font-extrabold tracking-tight">
+                Pani<span className="text-red-300">Go</span>
+              </h1>
+            </div>
+            <p className="mt-5 max-w-md text-xl font-semibold leading-snug text-slate-100">{t.app.title}</p>
             <p className="mt-4 max-w-md text-slate-300">{t.app.tagline}</p>
             {meta?.dataset && (
               <div className="mt-10 max-w-md rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur">

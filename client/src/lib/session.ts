@@ -12,7 +12,7 @@ export interface Session {
   user: SessionUser;
 }
 
-const KEY = 'uce.session';
+const KEY = 'panigo.session';
 const listeners = new Set<(s: Session | null) => void>();
 
 export function getSession(): Session | null {

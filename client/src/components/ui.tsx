@@ -62,19 +62,35 @@ export function ConnBadge({ conn, dark }: { conn: ConnState; dark?: boolean }) {
   );
 }
 
+/**
+ * PaniGo mark — a safe-place pin with a forward arrow ("go there").
+ * Same geometry as /public/logo.svg and /public/favicon.svg.
+ */
+export function LogoMark({ className = 'h-9 w-9' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 64 64" className={className} role="img" aria-label="PaniGo">
+      <defs>
+        <linearGradient id="pg-bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#F43F5E" />
+          <stop offset="1" stopColor="#B91C1C" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="16" fill="url(#pg-bg)" />
+      <path d="M32 55C24.5 46.6 16 38.6 16 28.5a16 16 0 0 1 32 0C48 38.6 39.5 46.6 32 55Z" fill="#fff" />
+      <path d="M24.5 29h14M33 22.5l6.5 6.5-6.5 6.5" fill="none" stroke="#DC2626" strokeWidth="4.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function Logo({ dark }: { dark?: boolean }) {
   return (
     <div className="flex items-center gap-2.5">
-      <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-red-500 to-rose-700 shadow-lg shadow-red-500/20">
-        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-          <path d="M12 3 21.5 19.5h-19Z" />
-          <path d="M12 10v4" />
-          <circle cx="12" cy="17" r=".6" fill="white" />
-        </svg>
-      </div>
+      <LogoMark className="h-9 w-9 shrink-0 drop-shadow-[0_4px_10px_rgba(220,38,38,0.35)]" />
       <div className="leading-tight">
-        <div className={clsx('text-sm font-extrabold tracking-tight', dark ? 'text-white' : 'text-slate-900')}>UCE</div>
-        <div className={clsx('text-[10px] font-medium uppercase tracking-[0.14em]', dark ? 'text-slate-400' : 'text-slate-500')}>Crisis Engine</div>
+        <div className={clsx('text-[15px] font-extrabold tracking-tight', dark ? 'text-white' : 'text-slate-900')}>
+          Pani<span className="text-red-500">Go</span>
+        </div>
+        <div lang="en" className={clsx('text-[10px] font-medium uppercase tracking-[0.14em]', dark ? 'text-slate-400' : 'text-slate-500')}>Evacuation Engine</div>
       </div>
     </div>
   );
